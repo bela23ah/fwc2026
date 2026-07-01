@@ -55,6 +55,7 @@
                             FRISSÍTÉS...
                         </span>
                         <span id="api-status-time" class="text-[10px] text-[#6E6D6A] hidden"></span>
+                        <span id="api-live-badge" class="hidden px-1.5 py-0.5 bg-red-500/10 rounded text-[9px] font-bold text-red-600 border border-red-500/20 items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span> <span id="api-live-count"></span></span>
                         <span class="text-xs text-[#6E6D6A] font-semibold tracking-widest uppercase">ÉLŐ ÁLLÁS</span>
                     </div>
                     <h1 class="text-2xl lg:text-3xl font-extrabold tracking-tight text-[#2B2A27]">
@@ -268,7 +269,14 @@
             "England": { id: "gb-eng", name: "Anglia", code: "gb-eng" },
             "Croatia": { id: "hr", name: "Horvátország", code: "hr" },
             "Ghana": { id: "gh", name: "Ghána", code: "gh" },
-            "Panama": { id: "pa", name: "Panama", code: "pa" }
+            "Panama": { id: "pa", name: "Panama", code: "pa" },
+
+            // Az ESPN élő-adat API néhány csapatnevet másképp ír, mint az openfootball —
+            // ezek az aliasok biztosítják, hogy az élő egyeztetés (ESPN overlay) is működjön.
+            "Bosnia and Herzegovina": { id: "ba", name: "Bosznia-Hercegovina", code: "ba" },
+            "Korea Republic": { id: "kr", name: "Dél-Korea", code: "kr" },
+            "IR Iran": { id: "ir", name: "Irán", code: "ir" },
+            "Czechia": { id: "cz", name: "Csehország", code: "cz" }
         };
 
         // A 32 kieséses szakaszba jutott csapat, VALÓS sorsolás szerint (2026-06-28 – 07-03 közötti
@@ -569,6 +577,88 @@
                 timeLabel.textContent = `(${hh}:${mm})`;
                 timeLabel.classList.remove('hidden');
             }
+
+            const liveBadge = document.getElementById('api-live-badge');
+            const liveCount = window.__espnLiveCount || 0;
+            if (state === 'live' && liveCount > 0) {
+                document.getElementById('api-live-count').textContent = liveCount === 1 ? 'ÉLŐ MECCS' : `${liveCount} ÉLŐ MECCS`;
+                liveBadge.classList.remove('hidden');
+                liveBadge.classList.add('flex');
+            } else {
+                liveBadge.classList.add('hidden');
+                liveBadge.classList.remove('flex');
+            }
+        }
+
+        // Az ESPN kulcs nélküli, nyilvános "hidden API"-ja valóban élőben (percenként) frissül,
+        // ellentétben az openfootball GitHub-forrással, amit csak naponta egyszer generálnak újra.
+        // Ez a réteg csak a MOST folyamatban lévő / még nem feldolgozott meccseknél lép közbe:
+        // az állást és az "élő" jelzést innen veszi, a gólszerzőket továbbra is az openfootball adja,
+        // amint frissül.
+        async function applyEspnLiveOverlay() {
+            const from = "20260628", to = "20260719"; // Legjobb 32 kezdete – döntő
+            const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${from}-${to}&limit=300`;
+            const res = await fetch(url);
+            if (!res.ok) return;
+            const data = await res.json();
+            const events = data.events || [];
+
+            let liveCount = 0;
+
+            events.forEach(ev => {
+                const comp = ev.competitions && ev.competitions[0];
+                if (!comp) return;
+                const state = comp.status && comp.status.type && comp.status.type.state; // 'pre' | 'in' | 'post'
+                if (state === 'pre') return; // még nem kezdődött el, nincs mit felülírni
+
+                const home = comp.competitors.find(c => c.homeAway === 'home');
+                const away = comp.competitors.find(c => c.homeAway === 'away');
+                if (!home || !away) return;
+
+                const homeMapped = nameMapping[home.team.displayName];
+                const awayMapped = nameMapping[away.team.displayName];
+                if (!homeMapped || !awayMapped) return;
+
+                for (let key in matches) {
+                    const m = matches[key];
+                    if (!m.team1 || !m.team2) continue;
+                    const normal = (m.team1.name === homeMapped.name && m.team2.name === awayMapped.name);
+                    const swapped = (m.team1.name === awayMapped.name && m.team2.name === homeMapped.name);
+                    if (!normal && !swapped) continue;
+
+                    // Ha az openfootball forrás ezt a meccset már véglegesen feldolgozta
+                    // (van győztese ÉS gólszerző-listája), akkor nem nyúlunk hozzá — az a
+                    // pontosabb, részletesebb adat marad érvényben.
+                    const alreadyFinalized = m.winner !== null && ((m.goals1 && m.goals1.length) || (m.goals2 && m.goals2.length) || m.score1 === 0 || m.score2 === 0);
+                    if (state === 'post' && alreadyFinalized) continue;
+
+                    const s1 = parseInt(home.score, 10) || 0;
+                    const s2 = parseInt(away.score, 10) || 0;
+                    m.score1 = normal ? s1 : s2;
+                    m.score2 = normal ? s2 : s1;
+                    m.liveSource = 'ESPN';
+                    m.liveMinute = comp.status.displayClock;
+
+                    if (state === 'in') {
+                        m.isLive = true;
+                        m.winner = null;
+                        liveCount++;
+                    } else if (state === 'post') {
+                        m.isLive = false;
+                        m.winner = m.score1 > m.score2 ? m.team1 : (m.score2 > m.score1 ? m.team2 : null);
+                        // Büntetőpárbaj: az ESPN a hosszabbítás utáni döntetlent "post" állapotban,
+                        // a hazai/vendég csapat jelzőjével (winner=true) adja vissza tizenegyesnél is.
+                        if (m.winner === null) {
+                            const homeWon = home.winner === true;
+                            const awayWon = away.winner === true;
+                            if (homeWon) m.winner = normal ? m.team1 : m.team2;
+                            else if (awayWon) m.winner = normal ? m.team2 : m.team1;
+                        }
+                    }
+                }
+            });
+
+            window.__espnLiveCount = liveCount;
         }
 
         async function fetchLiveData() {
@@ -623,6 +713,12 @@
                         }
                     }
                 });
+
+                // ESPN élő-adat réteg: az openfootball GitHub-forrás csak naponta frissül,
+                // ezért egy második, VALÓBAN élő (percenkénti) forrást is lekérünk rá, és
+                // csak azoknál a meccseknél írjuk felül vele az állást, amelyeknél az
+                // openfootball még nincs kész (folyamatban van, vagy még nincs eredménye).
+                try { await applyEspnLiveOverlay(); } catch (espnErr) { /* nem kritikus, csendben elnyeljük */ }
 
                 setApiStatus('live');
 
@@ -743,18 +839,6 @@
                 connectionsHTML += drawRadialConnector(angles.matches[matchId], 362, 320, match.winner?.id, matchId, match.winner !== null);
                 
                 nodesHTML += drawMatchNode(matchId, match, 362, angles.matches[matchId]);
-
-                // Büntetőpárbaj eredmény megrajzolása
-                if (match.winner !== null && match.pen1 !== undefined) {
-                    const textPt = polarToCartesian(500, 500, 376, angles.matches[matchId]);
-                    nodesHTML += `
-                        <text x="${textPt.x}" y="${textPt.y + 3}" 
-                              class="fill-[#b08a44] font-black text-[9px] tracking-tight drop-shadow-sm select-none" 
-                              text-anchor="middle">
-                            (${match.pen1}-${match.pen2})
-                        </text>
-                    `;
-                }
             }
 
             // R16
@@ -772,11 +856,6 @@
                 connectionsHTML += drawRadialConnector(angles.matches[matchId], 278, 236, match.winner?.id, matchId, match.winner !== null);
                 
                 nodesHTML += drawMatchNode(matchId, match, 278, angles.matches[matchId]);
-
-                if (match.winner !== null && match.pen1 !== undefined) {
-                    const textPt = polarToCartesian(500, 500, 292, angles.matches[matchId]);
-                    nodesHTML += `<text x="${textPt.x}" y="${textPt.y + 3}" class="fill-[#b08a44] font-black text-[9px] select-none" text-anchor="middle">(${match.pen1}-${match.pen2})</text>`;
-                }
             }
 
             // QF
@@ -794,11 +873,6 @@
                 connectionsHTML += drawRadialConnector(angles.matches[matchId], 194, 152, match.winner?.id, matchId, match.winner !== null);
                 
                 nodesHTML += drawMatchNode(matchId, match, 194, angles.matches[matchId]);
-
-                if (match.winner !== null && match.pen1 !== undefined) {
-                    const textPt = polarToCartesian(500, 500, 208, angles.matches[matchId]);
-                    nodesHTML += `<text x="${textPt.x}" y="${textPt.y + 3}" class="fill-[#b08a44] font-black text-[9px] select-none" text-anchor="middle">(${match.pen1}-${match.pen2})</text>`;
-                }
             }
 
             // SF
@@ -816,11 +890,6 @@
                 connectionsHTML += drawRadialConnector(angles.matches[matchId], 120, 80, match.winner?.id, matchId, match.winner !== null);
                 
                 nodesHTML += drawMatchNode(matchId, match, 110, angles.matches[matchId]);
-
-                if (match.winner !== null && match.pen1 !== undefined) {
-                    const textPt = polarToCartesian(500, 500, 124, angles.matches[matchId]);
-                    nodesHTML += `<text x="${textPt.x}" y="${textPt.y + 3}" class="fill-[#b08a44] font-black text-[9px] select-none" text-anchor="middle">(${match.pen1}-${match.pen2})</text>`;
-                }
             }
 
             // Döntő
@@ -900,12 +969,15 @@
         // Tooltip gól/büntető adatokkal - BÜNTETŐK MEGJELENÍTÉSE AZ EREDMÉNY ALATT
         function getTooltipHTML(match, matchId) {
             const isPlayed = match.winner !== null;
+            const isLive = match.isLive === true;
+            const showScore = isPlayed || isLive;
             const isPenalties = match.pen1 !== undefined && match.pen2 !== undefined;
             const isAET = match.note !== undefined;
             
             let statusText = isPlayed ? "MÉRKŐZÉS VÉGE" : "HAMAROSAN";
             if (isPlayed && isAET && !isPenalties) statusText = "HOSSZABBÍTÁS UTÁN";
             else if (isPlayed && isPenalties) statusText = "DÖNTÉST KÖVETŐEN";
+            if (isLive) statusText = match.liveMinute ? `ÉLŐ · ${match.liveMinute}` : "ÉLŐ";
             
             let roundName = "";
             switch(match.round) {
@@ -920,7 +992,7 @@
                 <div class="backdrop-blur-md bg-slate-900/95 border border-slate-700/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] p-4 min-w-[280px] text-white">
                     <div class="text-[10px] font-bold tracking-widest text-[#dfbe5b] mb-3 flex justify-between items-center">
                         <span>${roundName.toUpperCase()}</span>
-                        <span class="px-1.5 py-0.5 bg-white/10 rounded border border-white/10 text-[9px] font-bold">${statusText}</span>
+                        <span class="px-1.5 py-0.5 ${isLive ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-white/10 border-white/10'} rounded border text-[9px] font-bold ${isLive ? 'flex items-center gap-1' : ''}">${isLive ? '<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>' : ''}${statusText}</span>
                     </div>
                     
                     <div class="flex items-center justify-between gap-2.5">
@@ -932,11 +1004,11 @@
                         
                         <!-- Középső Eredmény -->
                         <div class="flex flex-col items-center justify-center shrink-0 min-w-[60px]">
-                            ${isPlayed ? `
+                            ${showScore ? `
                             <div class="flex items-center gap-1 font-black text-sm">
-                                <span class="${match.winner.id === match.team1.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score1}</span>
+                                <span class="${isPlayed && match.winner.id === match.team1.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score1}</span>
                                 <span class="text-slate-500 font-light">-</span>
-                                <span class="${match.winner.id === match.team2.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score2}</span>
+                                <span class="${isPlayed && match.winner.id === match.team2.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score2}</span>
                             </div>
                             ` : `
                             <span class="text-xs text-slate-500 font-bold">VS</span>
@@ -954,6 +1026,13 @@
                     ${isPlayed && isPenalties ? `
                     <div class="text-center text-[10px] text-[#dfbe5b] font-bold mt-1 tracking-wide select-none">
                         (Büntetőkkel: ${match.pen1} - ${match.pen2})
+                    </div>
+                    ` : ''}
+
+                    <!-- ESPN ÉLŐ FORRÁS JELZÉSE, AMÍG A RÉSZLETES GÓLSZERZŐ-ADAT MEG NEM ÉRKEZIK -->
+                    ${match.liveSource === 'ESPN' && isPlayed && !(match.goals1 && match.goals1.length) && !(match.goals2 && match.goals2.length) && match.score1 + match.score2 > 0 ? `
+                    <div class="text-center text-[9px] text-slate-400 italic mt-1">
+                        Élő állás (ESPN) · gólszerzők frissítés után
                     </div>
                     ` : ''}
 
@@ -1000,15 +1079,23 @@
             document.getElementById('modal-t2-name').innerText = match.team2.name;
             
             const isPlayed = match.winner !== null;
-            document.getElementById('modal-t1-score').innerText = isPlayed ? match.score1 : '-';
-            document.getElementById('modal-t2-score').innerText = isPlayed ? match.score2 : '-';
+            const isLive = match.isLive === true;
+            const showScore = isPlayed || isLive;
+            document.getElementById('modal-t1-score').innerText = showScore ? match.score1 : '-';
+            document.getElementById('modal-t2-score').innerText = showScore ? match.score2 : '-';
             
             const isAET = match.note !== undefined;
-            document.getElementById('modal-match-note').innerText = isAET ? match.note : (isPlayed ? 'FT' : 'VÁRAKOZIK');
-            if (!isPlayed) {
-                document.getElementById('modal-match-note').className = "text-[9px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded border border-slate-300 tracking-widest uppercase";
+            const noteLabel = document.getElementById('modal-match-note');
+            if (isLive) {
+                noteLabel.innerText = match.liveMinute ? `● ÉLŐ · ${match.liveMinute}` : "● ÉLŐ";
+                noteLabel.className = "text-[9px] font-bold text-red-600 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 tracking-widest uppercase";
             } else {
-                document.getElementById('modal-match-note').className = "text-[9px] font-bold text-[#b08a44] bg-amber-500/10 px-2 py-0.5 rounded border border-[#b08a44]/10 tracking-widest uppercase";
+                noteLabel.innerText = isAET ? match.note : (isPlayed ? 'FT' : 'VÁRAKOZIK');
+                if (!isPlayed) {
+                    noteLabel.className = "text-[9px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded border border-slate-300 tracking-widest uppercase";
+                } else {
+                    noteLabel.className = "text-[9px] font-bold text-[#b08a44] bg-amber-500/10 px-2 py-0.5 rounded border border-[#b08a44]/10 tracking-widest uppercase";
+                }
             }
 
             // MODÁLBELI BÜNTETŐ MEGJELENÍTÉSE KÖZVETLENÜL AZ EREDMÉNY ALATT
@@ -1026,7 +1113,7 @@
             t1ScorersUl.innerHTML = '';
             t2ScorersUl.innerHTML = '';
             
-            if (isPlayed) {
+            if (isPlayed || isLive) {
                 const goals1 = match.goals1 || [];
                 if (goals1.length > 0) {
                     goals1.forEach(g => {
