@@ -154,6 +154,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
+            <div id="modal-datetime-row" class="hidden px-5 py-2 border-b border-[#E2E0D8] text-center text-[10px] font-semibold text-[#6E6D6A] tracking-wide bg-[#FAF9F5]"></div>
             
             <div class="p-6 space-y-6">
                 <!-- Eredményjelző -->
@@ -203,141 +204,195 @@
     </div>
 
     <script>
+        // A csapatnevek az openfootball/worldcup.json API pontos angol elnevezéseit követik (kulcsként),
+        // hogy az élő adatok egyeztetése (nameMapping[raw.team1] stb.) biztosan találjon egyezést.
         const nameMapping = {
-            "South Africa": { id: "za", name: "Dél-Afrika", code: "za" },
-            "Canada": { id: "ca", name: "Kanada", code: "ca" },
-            "Brazil": { id: "br", name: "Brazília", code: "br" },
-            "Japan": { id: "jp", name: "Japán", code: "jp" },
-            "Germany": { id: "de", name: "Németország", code: "de" },
-            "Paraguay": { id: "py", name: "Paraguay", code: "py" },
-            "Netherlands": { id: "nl", name: "Hollandia", code: "nl" },
-            "Morocco": { id: "ma", name: "Marokkó", code: "ma" },
-            "Ivory Coast": { id: "ci", name: "Elefántcsontpart", code: "ci" },
-            "Côte d'Ivoire": { id: "ci", name: "Elefántcsontpart", code: "ci" },
-            "Norway": { id: "no", name: "Norvégia", code: "no" },
-            "France": { id: "fr", name: "Franciaország", code: "fr" },
-            "Sweden": { id: "se", name: "Svédország", code: "se" },
             "Mexico": { id: "mx", name: "Mexikó", code: "mx" },
-            "Ecuador": { id: "ec", name: "Ecuador", code: "ec" },
-            "England": { id: "gb", name: "Anglia", code: "gb" },
-            "DR Congo": { id: "cd", name: "Kongói DK", code: "cd" },
-            "Belgium": { id: "be", name: "Belgium", code: "be" },
-            "Senegal": { id: "sn", name: "Szenegál", code: "sn" },
+            "South Africa": { id: "za", name: "Dél-Afrika", code: "za" },
+            "South Korea": { id: "kr", name: "Dél-Korea", code: "kr" },
+            "Czech Republic": { id: "cz", name: "Csehország", code: "cz" },
+
+            "Canada": { id: "ca", name: "Kanada", code: "ca" },
+            "Bosnia & Herzegovina": { id: "ba", name: "Bosznia-Hercegovina", code: "ba" },
+            "Bosnia and Herzegovina": { id: "ba", name: "Bosznia-Hercegovina", code: "ba" },
+            "Qatar": { id: "qa", name: "Katar", code: "qa" },
+            "Switzerland": { id: "ch", name: "Svájc", code: "ch" },
+
+            "Brazil": { id: "br", name: "Brazília", code: "br" },
+            "Morocco": { id: "ma", name: "Marokkó", code: "ma" },
+            "Haiti": { id: "ht", name: "Haiti", code: "ht" },
+            "Scotland": { id: "gb-sct", name: "Skócia", code: "gb-sct" },
+
             "USA": { id: "us", name: "Egyesült Államok", code: "us" },
             "United States": { id: "us", name: "Egyesült Államok", code: "us" },
-            "Bosnia and Herzegovina": { id: "ba", name: "Bosznia-Hercegovina", code: "ba" },
-            "Spain": { id: "es", name: "Spanyolország", code: "es" },
-            "Austria": { id: "at", name: "Ausztria", code: "at" },
-            "Portugal": { id: "pt", name: "Portugália", code: "pt" },
-            "Croatia": { id: "hr", name: "Horvátország", code: "hr" },
-            "Switzerland": { id: "ch", name: "Svájc", code: "ch" },
-            "Algeria": { id: "dz", name: "Algéria", code: "dz" },
+            "Paraguay": { id: "py", name: "Paraguay", code: "py" },
             "Australia": { id: "au", name: "Ausztrália", code: "au" },
+            "Turkey": { id: "tr", name: "Törökország", code: "tr" },
+
+            "Germany": { id: "de", name: "Németország", code: "de" },
+            "Curaçao": { id: "cw", name: "Curaçao", code: "cw" },
+            "Ivory Coast": { id: "ci", name: "Elefántcsontpart", code: "ci" },
+            "Côte d'Ivoire": { id: "ci", name: "Elefántcsontpart", code: "ci" },
+            "Ecuador": { id: "ec", name: "Ecuador", code: "ec" },
+
+            "Netherlands": { id: "nl", name: "Hollandia", code: "nl" },
+            "Japan": { id: "jp", name: "Japán", code: "jp" },
+            "Sweden": { id: "se", name: "Svédország", code: "se" },
+            "Tunisia": { id: "tn", name: "Tunézia", code: "tn" },
+
+            "Belgium": { id: "be", name: "Belgium", code: "be" },
             "Egypt": { id: "eg", name: "Egyiptom", code: "eg" },
-            "Argentina": { id: "ar", name: "Argentína", code: "ar" },
+            "Iran": { id: "ir", name: "Irán", code: "ir" },
+            "New Zealand": { id: "nz", name: "Új-Zéland", code: "nz" },
+
+            "Spain": { id: "es", name: "Spanyolország", code: "es" },
             "Cape Verde": { id: "cv", name: "Zöld-foki Közt.", code: "cv" },
-            "Colombia": { id: "co", name: "Kolumbia", code: "co" },
-            "Ghana": { id: "gh", name: "Ghána", code: "gh" },
-            "Peru": { id: "pe", name: "Peru", code: "pe" },
-            "Angola": { id: "ao", name: "Angola", code: "ao" },
+            "Saudi Arabia": { id: "sa", name: "Szaúd-Arábia", code: "sa" },
+            "Uruguay": { id: "uy", name: "Uruguay", code: "uy" },
+
+            "France": { id: "fr", name: "Franciaország", code: "fr" },
+            "Senegal": { id: "sn", name: "Szenegál", code: "sn" },
+            "Iraq": { id: "iq", name: "Irak", code: "iq" },
+            "Norway": { id: "no", name: "Norvégia", code: "no" },
+
+            "Argentina": { id: "ar", name: "Argentína", code: "ar" },
+            "Algeria": { id: "dz", name: "Algéria", code: "dz" },
+            "Austria": { id: "at", name: "Ausztria", code: "at" },
+            "Jordan": { id: "jo", name: "Jordánia", code: "jo" },
+
+            "Portugal": { id: "pt", name: "Portugália", code: "pt" },
+            "DR Congo": { id: "cd", name: "Kongói DK", code: "cd" },
             "Uzbekistan": { id: "uz", name: "Üzbegisztán", code: "uz" },
-            "Slovakia": { id: "sk", name: "Szlovákia", code: "sk" },
+            "Colombia": { id: "co", name: "Kolumbia", code: "co" },
+
+            "England": { id: "gb-eng", name: "Anglia", code: "gb-eng" },
+            "Croatia": { id: "hr", name: "Horvátország", code: "hr" },
+            "Ghana": { id: "gh", name: "Ghána", code: "gh" },
             "Panama": { id: "pa", name: "Panama", code: "pa" }
         };
 
+        // A 32 kieséses szakaszba jutott csapat, VALÓS sorsolás szerint (2026-06-28 – 07-03 közötti
+        // Legjobb 32 mérkőzések alapján, forrás: openfootball/worldcup.json, hivatalos FIFA meccsszámok:
+        // 73–88). A sorrend NEM véletlenszerű: úgy van összeállítva, hogy a lap radiális logikája
+        // (minden körben a szomszédos párok győztese kerül össze) pontosan a valós FIFA ágrajzot adja
+        // ki egészen a döntőig. Lásd a numToMatchId térképet lejjebb a pontos meccsszám-hozzárendeléshez.
         const teams = {
-            0: nameMapping["South Africa"], 1: nameMapping["Canada"],
-            2: nameMapping["Brazil"], 3: nameMapping["Japan"],
-            4: nameMapping["Germany"], 5: nameMapping["Paraguay"],
+            0: nameMapping["Germany"], 1: nameMapping["Paraguay"],
+            2: nameMapping["France"], 3: nameMapping["Sweden"],
+            4: nameMapping["South Africa"], 5: nameMapping["Canada"],
             6: nameMapping["Netherlands"], 7: nameMapping["Morocco"],
-            8: nameMapping["Ivory Coast"], 9: nameMapping["Norway"],
-            10: nameMapping["France"], 11: nameMapping["Sweden"],
-            12: nameMapping["Mexico"], 13: nameMapping["Ecuador"],
-            14: nameMapping["England"], 15: nameMapping["DR Congo"],
-            16: nameMapping["Belgium"], 17: nameMapping["Senegal"],
-            18: nameMapping["USA"], 19: nameMapping["Bosnia and Herzegovina"],
-            20: nameMapping["Spain"], 21: nameMapping["Austria"],
-            22: nameMapping["Portugal"], 23: nameMapping["Croatia"],
-            24: nameMapping["Switzerland"], 25: nameMapping["Algeria"],
+            8: nameMapping["Portugal"], 9: nameMapping["Croatia"],
+            10: nameMapping["Spain"], 11: nameMapping["Austria"],
+            12: nameMapping["USA"], 13: nameMapping["Bosnia & Herzegovina"],
+            14: nameMapping["Belgium"], 15: nameMapping["Senegal"],
+            16: nameMapping["Brazil"], 17: nameMapping["Japan"],
+            18: nameMapping["Ivory Coast"], 19: nameMapping["Norway"],
+            20: nameMapping["Mexico"], 21: nameMapping["Ecuador"],
+            22: nameMapping["England"], 23: nameMapping["DR Congo"],
+            24: nameMapping["Argentina"], 25: nameMapping["Cape Verde"],
             26: nameMapping["Australia"], 27: nameMapping["Egypt"],
-            28: nameMapping["Argentina"], 29: nameMapping["Cape Verde"],
+            28: nameMapping["Switzerland"], 29: nameMapping["Algeria"],
             30: nameMapping["Colombia"], 31: nameMapping["Ghana"]
         };
 
+
         const groupArchiveData = [
             { name: "A Csoport", table: [
-                { name: "Mexikó", code: "mx", p: 9, gk: "+5", adv: true },
-                { name: "Ecuador", code: "ec", p: 6, gk: "+2", adv: true },
-                { name: "Zöld-foki Közt.", code: "cv", p: 3, gk: "-1", adv: true },
-                { name: "Angola", code: "ao", p: 0, gk: "-6", adv: false }
+                { name: "Mexikó", code: "mx", p: 9, gk: "+6", adv: true },
+                { name: "Dél-Afrika", code: "za", p: 4, gk: "-1", adv: true },
+                { name: "Dél-Korea", code: "kr", p: 3, gk: "-1", adv: false },
+                { name: "Csehország", code: "cz", p: 1, gk: "-4", adv: false }
             ]},
             { name: "B Csoport", table: [
-                { name: "Kanada", code: "ca", p: 7, gk: "+3", adv: true },
-                { name: "Dél-Afrika", code: "za", p: 5, gk: "+1", adv: true },
-                { name: "Peru", code: "pe", p: 4, gk: "0", adv: false },
-                { name: "Omán", code: "om", p: 0, gk: "-4", adv: false }
+                { name: "Svájc", code: "ch", p: 7, gk: "+4", adv: true },
+                { name: "Kanada", code: "ca", p: 4, gk: "+5", adv: true },
+                { name: "Bosznia-Hercegovina", code: "ba", p: 4, gk: "-1", adv: true },
+                { name: "Katar", code: "qa", p: 1, gk: "-8", adv: false }
             ]},
             { name: "C Csoport", table: [
-                { name: "Egyesült Államok", code: "us", p: 9, gk: "+4", adv: true },
-                { name: "Norvégia", code: "no", p: 6, gk: "+1", adv: true },
-                { name: "Jordánia", code: "jo", p: 3, gk: "-2", adv: false },
-                { name: "Románia", code: "ro", p: 0, gk: "-3", adv: false }
+                { name: "Brazília", code: "br", p: 7, gk: "+6", adv: true },
+                { name: "Marokkó", code: "ma", p: 7, gk: "+3", adv: true },
+                { name: "Skócia", code: "gb-sct", p: 3, gk: "-3", adv: false },
+                { name: "Haiti", code: "ht", p: 0, gk: "-6", adv: false }
             ]},
             { name: "D Csoport", table: [
-                { name: "Brazília", code: "br", p: 9, gk: "+6", adv: true },
-                { name: "Egyiptom", code: "eg", p: 4, gk: "0", adv: true },
-                { name: "Szlovákia", code: "sk", p: 3, gk: "-1", adv: false },
-                { name: "Honduras", code: "hn", p: 1, gk: "-5", adv: false }
+                { name: "Egyesült Államok", code: "us", p: 6, gk: "+4", adv: true },
+                { name: "Ausztrália", code: "au", p: 4, gk: "0", adv: true },
+                { name: "Paraguay", code: "py", p: 4, gk: "-2", adv: true },
+                { name: "Törökország", code: "tr", p: 3, gk: "-2", adv: false }
             ]},
             { name: "E Csoport", table: [
-                { name: "Németország", code: "de", p: 7, gk: "+3", adv: true },
-                { name: "Algéria", code: "dz", p: 5, gk: "+1", adv: true },
-                { name: "Üzbegisztán", code: "uz", p: 2, gk: "-1", adv: false },
-                { name: "Jamaica", code: "jm", p: 1, gk: "-3", adv: false }
+                { name: "Németország", code: "de", p: 6, gk: "+6", adv: true },
+                { name: "Elefántcsontpart", code: "ci", p: 6, gk: "+2", adv: true },
+                { name: "Ecuador", code: "ec", p: 4, gk: "0", adv: true },
+                { name: "Curaçao", code: "cw", p: 1, gk: "-8", adv: false }
             ]},
             { name: "F Csoport", table: [
-                { name: "Hollandia", code: "nl", p: 9, gk: "+5", adv: true },
-                { name: "Szenegál", code: "sn", p: 6, gk: "+2", adv: true },
-                { name: "Irak", code: "iq", p: 3, gk: "-3", adv: false },
-                { name: "Costa Rica", code: "cr", p: 0, gk: "-4", adv: false }
+                { name: "Hollandia", code: "nl", p: 7, gk: "+6", adv: true },
+                { name: "Japán", code: "jp", p: 5, gk: "+4", adv: true },
+                { name: "Svédország", code: "se", p: 4, gk: "0", adv: true },
+                { name: "Tunézia", code: "tn", p: 0, gk: "-10", adv: false }
             ]},
             { name: "G Csoport", table: [
-                { name: "Portugália", code: "pt", p: 7, gk: "+4", adv: true },
-                { name: "Horvátország", code: "hr", p: 5, gk: "+1", adv: true },
-                { name: "Japán", code: "jp", p: 4, gk: "0", adv: true },
-                { name: "Kamerun", code: "cm", p: 0, gk: "-5", adv: false }
+                { name: "Belgium", code: "be", p: 5, gk: "+4", adv: true },
+                { name: "Egyiptom", code: "eg", p: 5, gk: "+2", adv: true },
+                { name: "Irán", code: "ir", p: 3, gk: "0", adv: false },
+                { name: "Új-Zéland", code: "nz", p: 1, gk: "-6", adv: false }
             ]},
             { name: "H Csoport", table: [
-                { name: "Argentína", code: "ar", p: 9, gk: "+6", adv: true },
-                { name: "Svájc", code: "ch", p: 6, gk: "+2", adv: true },
-                { name: "Új-Zéland", code: "nz", p: 3, gk: "-3", adv: false },
-                { name: "Albánia", code: "al", p: 0, gk: "-5", adv: false }
+                { name: "Spanyolország", code: "es", p: 7, gk: "+5", adv: true },
+                { name: "Zöld-foki Közt.", code: "cv", p: 3, gk: "0", adv: true },
+                { name: "Uruguay", code: "uy", p: 2, gk: "-1", adv: false },
+                { name: "Szaúd-Arábia", code: "sa", p: 2, gk: "-4", adv: false }
             ]},
             { name: "I Csoport", table: [
-                { name: "Franciaország", code: "fr", p: 9, gk: "+5", adv: true },
-                { name: "Kongói DK", code: "cd", p: 6, gk: "+1", adv: true },
-                { name: "Svédország", code: "se", p: 3, gk: "-2", adv: true },
-                { name: "Ukrajna", code: "ua", p: 0, gk: "-4", adv: false }
+                { name: "Franciaország", code: "fr", p: 9, gk: "+8", adv: true },
+                { name: "Norvégia", code: "no", p: 6, gk: "+1", adv: true },
+                { name: "Szenegál", code: "sn", p: 3, gk: "+2", adv: true },
+                { name: "Irak", code: "iq", p: 0, gk: "-11", adv: false }
             ]},
             { name: "J Csoport", table: [
-                { name: "Spanyolország", code: "es", p: 9, gk: "+7", adv: true },
-                { name: "Ausztrália", code: "au", p: 4, gk: "0", adv: true },
-                { name: "Kolumbia", code: "co", p: 4, gk: "-1", adv: true },
-                { name: "Wales", code: "gb-wls", p: 0, gk: "-6", adv: false }
+                { name: "Argentína", code: "ar", p: 9, gk: "+7", adv: true },
+                { name: "Ausztria", code: "at", p: 4, gk: "0", adv: true },
+                { name: "Algéria", code: "dz", p: 4, gk: "-2", adv: true },
+                { name: "Jordánia", code: "jo", p: 0, gk: "-5", adv: false }
             ]},
             { name: "K Csoport", table: [
-                { name: "Belgium", code: "be", p: 7, gk: "+3", adv: true },
-                { name: "Elefántcsontpart", code: "ci", p: 5, gk: "+1", adv: true },
-                { name: "Ausztria", code: "at", p: 4, gk: "0", adv: true },
-                { name: "Vietnám", code: "vn", p: 0, gk: "-4", adv: false }
+                { name: "Kolumbia", code: "co", p: 7, gk: "+3", adv: true },
+                { name: "Portugália", code: "pt", p: 5, gk: "+5", adv: true },
+                { name: "Kongói DK", code: "cd", p: 4, gk: "+1", adv: true },
+                { name: "Üzbegisztán", code: "uz", p: 0, gk: "-9", adv: false }
             ]},
             { name: "L Csoport", table: [
-                { name: "Anglia", code: "gb", p: 9, gk: "+5", adv: true },
-                { name: "Marokkó", code: "ma", p: 6, gk: "+1", adv: true },
-                { name: "Ghána", code: "gh", p: 3, gk: "-2", adv: false },
+                { name: "Anglia", code: "gb-eng", p: 7, gk: "+4", adv: true },
+                { name: "Horvátország", code: "hr", p: 6, gk: "0", adv: true },
+                { name: "Ghána", code: "gh", p: 4, gk: "0", adv: true },
                 { name: "Panama", code: "pa", p: 0, gk: "-4", adv: false }
             ]}
         ];
+
+        // A hivatalos FIFA meccsszám (num) -> helyi matchId leképezése.
+        // Ez a csapatnevektől függetlenül, kizárólag a menetrendi pozíció alapján
+        // köti össze a mérkőzéseket, így az időpont/helyszín akkor is beazonosítható,
+        // ha a csapatok neve (még) nem egyezik a valós ágrajzzal. A pozíciók a fenti
+        // `teams` tömb valós FIFA-ágrajz szerinti sorrendjét követik.
+        const numToMatchId = {
+            74: "R32_0", 77: "R32_1", 73: "R32_2", 75: "R32_3",
+            83: "R32_4", 84: "R32_5", 81: "R32_6", 82: "R32_7",
+            76: "R32_8", 78: "R32_9", 79: "R32_10", 80: "R32_11",
+            86: "R32_12", 88: "R32_13", 85: "R32_14", 87: "R32_15",
+            89: "R16_0", 90: "R16_1", 93: "R16_2", 94: "R16_3",
+            91: "R16_4", 92: "R16_5", 95: "R16_6", 96: "R16_7",
+            97: "QF_0", 98: "QF_1", 99: "QF_2", 100: "QF_3",
+            101: "SF_0", 102: "SF_1"
+        };
+
+        function formatMatchDateTime(dateStr, timeStr) {
+            if (!dateStr) return null;
+            const [y, mo, d] = dateStr.split('-');
+            const datePart = `${y}. ${mo}. ${d}.`;
+            return timeStr ? `${datePart} ${timeStr}` : datePart;
+        }
 
         let matches = {
             "R32_0": { round: "R32", team1: teams[0], team2: teams[1], score1: null, score2: null, winner: null, goals1: [], goals2: [] },
@@ -533,6 +588,16 @@
                 }
 
                 rawMatches.forEach(raw => {
+                    // Dátum, időpont és helyszín hozzárendelése a menetrendi pozíció (num) alapján.
+                    // Ez már a mérkőzés lejátszása ELŐTT is működik, hiszen nem a csapatnévtől függ.
+                    let scheduleMatchId = raw.num ? numToMatchId[raw.num] : null;
+                    if (!scheduleMatchId && raw.round === "Final") scheduleMatchId = "F_0";
+                    if (scheduleMatchId && matches[scheduleMatchId]) {
+                        matches[scheduleMatchId].date = raw.date;
+                        matches[scheduleMatchId].time = raw.time;
+                        matches[scheduleMatchId].ground = raw.ground;
+                    }
+
                     const t1_mapped = nameMapping[raw.team1];
                     const t2_mapped = nameMapping[raw.team2];
                     if (!t1_mapped || !t2_mapped) return;
@@ -550,9 +615,9 @@
                             m.goals1 = matchNormal ? (raw.goals1 || []) : (raw.goals2 || []);
                             m.goals2 = matchNormal ? (raw.goals2 || []) : (raw.goals1 || []);
 
-                            if (raw.score.ps) {
-                                m.pen1 = matchNormal ? raw.score.ps[0] : raw.score.ps[1];
-                                m.pen2 = matchNormal ? raw.score.ps[1] : raw.score.ps[0];
+                            if (raw.score.p) {
+                                m.pen1 = matchNormal ? raw.score.p[0] : raw.score.p[1];
+                                m.pen2 = matchNormal ? raw.score.p[1] : raw.score.p[0];
                                 m.winner = m.pen1 > m.pen2 ? m.team1 : m.team2;
                             }
                         }
@@ -562,33 +627,64 @@
                 setApiStatus('live');
 
             } catch (err) {
-                // Lokális mentett eredmények (Hivatalos és pontos vb-eredmények alapján)
-                matches["R32_0"].score1 = 0; matches["R32_0"].score2 = 1; matches["R32_0"].winner = teams[1]; // Canada
-                matches["R32_0"].goals1 = []; matches["R32_0"].goals2 = [{ name: "Jonathan David", minute: "68" }];
+                // Offline / hiba esetén használt, VALÓS eredmények és menetrend (openfootball/worldcup.json,
+                // Legjobb 32 mérkőzések, 2026-06-28 – 07-03). A még le nem játszott meccseknél csak a
+                // dátum/időpont/helyszín ismert előre.
+                matches["R32_0"].date = "2026-06-29"; matches["R32_0"].time = "16:30 UTC-4"; matches["R32_0"].ground = "Boston (Foxborough)";
+                matches["R32_0"].score1 = 1; matches["R32_0"].score2 = 1; matches["R32_0"].pen1 = 3; matches["R32_0"].pen2 = 4; matches["R32_0"].winner = teams[1]; // Paraguay büntetőkkel
+                matches["R32_0"].goals1 = [{ name: "Kai Havertz", minute: "54" }];
+                matches["R32_0"].goals2 = [{ name: "Julio Enciso", minute: "42" }];
 
-                matches["R32_1"].score1 = 2; matches["R32_1"].score2 = 1; matches["R32_1"].winner = teams[2]; // Brazil
-                matches["R32_1"].goals1 = [{ name: "Vinícius Júnior", minute: "14" }, { name: "Rodrygo", minute: "77" }];
-                matches["R32_1"].goals2 = [{ name: "Kaoru Mitoma", minute: "43" }];
+                matches["R32_1"].date = "2026-06-30"; matches["R32_1"].time = "17:00 UTC-4"; matches["R32_1"].ground = "New York/New Jersey (East Rutherford)";
+                matches["R32_1"].score1 = 3; matches["R32_1"].score2 = 0; matches["R32_1"].winner = teams[2]; // France
+                matches["R32_1"].goals1 = [{ name: "Kylian Mbappé", minute: "45" }, { name: "Bradley Barcola", minute: "53" }, { name: "Kylian Mbappé", minute: "74" }];
+                matches["R32_1"].goals2 = [];
 
-                matches["R32_2"].score1 = 1; matches["R32_2"].score2 = 1; matches["R32_2"].pen1 = 3; matches["R32_2"].pen2 = 4; matches["R32_2"].winner = teams[5]; // Paraguay
-                matches["R32_2"].goals1 = [{ name: "Kai Havertz", minute: "35" }];
-                matches["R32_2"].goals2 = [{ name: "Julio Enciso", minute: "82" }];
+                matches["R32_2"].date = "2026-06-28"; matches["R32_2"].time = "12:00 UTC-7"; matches["R32_2"].ground = "Los Angeles (Inglewood)";
+                matches["R32_2"].score1 = 0; matches["R32_2"].score2 = 1; matches["R32_2"].winner = teams[5]; // Canada
+                matches["R32_2"].goals1 = [];
+                matches["R32_2"].goals2 = [{ name: "Stephan Eustáquio", minute: "90+2" }];
 
-                matches["R32_3"].score1 = 1; matches["R32_3"].score2 = 1; matches["R32_3"].pen1 = 2; matches["R32_3"].pen2 = 3; matches["R32_3"].winner = teams[7]; // Morocco
-                matches["R32_3"].goals1 = [{ name: "Cody Gakpo", minute: "52" }];
-                matches["R32_3"].goals2 = [{ name: "Youssef En-Nesyri", minute: "74" }];
+                matches["R32_3"].date = "2026-06-29"; matches["R32_3"].time = "19:00 UTC-6"; matches["R32_3"].ground = "Monterrey (Guadalupe)";
+                matches["R32_3"].score1 = 1; matches["R32_3"].score2 = 1; matches["R32_3"].pen1 = 2; matches["R32_3"].pen2 = 3; matches["R32_3"].winner = teams[7]; // Morocco büntetőkkel
+                matches["R32_3"].goals1 = [{ name: "Cody Gakpo", minute: "72" }];
+                matches["R32_3"].goals2 = [{ name: "Issa Diop", minute: "90+1" }];
 
-                matches["R32_4"].score1 = 1; matches["R32_4"].score2 = 2; matches["R32_4"].winner = teams[9]; // Norway
-                matches["R32_4"].goals1 = [{ name: "Sébastien Haller", minute: "45" }];
-                matches["R32_4"].goals2 = [{ name: "Erling Haaland", minute: "21" }, { name: "Martin Ødegaard", minute: "89" }];
+                matches["R32_4"].date = "2026-07-02"; matches["R32_4"].time = "19:00 UTC-4"; matches["R32_4"].ground = "Toronto"; // Portugal - Horvátország
 
-                matches["R32_5"].score1 = 3; matches["R32_5"].score2 = 0; matches["R32_5"].winner = teams[10]; // France
-                matches["R32_5"].goals1 = [{ name: "Kylian Mbappé", minute: "9" }, { name: "Antoine Griezmann", minute: "31" }, { name: "Marcus Thuram", minute: "84" }];
-                matches["R32_5"].goals2 = [];
+                matches["R32_5"].date = "2026-07-02"; matches["R32_5"].time = "12:00 UTC-7"; matches["R32_5"].ground = "Los Angeles (Inglewood)"; // Spanyolország - Ausztria
 
-                matches["R32_6"].score1 = 2; matches["R32_6"].score2 = 0; matches["R32_6"].winner = teams[12]; // Mexico
-                matches["R32_6"].goals1 = [{ name: "Santiago Giménez", minute: "40" }, { name: "Luis Chávez", minute: "73" }];
-                matches["R32_6"].goals2 = [];
+                matches["R32_6"].date = "2026-07-01"; matches["R32_6"].time = "17:00 UTC-7"; matches["R32_6"].ground = "San Francisco Bay Area (Santa Clara)"; // USA - Bosznia-Hercegovina
+
+                matches["R32_7"].date = "2026-07-01"; matches["R32_7"].time = "13:00 UTC-7"; matches["R32_7"].ground = "Seattle"; // Belgium - Szenegál
+
+                matches["R32_8"].date = "2026-06-29"; matches["R32_8"].time = "12:00 UTC-5"; matches["R32_8"].ground = "Houston";
+                matches["R32_8"].score1 = 2; matches["R32_8"].score2 = 1; matches["R32_8"].winner = teams[16]; // Brazília
+                matches["R32_8"].goals1 = [{ name: "Casemiro", minute: "56" }, { name: "Gabriel Martinelli", minute: "90+5" }];
+                matches["R32_8"].goals2 = [{ name: "Kaishu Sano", minute: "29" }];
+
+                matches["R32_9"].date = "2026-06-30"; matches["R32_9"].time = "12:00 UTC-5"; matches["R32_9"].ground = "Dallas (Arlington)";
+                matches["R32_9"].score1 = 1; matches["R32_9"].score2 = 2; matches["R32_9"].winner = teams[19]; // Norvégia
+                matches["R32_9"].goals1 = [{ name: "Amad Diallo", minute: "74" }];
+                matches["R32_9"].goals2 = [{ name: "Antonio Nusa", minute: "39" }, { name: "Erling Haaland", minute: "86" }];
+
+                matches["R32_10"].date = "2026-06-30"; matches["R32_10"].time = "19:00 UTC-6"; matches["R32_10"].ground = "Mexico City";
+                matches["R32_10"].score1 = 2; matches["R32_10"].score2 = 0; matches["R32_10"].winner = teams[20]; // Mexikó
+                matches["R32_10"].goals1 = [{ name: "Julián Quiñones", minute: "31" }, { name: "Raúl Jiménez", minute: "45+1" }];
+                matches["R32_10"].goals2 = [];
+
+                matches["R32_11"].date = "2026-07-01"; matches["R32_11"].time = "12:00 UTC-4"; matches["R32_11"].ground = "Atlanta";
+                matches["R32_11"].score1 = 2; matches["R32_11"].score2 = 1; matches["R32_11"].winner = teams[22]; // Anglia
+                matches["R32_11"].goals1 = [{ name: "Harry Kane", minute: "75" }, { name: "Harry Kane", minute: "86" }];
+                matches["R32_11"].goals2 = [{ name: "Brian Cipenga", minute: "7" }];
+
+                matches["R32_12"].date = "2026-07-03"; matches["R32_12"].time = "18:00 UTC-4"; matches["R32_12"].ground = "Miami (Miami Gardens)"; // Argentína - Zöld-foki Közt.
+
+                matches["R32_13"].date = "2026-07-03"; matches["R32_13"].time = "13:00 UTC-5"; matches["R32_13"].ground = "Dallas (Arlington)"; // Ausztrália - Egyiptom
+
+                matches["R32_14"].date = "2026-07-02"; matches["R32_14"].time = "20:00 UTC-7"; matches["R32_14"].ground = "Vancouver"; // Svájc - Algéria
+
+                matches["R32_15"].date = "2026-07-03"; matches["R32_15"].time = "20:30 UTC-5"; matches["R32_15"].ground = "Kansas City"; // Kolumbia - Ghána
 
                 setApiStatus('offline');
             }
@@ -860,6 +956,13 @@
                         (Büntetőkkel: ${match.pen1} - ${match.pen2})
                     </div>
                     ` : ''}
+
+                    <!-- MÉRKŐZÉS IDŐPONTJA / HELYSZÍNE -->
+                    ${match.date ? `
+                    <div class="text-center text-[10px] text-slate-300 font-medium mt-2 pt-2 border-t border-white/10">
+                        ${formatMatchDateTime(match.date, match.time)}${match.ground ? ` · ${match.ground}` : ''}
+                    </div>
+                    ` : ''}
                     
                     <div class="mt-3 pt-2 border-t border-white/10 text-center text-[9px] text-[#dfbe5b]/80 font-medium tracking-wide">
                         KATTINTSON A RÉSZLETEKÉRT
@@ -882,6 +985,14 @@
                 case "F": roundName = "Döntő - FIFA World Cup 2026"; break;
             }
             document.getElementById('modal-round-name').innerText = roundName.toUpperCase();
+
+            const datetimeRow = document.getElementById('modal-datetime-row');
+            if (match.date) {
+                datetimeRow.classList.remove('hidden');
+                datetimeRow.innerText = `${formatMatchDateTime(match.date, match.time)}${match.ground ? ` · ${match.ground}` : ''}`;
+            } else {
+                datetimeRow.classList.add('hidden');
+            }
             
             document.getElementById('modal-t1-flag').src = `https://flagcdn.com/w80/${match.team1.code}.png`;
             document.getElementById('modal-t2-flag').src = `https://flagcdn.com/w80/${match.team2.code}.png`;
