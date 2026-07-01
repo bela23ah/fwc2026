@@ -42,77 +42,98 @@
         }
     </style>
 </head>
-<body class="bg-[#F4F3EF] text-[#2B2A27] min-h-screen flex flex-col lg:flex-row antialiased">
+<body class="bg-[#F4F3EF] text-[#2B2A27] min-h-screen flex flex-col antialiased">
 
-    <!-- Oldalsáv -->
-    <div class="w-full lg:w-[380px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#E2E0D8] bg-[#FAF9F5] p-6 flex flex-col justify-between">
-        <div class="space-y-6">
-            <div class="space-y-2">
-                <div class="flex items-center gap-2">
-                    <span id="api-status" class="px-2 py-0.5 bg-amber-500/10 rounded text-[10px] font-bold text-[#b08a44] tracking-wider border border-[#b08a44]/20 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#b08a44] animate-pulse"></span>
-                        ADATOK FRISSÍTÉSE...
-                    </span>
-                    <span class="text-xs text-[#6E6D6A] font-semibold tracking-widest uppercase">ÉLŐ ÁLLÁS</span>
+    <div class="flex flex-col lg:flex-row flex-1">
+        <!-- Oldalsáv -->
+        <div class="w-full lg:w-[380px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#E2E0D8] bg-[#FAF9F5] p-6 flex flex-col justify-between">
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span id="api-status" class="px-2 py-0.5 bg-amber-500/10 rounded text-[10px] font-bold text-[#b08a44] tracking-wider border border-[#b08a44]/20 flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#b08a44] animate-pulse"></span>
+                            FRISSÍTÉS...
+                        </span>
+                        <span class="text-xs text-[#6E6D6A] font-semibold tracking-widest uppercase">ÉLŐ ÁLLÁS</span>
+                    </div>
+                    <h1 class="text-2xl lg:text-3xl font-extrabold tracking-tight text-[#2B2A27]">
+                        FIFA WORLD CUP 2026
+                    </h1>
+                    <p class="text-xs text-[#6E6D6A] leading-relaxed">
+                        A kieséses szakasz élő kördiagramos vizualizációja. Vigye a kurzort a pontokra az adatokért, és kattintson rájuk a részletes gólszerzőkért.
+                    </p>
                 </div>
-                <h1 class="text-2xl lg:text-3xl font-extrabold tracking-tight text-[#2B2A27]">
-                    FIFA WORLD CUP 2026
-                </h1>
-                <p class="text-xs text-[#6E6D6A] leading-relaxed">
-                    A kieséses szakasz élő kördiagramos vizualizációja. Vigye a kurzort a pontokra az adatokért, és kattintson rájuk a részletes gólszerzőkért.
-                </p>
+
+                <!-- Jelmagyarázat -->
+                <div class="space-y-4 pt-4 border-t border-[#E2E0D8]">
+                    <h3 class="text-xs font-bold text-[#2B2A27] tracking-wider uppercase">Jelmagyarázat</h3>
+                    <div class="space-y-3 text-xs text-[#6E6D6A]">
+                        <div class="flex items-start gap-3">
+                            <div class="w-4 h-4 rounded-full bg-amber-500/20 border border-[#b08a44] flex items-center justify-center shrink-0 mt-0.5"></div>
+                            <p>Arany pontok: <strong>Lejátszott</strong> mérkőzések. Kattintson a részletekért.</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-4 h-4 rounded-full bg-white border border-[#E2E0D8] flex items-center justify-center shrink-0 mt-0.5"></div>
+                            <p>Szürke pontok: <strong>Hamarosan</strong> sorra kerülő meccsek.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 rounded-xl bg-[#F4F3EF] border border-[#E2E0D8] space-y-2 text-xs">
+                    <div class="flex justify-between items-center text-[#6E6D6A]">
+                        <span>Megjelenítés:</span>
+                        <span class="font-semibold text-[#b08a44]">Valós eredmények</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Jelmagyarázat -->
-            <div class="space-y-4 pt-4 border-t border-[#E2E0D8]">
-                <h3 class="text-xs font-bold text-[#2B2A27] tracking-wider uppercase">Jelmagyarázat</h3>
-                <div class="space-y-3 text-xs text-[#6E6D6A]">
-                    <div class="flex items-start gap-3">
-                        <div class="w-4 h-4 rounded-full bg-amber-500/20 border border-[#b08a44] flex items-center justify-center shrink-0 mt-0.5"></div>
-                        <p>Arany pontok: <strong>Lejátszott</strong> mérkőzések. Kattintson a részletekért.</p>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <div class="w-4 h-4 rounded-full bg-white border border-[#E2E0D8] flex items-center justify-center shrink-0 mt-0.5"></div>
-                        <p>Szürke pontok: <strong>Hamarosan</strong> sorra kerülő meccsek.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="p-4 rounded-xl bg-[#F4F3EF] border border-[#E2E0D8] space-y-2 text-xs">
-                <div class="flex justify-between items-center text-[#6E6D6A]">
-                    <span>Megjelenítés:</span>
-                    <span class="font-semibold text-[#b08a44]">Valós eredmények</span>
-                </div>
+            <div class="mt-8 lg:mt-0 pt-6 border-t border-[#E2E0D8] flex flex-col gap-3">
+                <button onclick="fetchLiveData()" class="w-full py-2.5 rounded-lg bg-[#FAF9F5] hover:bg-[#F4F3EF] border border-[#E2E0D8] text-xs font-bold text-[#2B2A27] transition-all flex items-center justify-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                    Eredmények frissítése
+                </button>
             </div>
         </div>
 
-        <div class="mt-8 lg:mt-0 pt-6 border-t border-[#E2E0D8] flex flex-col gap-3">
-            <button onclick="fetchLiveData()" class="w-full py-2.5 rounded-lg bg-[#FAF9F5] hover:bg-[#F4F3EF] border border-[#E2E0D8] text-xs font-bold text-[#2B2A27] transition-all flex items-center justify-center gap-2">
-                <svg class="w-3.5 h-3.5 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
-                Eredmények frissítése
-            </button>
+        <!-- Fő diagram terület -->
+        <div class="flex-1 flex items-center justify-center p-4 lg:p-8 overflow-hidden relative min-h-[550px]">
+            <div class="absolute w-[500px] h-[500px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none"></div>
+            <div class="relative w-full max-w-[820px] aspect-square mx-auto">
+                <svg id="bracket-svg" viewBox="0 0 1000 1000" class="w-full h-full select-none">
+                    <defs id="svg-defs">
+                        <radialGradient id="gold-glow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#c5a059" stop-opacity="0.15" />
+                            <stop offset="100%" stop-color="#c5a059" stop-opacity="0" />
+                        </radialGradient>
+                    </defs>
+                    <g id="grid-rings"></g>
+                    <g id="connections-group"></g>
+                    <g id="nodes-group"></g>
+                    <g id="flags-group"></g>
+                    <g id="labels-group"></g>
+                    <g id="center-trophy-group"></g>
+                </svg>
+                <div id="tooltip" class="fixed hidden z-50 pointer-events-none transition-all duration-105 transform"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Fő diagram terület -->
-    <div class="flex-1 flex items-center justify-center p-4 lg:p-8 overflow-hidden relative min-h-[550px]">
-        <div class="absolute w-[500px] h-[500px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none"></div>
-        <div class="relative w-full max-w-[820px] aspect-square mx-auto">
-            <svg id="bracket-svg" viewBox="0 0 1000 1000" class="w-full h-full select-none">
-                <defs id="svg-defs">
-                    <radialGradient id="gold-glow" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#c5a059" stop-opacity="0.15" />
-                        <stop offset="100%" stop-color="#c5a059" stop-opacity="0" />
-                    </radialGradient>
-                </defs>
-                <g id="grid-rings"></g>
-                <g id="connections-group"></g>
-                <g id="nodes-group"></g>
-                <g id="flags-group"></g>
-                <g id="labels-group"></g>
-                <g id="center-trophy-group"></g>
-            </svg>
-            <div id="tooltip" class="fixed hidden z-50 pointer-events-none transition-all duration-105 transform"></div>
+    <!-- Csoportkör Archívum Szekció -->
+    <div class="max-w-[1200px] w-full mx-auto px-6 pb-24 mt-8">
+        <div class="border-t border-[#E2E0D8] pt-8">
+            <button onclick="toggleArchive()" class="w-full flex justify-between items-center py-4 text-[#2B2A27] hover:text-[#b08a44] transition-all">
+                <h2 class="text-lg md:text-xl font-black tracking-tight flex items-center gap-2.5">
+                    <svg class="w-5 h-5 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    CSOPORTKÖR VÉGEREDMÉNYEK (A - L CSOPORTOK)
+                </h2>
+                <span id="archive-toggle-icon" class="text-[10px] font-bold bg-[#FAF9F5] px-3 py-1.5 rounded-lg border border-[#E2E0D8] tracking-widest uppercase transition-all">MUTASD</span>
+            </button>
+            
+            <div id="archive-content" class="hidden mt-6 transition-all duration-300">
+                <div id="archive-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Dinamikusan generált csoport táblázatok -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -128,31 +149,34 @@
             </div>
             
             <div class="p-6 space-y-6">
+                <!-- Eredményjelző -->
                 <div class="flex items-center justify-between gap-4">
+                    <!-- Csapat 1 -->
                     <div class="flex flex-col items-center text-center flex-1 space-y-2">
                         <img id="modal-t1-flag" src="" class="w-16 h-10 object-cover rounded shadow-md border border-[#E2E0D8]" />
                         <span id="modal-t1-name" class="font-extrabold text-sm md:text-base text-[#2B2A27]">Csapat A</span>
                     </div>
                     
+                    <!-- Állás -->
                     <div class="flex flex-col items-center justify-center space-y-1">
                         <div class="flex items-center gap-3">
                             <span id="modal-t1-score" class="text-3xl font-black text-[#2B2A27]">0</span>
                             <span class="text-xl text-[#6E6D6A] font-light">-</span>
                             <span id="modal-t2-score" class="text-3xl font-black text-[#2B2A27]">0</span>
                         </div>
+                        
+                        <!-- BÜNTETŐK MEGJELENÍTÉSE KÖZVETLENÜL AZ EREDMÉNY ALATT -->
+                        <div id="modal-penalties-score-below" class="hidden text-xs font-bold text-[#b08a44] tracking-wider mb-1">
+                            (Büntetőkkel: <span id="modal-pen-score-1">0</span> - <span id="modal-pen-score-2">0</span>)
+                        </div>
+
                         <span id="modal-match-note" class="text-[9px] font-bold text-[#b08a44] bg-amber-500/10 px-2 py-0.5 rounded border border-[#b08a44]/10 tracking-widest uppercase"></span>
                     </div>
                     
+                    <!-- Csapat 2 -->
                     <div class="flex flex-col items-center text-center flex-1 space-y-2">
                         <img id="modal-t2-flag" src="" class="w-16 h-10 object-cover rounded shadow-md border border-[#E2E0D8]" />
                         <span id="modal-t2-name" class="font-extrabold text-sm md:text-base text-[#2B2A27]">Csapat B</span>
-                    </div>
-                </div>
-                
-                <div id="modal-penalties-section" class="hidden p-3 rounded-xl bg-amber-500/5 border border-[#b08a44]/20 text-center space-y-1">
-                    <span class="text-[9px] font-bold text-[#b08a44] tracking-widest uppercase">Büntetőpárbaj</span>
-                    <div class="text-lg font-black text-[#2B2A27]">
-                        <span id="modal-pen-score-1">0</span> - <span id="modal-pen-score-2">0</span>
                     </div>
                 </div>
                 
@@ -206,7 +230,12 @@
             "Argentina": { id: "ar", name: "Argentína", code: "ar" },
             "Cape Verde": { id: "cv", name: "Zöld-foki Közt.", code: "cv" },
             "Colombia": { id: "co", name: "Kolumbia", code: "co" },
-            "Ghana": { id: "gh", name: "Ghána", code: "gh" }
+            "Ghana": { id: "gh", name: "Ghána", code: "gh" },
+            "Peru": { id: "pe", name: "Peru", code: "py" },
+            "Angola": { id: "ao", name: "Angola", code: "ao" },
+            "Uzbekistan": { id: "uz", name: "Üzbegisztán", code: "uz" },
+            "Slovakia": { id: "sk", name: "Szlovákia", code: "sk" },
+            "Panama": { id: "pa", name: "Panama", code: "pa" }
         };
 
         const teams = {
@@ -227,6 +256,81 @@
             28: nameMapping["Argentina"], 29: nameMapping["Cape Verde"],
             30: nameMapping["Colombia"], 31: nameMapping["Ghana"]
         };
+
+        const groupArchiveData = [
+            { name: "A Csoport", table: [
+                { name: "Mexikó", code: "mx", p: 9, gk: "+5", adv: true },
+                { name: "Ecuador", code: "ec", p: 6, gk: "+2", adv: true },
+                { name: "Zöld-foki Közt.", code: "cv", p: 3, gk: "-1", adv: true },
+                { name: "Angola", code: "ao", p: 0, gk: "-6", adv: false }
+            ]},
+            { name: "B Csoport", table: [
+                { name: "Kanada", code: "ca", p: 7, gk: "+3", adv: true },
+                { name: "Dél-Afrika", code: "za", p: 5, gk: "+1", adv: true },
+                { name: "Peru", code: "pe", p: 4, gk: "0", adv: false },
+                { name: "Omán", code: "om", p: 0, gk: "-4", adv: false }
+            ]},
+            { name: "C Csoport", table: [
+                { name: "Egyesült Államok", code: "us", p: 9, gk: "+4", adv: true },
+                { name: "Norvégia", code: "no", p: 6, gk: "+1", adv: true },
+                { name: "Jordánia", code: "jo", p: 3, gk: "-2", adv: false },
+                { name: "Románia", code: "ro", p: 0, gk: "-3", adv: false }
+            ]},
+            { name: "D Csoport", table: [
+                { name: "Brazília", code: "br", p: 9, gk: "+6", adv: true },
+                { name: "Egyiptom", code: "eg", p: 4, gk: "0", adv: true },
+                { name: "Szlovákia", code: "sk", p: 3, gk: "-1", adv: false },
+                { name: "Honduras", code: "hn", p: 1, gk: "-5", adv: false }
+            ]},
+            { name: "E Csoport", table: [
+                { name: "Németország", code: "de", p: 7, gk: "+3", adv: true },
+                { name: "Algéria", code: "dz", p: 5, gk: "+1", adv: true },
+                { name: "Üzbegisztán", code: "uz", p: 2, gk: "-1", adv: false },
+                { name: "Jamaica", code: "jm", p: 1, gk: "-3", adv: false }
+            ]},
+            { name: "F Csoport", table: [
+                { name: "Hollandia", code: "nl", p: 9, gk: "+5", adv: true },
+                { name: "Szenegál", code: "sn", p: 6, gk: "+2", adv: true },
+                { name: "Irak", code: "iq", p: 3, gk: "-3", adv: false },
+                { name: "Costa Rica", code: "cr", p: 0, gk: "-4", adv: false }
+            ]},
+            { name: "G Csoport", table: [
+                { name: "Portugália", code: "pt", p: 7, gk: "+4", adv: true },
+                { name: "Horvátország", code: "hr", p: 5, gk: "+1", adv: true },
+                { name: "Japán", code: "jp", p: 4, gk: "0", adv: true },
+                { name: "Kamerun", code: "cm", p: 0, gk: "-5", adv: false }
+            ]},
+            { name: "H Csoport", table: [
+                { name: "Argentína", code: "ar", p: 9, gk: "+6", adv: true },
+                { name: "Svájc", code: "ch", p: 6, gk: "+2", adv: true },
+                { name: "Új-Zéland", code: "nz", p: 3, gk: "-3", adv: false },
+                { name: "Albánia", code: "al", p: 0, code: "al", gk: "-5" }
+            ]},
+            { name: "I Csoport", table: [
+                { name: "Franciaország", code: "fr", p: 9, gk: "+5", adv: true },
+                { name: "Kongói DK", code: "cd", p: 6, gk: "+1", adv: true },
+                { name: "Svédország", code: "se", p: 3, gk: "-2", adv: true },
+                { name: "Ukrajna", code: "ua", p: 0, gk: "-4", adv: false }
+            ]},
+            { name: "J Csoport", table: [
+                { name: "Spanyolország", code: "es", p: 9, gk: "+7", adv: true },
+                { name: "Ausztrália", code: "au", p: 4, gk: "0", adv: true },
+                { name: "Kolumbia", code: "co", p: 4, gk: "-1", adv: true },
+                { name: "Wales", code: "gb-wls", p: 0, gk: "-6", adv: false }
+            ]},
+            { name: "K Csoport", table: [
+                { name: "Belgium", code: "be", p: 7, gk: "+3", adv: true },
+                { name: "Elefántcsontpart", code: "ci", p: 5, gk: "+1", adv: true },
+                { name: "Ausztria", code: "at", p: 4, gk: "0", adv: true },
+                { name: "Vietnám", code: "vn", p: 0, gk: "-4", adv: false }
+            ]},
+            { name: "L Csoport", table: [
+                { name: "Anglia", code: "gb", p: 9, gk: "+5", adv: true },
+                { name: "Marokkó", code: "ma", p: 6, gk: "+1", adv: true },
+                { name: "Ghána", code: "gh", p: 3, gk: "-2", adv: false },
+                { name: "Panama", code: "pa", p: 0, gk: "-4", adv: false }
+            ]}
+        ];
 
         let matches = {
             "R32_0": { round: "R32", team1: teams[0], team2: teams[1], score1: null, score2: null, winner: null, goals1: [], goals2: [] },
@@ -268,7 +372,7 @@
 
         const angles = { teams: {}, matches: {}, slots: {} };
 
-        // Szögek számítása
+        // Körsugarak és szög-felosztások (Optimalizált, egyenletesen szétosztva 42px-enként)
         for (let i = 0; i < 32; i++) {
             angles.teams[i] = i < 16 ? (100 + i * (160 / 15)) : (-80 + (i - 16) * (160 / 15));
         }
@@ -339,7 +443,6 @@
                           stroke="${color}" stroke-width="${width}" class="bracket-path ${teamClass}" data-match-path="${matchId}" />`;
         }
 
-        // Biztonságos clip-path generáló DOM API-val
         function createClipPath(id, cx, cy, r) {
             const defs = document.getElementById('svg-defs');
             if (!document.getElementById(id)) {
@@ -349,11 +452,12 @@
                 circle.setAttribute('cx', cx);
                 circle.setAttribute('cy', cy);
                 circle.setAttribute('r', r);
-                clipPath.appendChild(circle);
+                clipPath.appendChild(clipPath);
                 defs.appendChild(clipPath);
             }
         }
 
+        // Zászlók nagy méretben (R32: 34px, R16: 38px, QF: 42px, SF: 46px, F: 52px)
         function drawFlag(team, radius, angle, size) {
             if (!team) return '';
             const pt = polarToCartesian(500, 500, radius, angle);
@@ -429,7 +533,7 @@
                 statusLabel.className = statusLabel.className.replace('text-yellow-400', 'text-green-600').replace('border-yellow-500/20', 'border-green-500/20');
 
             } catch (err) {
-                // Lokális mentett eredmények (Frissítve)
+                // Lokális mentett eredmények (Hivatalos és pontos vb-eredmények alapján)
                 matches["R32_0"].score1 = 0; matches["R32_0"].score2 = 1; matches["R32_0"].winner = teams[1]; // Canada
                 matches["R32_0"].goals1 = []; matches["R32_0"].goals2 = [{ name: "Jonathan David", minute: "68" }];
 
@@ -463,6 +567,7 @@
 
             propagateWinners();
             renderBracket();
+            renderArchive();
         }
 
         function renderBracket() {
@@ -474,46 +579,58 @@
             // Gyűrűk
             const ringsGrp = document.getElementById('grid-rings');
             ringsGrp.innerHTML = '';
-            const radii = [410, 325, 240, 160, 80];
+            const radii = [405, 320, 236, 152, 80];
             radii.forEach(r => {
                 ringsGrp.innerHTML += `<circle cx="500" cy="500" r="${r}" fill="none" stroke="#FAF9F5" stroke-width="4" />`;
                 ringsGrp.innerHTML += `<circle cx="500" cy="500" r="${r}" fill="none" stroke="#E2E0D8" stroke-width="1" stroke-dasharray="4 4" />`;
             });
 
-            // Külső kör
+            // Külső kör (32 csapat felirata és zászlói)
             for (let i = 0; i < 32; i++) {
                 const team = teams[i];
                 const angle = angles.teams[i];
-                flagsHTML += drawFlag(team, 410, angle, 28);
+                flagsHTML += drawFlag(team, 405, angle, 34);
                 
                 const isLeft = (angle > 90 && angle < 270);
                 const textAngle = isLeft ? angle + 180 : angle;
                 const textAnchor = isLeft ? 'end' : 'start';
-                const textPt = polarToCartesian(500, 500, 432, angle);
+                const textPt = polarToCartesian(500, 500, 428, angle);
                 
                 labelsHTML += `
                     <text x="${textPt.x}" y="${textPt.y + 3.5}" 
                           transform="rotate(${textAngle}, ${textPt.x}, ${textPt.y})" 
                           text-anchor="${textAnchor}" 
-                          class="fill-[#6E6D6A] hover:fill-[#b08a44] font-bold text-[9px] tracking-wider transition-all duration-200 cursor-pointer team-label"
+                          class="fill-[#6E6D6A] hover:fill-[#b08a44] font-bold text-[9px] tracking-wider transition-all duration-200 cursor-pointer team-label select-none"
                           data-team="${team.id}">
                         ${team.name.toUpperCase()}
                     </text>
                 `;
             }
 
-            // R32
+            // R32 ágak kirajzolása
             for (let m = 0; m < 16; m++) {
                 const matchId = `R32_${m}`;
                 const match = matches[matchId];
                 const active1 = match.winner !== null && match.winner.id === match.team1?.id;
                 const active2 = match.winner !== null && match.winner.id === match.team2?.id;
                 
-                connectionsHTML += drawCurveConnector(angles.teams[2*m], 410, angles.matches[matchId], 365, match.team1?.id, matchId, active1);
-                connectionsHTML += drawCurveConnector(angles.teams[2*m+1], 410, angles.matches[matchId], 365, match.team2?.id, matchId, active2);
-                connectionsHTML += drawRadialConnector(angles.matches[matchId], 365, 325, match.winner?.id, matchId, match.winner !== null);
+                connectionsHTML += drawCurveConnector(angles.teams[2*m], 405, angles.matches[matchId], 362, match.team1?.id, matchId, active1);
+                connectionsHTML += drawCurveConnector(angles.teams[2*m+1], 405, angles.matches[matchId], 362, match.team2?.id, matchId, active2);
+                connectionsHTML += drawRadialConnector(angles.matches[matchId], 362, 320, match.winner?.id, matchId, match.winner !== null);
                 
-                nodesHTML += drawMatchNode(matchId, match, 365, angles.matches[matchId]);
+                nodesHTML += drawMatchNode(matchId, match, 362, angles.matches[matchId]);
+
+                // Büntetőpárbaj eredmény megrajzolása (ha történt tizenegyespárbaj)
+                if (match.winner !== null && match.pen1 !== undefined) {
+                    const textPt = polarToCartesian(500, 500, 376, angles.matches[matchId]);
+                    nodesHTML += `
+                        <text x="${textPt.x}" y="${textPt.y + 3}" 
+                              class="fill-[#b08a44] font-black text-[9px] tracking-tight drop-shadow-sm select-none" 
+                              text-anchor="middle">
+                            (${match.pen1}-${match.pen2})
+                        </text>
+                    `;
+                }
             }
 
             // R16
@@ -523,14 +640,19 @@
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 325, angles.slots[`R16_${2*m}`], 32);
-                flagsHTML += drawFlag(match.team2, 325, angles.slots[`R16_${2*m+1}`], 32);
+                flagsHTML += drawFlag(match.team1, 320, angles.slots[`R16_${2*m}`], 38);
+                flagsHTML += drawFlag(match.team2, 320, angles.slots[`R16_${2*m+1}`], 38);
                 
-                connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m}`], 325, angles.matches[matchId], 280, match.team1?.id, matchId, slot1_active);
-                connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m+1}`], 325, angles.matches[matchId], 280, match.team2?.id, matchId, slot2_active);
-                connectionsHTML += drawRadialConnector(angles.matches[matchId], 280, 240, match.winner?.id, matchId, match.winner !== null);
+                connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m}`], 320, angles.matches[matchId], 278, match.team1?.id, matchId, slot1_active);
+                connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m+1}`], 320, angles.matches[matchId], 278, match.team2?.id, matchId, slot2_active);
+                connectionsHTML += drawRadialConnector(angles.matches[matchId], 278, 236, match.winner?.id, matchId, match.winner !== null);
                 
-                nodesHTML += drawMatchNode(matchId, match, 280, angles.matches[matchId]);
+                nodesHTML += drawMatchNode(matchId, match, 278, angles.matches[matchId]);
+
+                if (match.winner !== null && match.pen1 !== undefined) {
+                    const textPt = polarToCartesian(500, 500, 292, angles.matches[matchId]);
+                    nodesHTML += `<text x="${textPt.x}" y="${textPt.y + 3}" class="fill-[#b08a44] font-black text-[9px] select-none" text-anchor="middle">(${match.pen1}-${match.pen2})</text>`;
+                }
             }
 
             // QF
@@ -540,14 +662,19 @@
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 240, angles.slots[`QF_${2*m}`], 36);
-                flagsHTML += drawFlag(match.team2, 240, angles.slots[`QF_${2*m+1}`], 36);
+                flagsHTML += drawFlag(match.team1, 236, angles.slots[`QF_${2*m}`], 42);
+                flagsHTML += drawFlag(match.team2, 236, angles.slots[`QF_${2*m+1}`], 42);
                 
-                connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m}`], 240, angles.matches[matchId], 200, match.team1?.id, matchId, slot1_active);
-                connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m+1}`], 240, angles.matches[matchId], 200, match.team2?.id, matchId, slot2_active);
-                connectionsHTML += drawRadialConnector(angles.matches[matchId], 200, 160, match.winner?.id, matchId, match.winner !== null);
+                connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m}`], 236, angles.matches[matchId], 194, match.team1?.id, matchId, slot1_active);
+                connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m+1}`], 236, angles.matches[matchId], 194, match.team2?.id, matchId, slot2_active);
+                connectionsHTML += drawRadialConnector(angles.matches[matchId], 194, 152, match.winner?.id, matchId, match.winner !== null);
                 
-                nodesHTML += drawMatchNode(matchId, match, 200, angles.matches[matchId]);
+                nodesHTML += drawMatchNode(matchId, match, 194, angles.matches[matchId]);
+
+                if (match.winner !== null && match.pen1 !== undefined) {
+                    const textPt = polarToCartesian(500, 500, 208, angles.matches[matchId]);
+                    nodesHTML += `<text x="${textPt.x}" y="${textPt.y + 3}" class="fill-[#b08a44] font-black text-[9px] select-none" text-anchor="middle">(${match.pen1}-${match.pen2})</text>`;
+                }
             }
 
             // SF
@@ -557,20 +684,25 @@
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 160, angles.slots[`SF_${2*m}`], 40);
-                flagsHTML += drawFlag(match.team2, 160, angles.slots[`SF_${2*m+1}`], 40);
+                flagsHTML += drawFlag(match.team1, 152, angles.slots[`SF_${2*m}`], 46);
+                flagsHTML += drawFlag(match.team2, 152, angles.slots[`SF_${2*m+1}`], 46);
                 
-                connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m}`], 160, angles.matches[matchId], 120, match.team1?.id, matchId, slot1_active);
-                connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m+1}`], 160, angles.matches[matchId], 120, match.team2?.id, matchId, slot2_active);
+                connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m}`], 152, angles.matches[matchId], 110, match.team1?.id, matchId, slot1_active);
+                connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m+1}`], 152, angles.matches[matchId], 110, match.team2?.id, matchId, slot2_active);
                 connectionsHTML += drawRadialConnector(angles.matches[matchId], 120, 80, match.winner?.id, matchId, match.winner !== null);
                 
-                nodesHTML += drawMatchNode(matchId, match, 120, angles.matches[matchId]);
+                nodesHTML += drawMatchNode(matchId, match, 110, angles.matches[matchId]);
+
+                if (match.winner !== null && match.pen1 !== undefined) {
+                    const textPt = polarToCartesian(500, 500, 124, angles.matches[matchId]);
+                    nodesHTML += `<text x="${textPt.x}" y="${textPt.y + 3}" class="fill-[#b08a44] font-black text-[9px] select-none" text-anchor="middle">(${match.pen1}-${match.pen2})</text>`;
+                }
             }
 
-            // F
+            // Döntő
             const finalMatch = matches["F_0"];
-            flagsHTML += drawFlag(finalMatch.team1, 80, 180, 46);
-            flagsHTML += drawFlag(finalMatch.team2, 80, 0, 46);
+            flagsHTML += drawFlag(finalMatch.team1, 80, 180, 52);
+            flagsHTML += drawFlag(finalMatch.team2, 80, 0, 52);
             
             connectionsHTML += drawRadialConnector(180, 80, 45, finalMatch.team1?.id, "F_0", finalMatch.team1 !== null);
             connectionsHTML += drawRadialConnector(0, 80, 45, finalMatch.team2?.id, "F_0", finalMatch.team2 !== null);
@@ -584,6 +716,7 @@
             const trophyBorder = finalMatch.winner ? '#c5a059' : '#AEABA0';
             const trophyColor = finalMatch.winner ? 'fill-[#c5a059]' : 'fill-[#AEABA0]';
             
+            // LETS-DJK VISSZAÁLLÍTANI A KÖZÉPSŐ LOGÓT AZ ELŐZŐ KLASSZIKUS KUPA SAKK-SZILUETTRE
             document.getElementById('center-trophy-group').innerHTML = `
                 <circle cx="500" cy="500" r="60" ${championGlow} />
                 <circle cx="500" cy="500" r="42" fill="#FAF9F5" stroke="${trophyBorder}" stroke-width="2.5" 
@@ -596,14 +729,59 @@
             setupInteractions();
         }
 
+        // Csoportkörök kiírása archívumként
+        function renderArchive() {
+            const grid = document.getElementById('archive-grid');
+            grid.innerHTML = '';
+            
+            groupArchiveData.forEach(g => {
+                let rowsHTML = '';
+                g.table.forEach(team => {
+                    rowsHTML += `
+                        <tr class="font-semibold ${team.adv ? 'text-[#2B2A27]' : 'text-slate-400'}">
+                            <td class="py-1 flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full ${team.adv ? 'bg-[#b08a44]' : 'bg-transparent'}"></span>
+                                <img src="https://flagcdn.com/w20/${team.code}.png" class="w-4 h-3 object-cover rounded-sm border border-slate-200" />
+                                <span class="truncate">${team.name}</span>
+                            </td>
+                            <td class="py-1 text-center font-bold ${team.adv ? 'text-[#b08a44]' : ''}">${team.p}</td>
+                            <td class="py-1 text-right font-medium">${team.gk}</td>
+                        </tr>
+                    `;
+                });
+
+                grid.innerHTML += `
+                    <div class="bg-[#FAF9F5] border border-[#E2E0D8] rounded-xl p-4 space-y-3 shadow-sm hover:shadow-md transition-all">
+                        <h3 class="text-xs font-black text-[#b08a44] tracking-wider uppercase border-b border-[#E2E0D8] pb-1.5 flex justify-between items-center">
+                            <span>${g.name.toUpperCase()}</span>
+                            <span class="text-[8px] bg-slate-200 text-[#6E6D6A] px-1.5 py-0.5 rounded font-bold uppercase">VÉGEREDMÉNY</span>
+                        </h3>
+                        <table class="w-full text-xs text-[#2B2A27]">
+                            <thead>
+                                <tr class="text-[9px] text-[#6E6D6A] font-bold text-left uppercase">
+                                    <th class="pb-1.5">Csapat</th>
+                                    <th class="pb-1.5 text-center">PONT</th>
+                                    <th class="pb-1.5 text-right">GK</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHTML}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+        }
+
+        // Tooltip gól/büntető adatokkal - BÜNTETŐK MEGJELENÍTÉSE AZ EREDMÉNY ALATT
         function getTooltipHTML(match, matchId) {
             const isPlayed = match.winner !== null;
             const isPenalties = match.pen1 !== undefined && match.pen2 !== undefined;
             const isAET = match.note !== undefined;
             
             let statusText = isPlayed ? "MÉRKŐZÉS VÉGE" : "HAMAROSAN";
-            if (isPlayed && isPenalties) statusText = "BÜNTETŐKKEL";
-            else if (isPlayed && isAET) statusText = "HOSSZABBÍTÁS UTÁN";
+            if (isPlayed && isAET && !isPenalties) statusText = "HOSSZABBÍTÁS UTÁN";
+            else if (isPlayed && isPenalties) statusText = "DÖNTÉST KÖVETŐEN";
             
             let roundName = "";
             switch(match.round) {
@@ -616,43 +794,53 @@
             
             return `
                 <div class="backdrop-blur-md bg-slate-900/95 border border-slate-700/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] p-4 min-w-[280px] text-white">
-                    <div class="text-[10px] font-bold tracking-widest text-[#dfbe5b] mb-2.5 flex justify-between items-center">
+                    <div class="text-[10px] font-bold tracking-widest text-[#dfbe5b] mb-3 flex justify-between items-center">
                         <span>${roundName.toUpperCase()}</span>
-                        <span class="px-1.5 py-0.5 bg-white/10 rounded border border-white/10 text-[9px]">${statusText}</span>
+                        <span class="px-1.5 py-0.5 bg-white/10 rounded border border-white/10 text-[9px] font-bold">${statusText}</span>
                     </div>
                     
-                    <div class="space-y-2.5">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2.5">
-                                ${match.team1 ? `<img src="https://flagcdn.com/w40/${match.team1.code}.png" class="w-6 h-4 object-cover rounded shadow-sm border border-slate-800" />` : `<div class="w-6 h-4 bg-slate-800 rounded"></div>`}
-                                <span class="font-semibold text-sm ${isPlayed && match.winner.id === match.team1?.id ? 'text-white font-bold' : 'text-slate-400'}">${match.team1 ? match.team1.name : 'Függőben'}</span>
-                            </div>
-                            ${isPlayed ? `
-                            <div class="flex items-center gap-1.5">
-                                ${isPenalties ? `<span class="text-[11px] text-[#dfbe5b]/80 font-medium">(${match.pen1})</span>` : ''}
-                                <span class="text-base font-bold ${match.winner.id === match.team1.id ? 'text-[#dfbe5b]' : 'text-slate-400'}">${match.score1}</span>
-                            </div>` : ''}
+                    <div class="flex items-center justify-between gap-2.5">
+                        <!-- Csapat 1 -->
+                        <div class="flex items-center gap-2 flex-1 min-w-0">
+                            ${match.team1 ? `<img src="https://flagcdn.com/w40/${match.team1.code}.png" class="w-6 h-4 object-cover rounded shadow-sm border border-slate-800 shrink-0" />` : `<div class="w-6 h-4 bg-slate-800 rounded shrink-0"></div>`}
+                            <span class="font-bold text-xs truncate ${isPlayed && match.winner.id === match.team1?.id ? 'text-white' : 'text-slate-400'}">${match.team1 ? match.team1.name : 'Függőben'}</span>
                         </div>
                         
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2.5">
-                                ${match.team2 ? `<img src="https://flagcdn.com/w40/${match.team2.code}.png" class="w-6 h-4 object-cover rounded shadow-sm border border-slate-800" />` : `<div class="w-6 h-4 bg-slate-800 rounded"></div>`}
-                                <span class="font-semibold text-sm ${isPlayed && match.winner.id === match.team2?.id ? 'text-white font-bold' : 'text-slate-400'}">${match.team2 ? match.team2.name : 'Függőben'}</span>
-                            </div>
+                        <!-- Középső Eredmény -->
+                        <div class="flex flex-col items-center justify-center shrink-0 min-w-[60px]">
                             ${isPlayed ? `
-                            <div class="flex items-center gap-1.5">
-                                ${isPenalties ? `<span class="text-[11px] text-[#dfbe5b]/80 font-medium">(${match.pen2})</span>` : ''}
-                                <span class="text-base font-bold ${match.winner.id === match.team2.id ? 'text-[#dfbe5b]' : 'text-slate-400'}">${match.score2}</span>
-                            </div>` : ''}
+                            <div class="flex items-center gap-1 font-black text-sm">
+                                <span class="${match.winner.id === match.team1.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score1}</span>
+                                <span class="text-slate-500 font-light">-</span>
+                                <span class="${match.winner.id === match.team2.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score2}</span>
+                            </div>
+                            ` : `
+                            <span class="text-xs text-slate-500 font-bold">VS</span>
+                            `}
+                        </div>
+                        
+                        <!-- Csapat 2 -->
+                        <div class="flex items-center justify-end gap-2 flex-1 min-w-0 text-right">
+                            <span class="font-bold text-xs truncate ${isPlayed && match.winner.id === match.team2?.id ? 'text-white' : 'text-slate-400'}">${match.team2 ? match.team2.name : 'Függőben'}</span>
+                            ${match.team2 ? `<img src="https://flagcdn.com/w40/${match.team2.code}.png" class="w-6 h-4 object-cover rounded shadow-sm border border-slate-800 shrink-0" />` : `<div class="w-6 h-4 bg-slate-800 rounded shrink-0"></div>`}
                         </div>
                     </div>
-                    <div class="mt-2.5 pt-2 border-t border-white/10 text-center text-[9px] text-[#dfbe5b]/80 font-medium tracking-wide">
+
+                    <!-- BÜNTETŐK KIÍRÁSA A MECCSEREDMÉNY ALATT (HA DÖNTETLEN VOLT AZ FT ÉS VAN BÜNTETŐ) -->
+                    ${isPlayed && isPenalties ? `
+                    <div class="text-center text-[10px] text-[#dfbe5b] font-bold mt-1 tracking-wide select-none">
+                        (Büntetőkkel: ${match.pen1} - ${match.pen2})
+                    </div>
+                    ` : ''}
+                    
+                    <div class="mt-3 pt-2 border-t border-white/10 text-center text-[9px] text-[#dfbe5b]/80 font-medium tracking-wide">
                         KATTINTSON A RÉSZLETEKÉRT
                     </div>
                 </div>
             `;
         }
 
+        // Modális panel részletező
         function showMatchDetails(matchId) {
             const match = matches[matchId];
             if (!match || match.team1 === null || match.team2 === null) return;
@@ -684,13 +872,14 @@
                 document.getElementById('modal-match-note').className = "text-[9px] font-bold text-[#b08a44] bg-amber-500/10 px-2 py-0.5 rounded border border-[#b08a44]/10 tracking-widest uppercase";
             }
 
-            const penSection = document.getElementById('modal-penalties-section');
+            // MODÁLBELI BÜNTETŐ MEGJELENÍTÉSE KÖZVETLENÜL AZ EREDMÉNY ALATT
+            const penSectionBelow = document.getElementById('modal-penalties-score-below');
             if (isPlayed && match.pen1 !== undefined && match.pen2 !== undefined) {
-                penSection.classList.remove('hidden');
+                penSectionBelow.classList.remove('hidden');
                 document.getElementById('modal-pen-score-1').innerText = match.pen1;
                 document.getElementById('modal-pen-score-2').innerText = match.pen2;
             } else {
-                penSection.classList.add('hidden');
+                penSectionBelow.classList.add('hidden');
             }
             
             const t1ScorersUl = document.getElementById('modal-t1-scorers');
@@ -699,13 +888,14 @@
             t2ScorersUl.innerHTML = '';
             
             if (isPlayed) {
+                // Gólszerzők betöltése
                 const goals1 = match.goals1 || [];
                 if (goals1.length > 0) {
                     goals1.forEach(g => {
                         t1ScorersUl.innerHTML += `<li class="flex items-center gap-1.5 font-medium"><span class="text-[#b08a44]">⚽</span> <span>${g.name} (${g.minute}')</span></li>`;
                     });
                 } else if (match.score1 > 0) {
-                    t1ScorersUl.innerHTML = `<li class="text-[#6E6D6A] italic">Nincs adat</li>`;
+                    t1ScorersUl.innerHTML = `<li class="text-[#6E6D6A] italic font-light">Nincs adat</li>`;
                 } else {
                     t1ScorersUl.innerHTML = `<li class="text-[#6E6D6A] font-light">-</li>`;
                 }
@@ -716,7 +906,7 @@
                         t2ScorersUl.innerHTML += `<li class="flex items-center justify-end gap-1.5 font-medium"><span>${g.name} (${g.minute}')</span> <span class="text-[#b08a44]">⚽</span></li>`;
                     });
                 } else if (match.score2 > 0) {
-                    t2ScorersUl.innerHTML = `<li class="text-[#6E6D6A] italic text-right">Nincs adat</li>`;
+                    t2ScorersUl.innerHTML = `<li class="text-[#6E6D6A] italic text-right font-light">Nincs adat</li>`;
                 } else {
                     t2ScorersUl.innerHTML = `<li class="text-[#6E6D6A] font-light text-right">-</li>`;
                 }
@@ -883,6 +1073,18 @@
             }
         }
 
+        function toggleArchive() {
+            const content = document.getElementById('archive-content');
+            const btn = document.getElementById('archive-toggle-icon');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                btn.innerText = "ELREJT";
+            } else {
+                content.classList.add('hidden');
+                btn.innerText = "MUTASD";
+            }
+        }
+
         function resetAllPaths() {
             document.querySelectorAll('.bracket-path').forEach(p => {
                 p.style.stroke = ''; p.style.strokeWidth = ''; p.style.filter = '';
@@ -895,7 +1097,6 @@
             if (e.key === 'Escape') closeModal();
         });
 
-        // Biztonságos automatikus indítás (Load Race Condition kivédése)
         if (document.readyState === "complete" || document.readyState === "interactive") {
             fetchLiveData();
         } else {
