@@ -397,9 +397,40 @@
 
         function formatMatchDateTime(dateStr, timeStr) {
             if (!dateStr) return null;
-            const [y, mo, d] = dateStr.split('-');
-            const datePart = `${y}. ${mo}. ${d}.`;
-            return timeStr ? `${datePart} ${timeStr}` : datePart;
+            const [y, mo, d] = dateStr.split('-').map(Number);
+            const datePart = `${y}. ${String(mo).padStart(2, '0')}. ${String(d).padStart(2, '0')}.`;
+            if (!timeStr) return datePart;
+
+            // A helyszíni időpontot (pl. "16:30 UTC-4") átszámoljuk a néző saját
+            // időzónájára — ez mindig a böngészőjéből kiolvasott zóna, tehát
+            // automatikusan Budapest/Belgrád idő szerint jelenik meg, ha onnan nézi.
+            const tm = timeStr.match(/(\d{1,2}):(\d{2})\s*UTC([+-]\d+)/);
+            if (!tm) return `${datePart} ${timeStr}`;
+
+            const hour = parseInt(tm[1], 10), minute = parseInt(tm[2], 10), offset = parseInt(tm[3], 10);
+            const utcMoment = new Date(Date.UTC(y, mo - 1, d, hour - offset, minute));
+
+            const localHH = String(utcMoment.getHours()).padStart(2, '0');
+            const localMM = String(utcMoment.getMinutes()).padStart(2, '0');
+
+            // Ha a helyi idő szerint más naptári napra esik a meccs (pl. hajnalra csúszik át),
+            // azt is jelezzük.
+            const utcMidnightOfMatchDay = Date.UTC(y, mo - 1, d);
+            const localDateStr = `${utcMoment.getFullYear()}-${utcMoment.getMonth()}-${utcMoment.getDate()}`;
+            const origDateStr = `${y}-${mo - 1}-${d}`;
+            let dayShift = '';
+            if (localDateStr !== origDateStr) {
+                const diffDays = Math.round((new Date(utcMoment.getFullYear(), utcMoment.getMonth(), utcMoment.getDate()) - new Date(y, mo - 1, d)) / 86400000);
+                dayShift = diffDays > 0 ? ` (+${diffDays} nap)` : ` (${diffDays} nap)`;
+            }
+
+            let tzLabel = '';
+            try {
+                const part = new Intl.DateTimeFormat('hu-HU', { timeZoneName: 'short' }).formatToParts(utcMoment).find(p => p.type === 'timeZoneName');
+                if (part) tzLabel = ' ' + part.value;
+            } catch (e) { /* ha a böngésző nem támogatja, egyszerűen kihagyjuk */ }
+
+            return `${datePart} ${timeStr} · nálad: ${localHH}:${localMM}${dayShift}${tzLabel}`;
         }
 
         let matches = {
@@ -554,7 +585,7 @@
             const fill = isPlayed ? '#F4F3EF' : '#FFFFFF';
             const shadowClass = isPlayed ? 'drop-shadow-[0_0_4px_rgba(197, 160, 89, 0.5)]' : '';
             
-            return `<circle cx="${pt.x}" cy="${pt.y}" r="6" fill="${fill}" stroke="${strokeColor}" stroke-width="2.5" class="match-node cursor-pointer ${shadowClass}" data-match="${matchId}" />`;
+            return `<circle cx="${pt.x}" cy="${pt.y}" r="9" fill="${fill}" stroke="${strokeColor}" stroke-width="3" class="match-node cursor-pointer ${shadowClass}" data-match="${matchId}" />`;
         }
 
         function setApiStatus(state) {
@@ -809,7 +840,7 @@
             for (let i = 0; i < 32; i++) {
                 const team = teams[i];
                 const angle = angles.teams[i];
-                flagsHTML += drawFlag(team, 405, angle, 34);
+                flagsHTML += drawFlag(team, 405, angle, 46);
                 
                 const isLeft = (angle > 90 && angle < 270);
                 const textAngle = isLeft ? angle + 180 : angle;
@@ -848,8 +879,8 @@
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 320, angles.slots[`R16_${2*m}`], 38);
-                flagsHTML += drawFlag(match.team2, 320, angles.slots[`R16_${2*m+1}`], 38);
+                flagsHTML += drawFlag(match.team1, 320, angles.slots[`R16_${2*m}`], 52);
+                flagsHTML += drawFlag(match.team2, 320, angles.slots[`R16_${2*m+1}`], 52);
                 
                 connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m}`], 320, angles.matches[matchId], 278, match.team1?.id, matchId, slot1_active);
                 connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m+1}`], 320, angles.matches[matchId], 278, match.team2?.id, matchId, slot2_active);
@@ -865,8 +896,8 @@
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 236, angles.slots[`QF_${2*m}`], 42);
-                flagsHTML += drawFlag(match.team2, 236, angles.slots[`QF_${2*m+1}`], 42);
+                flagsHTML += drawFlag(match.team1, 236, angles.slots[`QF_${2*m}`], 58);
+                flagsHTML += drawFlag(match.team2, 236, angles.slots[`QF_${2*m+1}`], 58);
                 
                 connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m}`], 236, angles.matches[matchId], 194, match.team1?.id, matchId, slot1_active);
                 connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m+1}`], 236, angles.matches[matchId], 194, match.team2?.id, matchId, slot2_active);
@@ -882,8 +913,8 @@
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 152, angles.slots[`SF_${2*m}`], 46);
-                flagsHTML += drawFlag(match.team2, 152, angles.slots[`SF_${2*m+1}`], 46);
+                flagsHTML += drawFlag(match.team1, 152, angles.slots[`SF_${2*m}`], 64);
+                flagsHTML += drawFlag(match.team2, 152, angles.slots[`SF_${2*m+1}`], 64);
                 
                 connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m}`], 152, angles.matches[matchId], 110, match.team1?.id, matchId, slot1_active);
                 connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m+1}`], 152, angles.matches[matchId], 110, match.team2?.id, matchId, slot2_active);
@@ -894,8 +925,8 @@
 
             // Döntő
             const finalMatch = matches["F_0"];
-            flagsHTML += drawFlag(finalMatch.team1, 80, 180, 52);
-            flagsHTML += drawFlag(finalMatch.team2, 80, 0, 52);
+            flagsHTML += drawFlag(finalMatch.team1, 80, 180, 72);
+            flagsHTML += drawFlag(finalMatch.team2, 80, 0, 72);
             
             connectionsHTML += drawRadialConnector(180, 80, 45, finalMatch.team1?.id, "F_0", finalMatch.team1 !== null);
             connectionsHTML += drawRadialConnector(0, 80, 45, finalMatch.team2?.id, "F_0", finalMatch.team2 !== null);
