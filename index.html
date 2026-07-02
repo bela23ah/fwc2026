@@ -660,7 +660,10 @@
                     // Ha az openfootball forrás ezt a meccset már véglegesen feldolgozta
                     // (van győztese ÉS gólszerző-listája), akkor nem nyúlunk hozzá — az a
                     // pontosabb, részletesebb adat marad érvényben.
-                    const alreadyFinalized = m.winner !== null && ((m.goals1 && m.goals1.length) || (m.goals2 && m.goals2.length) || m.score1 === 0 || m.score2 === 0);
+                    // Ha az openfootball forrás ezt a meccset már feldolgozta és van győztese
+                    // (a helyes p > et > ft prioritás szerint), akkor nem nyúlunk hozzá —
+                    // az a pontosabb, gólszerzőket is tartalmazó adat marad érvényben.
+                    const alreadyFinalized = m.winner !== null;
                     if (state === 'post' && alreadyFinalized) continue;
 
                     const s1 = parseInt(home.score, 10) || 0;
@@ -729,9 +732,19 @@
                         const matchSwapped = (m.team1 && m.team2 && m.team1.name === t2_mapped.name && m.team2.name === t1_mapped.name);
                         
                         if ((matchNormal || matchSwapped) && raw.score && raw.score.ft) {
-                            m.score1 = matchNormal ? raw.score.ft[0] : raw.score.ft[1];
-                            m.score2 = matchNormal ? raw.score.ft[1] : raw.score.ft[0];
-                            m.winner = m.score1 > m.score2 ? m.team1 : m.team2;
+                            // FONTOS: a végeredményt (és a győztest) a legkésőbbi, ténylegesen
+                            // eldöntött szakasz alapján kell megállapítani, NEM mindig a 90 perces
+                            // "ft" mező alapján! Ha a meccs a hosszabbításban dőlt el
+                            // (pl. { ft:[2,2], et:[3,2] }, tizenegyespárbaj NÉLKÜL), akkor az "et"
+                            // a valódi végeredmény — az "ft" csak a rendes játékidő állását mutatja.
+                            // Sorrend: büntetők (p) > hosszabbítás (et) > rendes játékidő (ft).
+                            const finalScore = raw.score.et || raw.score.ft;
+                            m.score1 = matchNormal ? finalScore[0] : finalScore[1];
+                            m.score2 = matchNormal ? finalScore[1] : finalScore[0];
+                            m.winner = m.score1 > m.score2 ? m.team1 : (m.score2 > m.score1 ? m.team2 : null);
+                            if (raw.score.et && raw.score.et[0] !== raw.score.et[1]) {
+                                m.note = "HOSSZABBÍTÁS UTÁN";
+                            }
 
                             m.goals1 = matchNormal ? (raw.goals1 || []) : (raw.goals2 || []);
                             m.goals2 = matchNormal ? (raw.goals2 || []) : (raw.goals1 || []);
@@ -740,6 +753,7 @@
                                 m.pen1 = matchNormal ? raw.score.p[0] : raw.score.p[1];
                                 m.pen2 = matchNormal ? raw.score.p[1] : raw.score.p[0];
                                 m.winner = m.pen1 > m.pen2 ? m.team1 : m.team2;
+                                delete m.note;
                             }
                         }
                     }
@@ -781,9 +795,16 @@
 
                 matches["R32_5"].date = "2026-07-02"; matches["R32_5"].time = "12:00 UTC-7"; matches["R32_5"].ground = "Los Angeles (Inglewood)"; // Spanyolország - Ausztria
 
-                matches["R32_6"].date = "2026-07-01"; matches["R32_6"].time = "17:00 UTC-7"; matches["R32_6"].ground = "San Francisco Bay Area (Santa Clara)"; // USA - Bosznia-Hercegovina
+                matches["R32_6"].date = "2026-07-01"; matches["R32_6"].time = "17:00 UTC-7"; matches["R32_6"].ground = "San Francisco Bay Area (Santa Clara)";
+                matches["R32_6"].score1 = 2; matches["R32_6"].score2 = 0; matches["R32_6"].winner = teams[12]; // USA
+                matches["R32_6"].goals1 = [{ name: "Folarin Balogun", minute: "45" }, { name: "Malik Tillman", minute: "82" }];
+                matches["R32_6"].goals2 = [];
 
-                matches["R32_7"].date = "2026-07-01"; matches["R32_7"].time = "13:00 UTC-7"; matches["R32_7"].ground = "Seattle"; // Belgium - Szenegál
+                matches["R32_7"].date = "2026-07-01"; matches["R32_7"].time = "13:00 UTC-7"; matches["R32_7"].ground = "Seattle";
+                matches["R32_7"].score1 = 3; matches["R32_7"].score2 = 2; matches["R32_7"].winner = teams[14]; // Belgium, hosszabbítás után (11-esből, tizenegyespárbaj nélkül)
+                matches["R32_7"].note = "HOSSZABBÍTÁS UTÁN";
+                matches["R32_7"].goals1 = [{ name: "Romelu Lukaku", minute: "86" }, { name: "Youri Tielemans", minute: "89" }, { name: "Youri Tielemans", minute: "120+5" }];
+                matches["R32_7"].goals2 = [{ name: "Habib Diarra", minute: "25" }, { name: "Ismaïla Sarr", minute: "51" }];
 
                 matches["R32_8"].date = "2026-06-29"; matches["R32_8"].time = "12:00 UTC-5"; matches["R32_8"].ground = "Houston";
                 matches["R32_8"].score1 = 2; matches["R32_8"].score2 = 1; matches["R32_8"].winner = teams[16]; // Brazília
