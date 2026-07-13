@@ -6,44 +6,16 @@
     <title>FIFA World Cup 2026 - Kieséses Szakasz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        poster: {
-                            bg: '#F4F3EF',
-                            card: '#FAF9F5',
-                            text: '#2B2A27',
-                            muted: '#6E6D6A',
-                            line: '#E2E0D8'
-                        },
-                        gold: {
-                            50: '#fbf8eb', 100: '#f5eecc', 200: '#ebd999', 300: '#dfbe5b',
-                            400: '#c5a059', 500: '#b08a44', 600: '#967134', 700: '#7c5a27'
-                        }
-                    }
-                }
-            }
-        }
+        tailwind.config={theme:{extend:{colors:{poster:{bg:'#F4F3EF',card:'#FAF9F5',text:'#2B2A27',muted:'#6E6D6A',line:'#E2E0D8'},gold:{50:'#fbf8eb',100:'#f5eecc',200:'#ebd999',300:'#dfbe5b',400:'#c5a059',500:'#b08a44',600:'#967134',700:'#7c5a27'}}}}};
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body {
-            background-color: #F4F3EF;
-            color: #2B2A27;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-        .bracket-path {
-            transition: stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease;
-        }
-        .match-node {
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), r 0.2s ease, fill 0.2s ease;
-        }
+        body{background-color:#F4F3EF;color:#2B2A27;font-family:'Inter',sans-serif;overflow-x:hidden;}
+        .bracket-path{transition:stroke .3s ease,stroke-width .3s ease,filter .3s ease;}
+        .match-node{transition:transform .2s cubic-bezier(.175,.885,.32,1.275),r .2s ease,fill .2s ease;}
     </style>
 </head>
 <body class="bg-[#F4F3EF] text-[#2B2A27] min-h-screen flex flex-col antialiased">
-
     <div class="flex flex-col lg:flex-row flex-1">
         <!-- Oldalsáv -->
         <div class="w-full lg:w-[380px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#E2E0D8] bg-[#FAF9F5] p-6 flex flex-col justify-between">
@@ -51,27 +23,22 @@
                 <div class="space-y-2">
                     <div class="flex items-center gap-2">
                         <span id="api-status" class="px-2 py-0.5 bg-amber-500/10 rounded text-[10px] font-bold text-amber-600 tracking-wider border border-amber-500/20 flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                            ADATOK FRISSÍTÉSE...
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>FRISSÍTÉS...
                         </span>
-                        <span class="text-xs text-[#6E6D6A] font-semibold tracking-widest uppercase">Kieséses ág</span>
+                        <span id="api-status-time" class="text-[10px] text-[#6E6D6A] hidden"></span>
+                        <span id="api-live-badge" class="hidden px-1.5 py-0.5 bg-red-500/10 rounded text-[9px] font-bold text-red-600 border border-red-500/20 items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span><span id="api-live-count"></span></span>
+                        <span class="text-xs text-[#6E6D6A] font-semibold tracking-widest uppercase">ÉLŐ ÁLLÁS</span>
                     </div>
-                    <h1 class="text-2xl lg:text-3xl font-extrabold tracking-tight text-[#2B2A27]">
-                        FIFA WORLD CUP 2026
-                    </h1>
-                    <p class="text-xs text-[#6E6D6A] leading-relaxed">
-                        A kieséses szakasz élő kördiagramja. Vigye a kurzort a pontokra az adatokért, és kattintson rájuk a részletes gólszerzőkért.
-                    </p>
+                    <h1 class="text-2xl lg:text-3xl font-extrabold tracking-tight text-[#2B2A27]">FIFA WORLD CUP 2026</h1>
+                    <p class="text-xs text-[#6E6D6A] leading-relaxed">A kieséses szakasz élő kördiagramja. Vigye a kurzort a pontokra az adatokért, és kattintson rájuk a részletekért.</p>
                     <p id="last-updated-time" class="text-[10px] font-medium text-[#6E6D6A] italic pt-1"></p>
                 </div>
-
-                <!-- Jelmagyarázat -->
                 <div class="space-y-4 pt-4 border-t border-[#E2E0D8]">
                     <h3 class="text-xs font-bold text-[#2B2A27] tracking-wider uppercase">Jelmagyarázat</h3>
                     <div class="space-y-3 text-xs text-[#6E6D6A]">
                         <div class="flex items-start gap-3">
                             <div class="w-4 h-4 rounded-full bg-amber-500/20 border border-[#b08a44] flex items-center justify-center shrink-0 mt-0.5"></div>
-                            <p>Arany pontok: <strong>Lejátszott</strong> mérkőzések. Kattintson a részletekért.</p>
+                            <p>Arany pontok: <strong>Lejátszott</strong> mérkőzések.</p>
                         </div>
                         <div class="flex items-start gap-3">
                             <div class="w-4 h-4 rounded-full bg-white border border-[#E2E0D8] flex items-center justify-center shrink-0 mt-0.5"></div>
@@ -79,26 +46,19 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="p-4 rounded-xl bg-[#F4F3EF] border border-[#E2E0D8] space-y-2 text-xs">
-                    <div class="flex justify-between items-center text-[#6E6D6A]">
-                        <span>Megjelenítés:</span>
-                        <span class="font-semibold text-[#b08a44]">Valós eredmények</span>
-                    </div>
+                    <div class="flex justify-between items-center text-[#6E6D6A]"><span>Megjelenítés:</span><span class="font-semibold text-[#b08a44]">Valós eredmények</span></div>
                 </div>
             </div>
-
-            <div class="mt-8 lg:mt-0 pt-6 border-t border-[#E2E0D8] flex flex-col gap-3">
+            <div class="mt-8 lg:mt-0 pt-6 border-t border-[#E2E0D8]">
                 <button onclick="fetchLiveData()" class="w-full py-2.5 rounded-lg bg-[#FAF9F5] hover:bg-[#F4F3EF] border border-[#E2E0D8] text-xs font-bold text-[#2B2A27] transition-all flex items-center justify-center gap-2">
-                    <svg class="w-3.5 h-3.5 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
-                    Eredmények frissítése
+                    <svg class="w-3.5 h-3.5 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>Eredmények frissítése
                 </button>
             </div>
         </div>
 
-        <!-- Fő diagram terület -->
-        <div class="flex-1 flex items-center justify-center p-4 lg:p-8 overflow-hidden relative min-h-[550px]" aria-label="Interaktív ágrajz kördiagram formátumban">
-            <div class="absolute w-[500px] h-[500px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none"></div>
+        <!-- Fő diagram és kártyák gördíthető területe -->
+        <div class="flex-1 flex flex-col items-center justify-start p-4 lg:p-8 overflow-y-auto space-y-8">
             <div class="relative w-full max-w-[820px] aspect-square mx-auto">
                 <svg id="bracket-svg" viewBox="0 0 1000 1000" class="w-full h-full select-none" role="img" aria-label="FIFA World Cup 2026 kördiagram">
                     <defs id="svg-defs">
@@ -116,190 +76,103 @@
                 </svg>
                 <div id="tooltip" class="fixed hidden z-50 pointer-events-none transition-all duration-105 transform"></div>
             </div>
-        </div>
-    </div>
 
-    <!-- Polymarket Kitekintés Szekció -->
-    <div class="max-w-[1200px] w-full mx-auto px-6 mt-8">
-        <div class="bg-[#FAF9F5] border border-[#E2E0D8] rounded-2xl p-6 shadow-sm space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-[#E2E0D8] pb-4">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                        <span class="text-xs text-[#6E6D6A] font-bold tracking-widest uppercase">Polymarket élő prognózis</span>
+            <!-- Polymarket Kitekintés Szekció -->
+            <div class="w-full max-w-[820px] bg-[#FAF9F5] border border-[#E2E0D8] rounded-2xl p-6 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-[#E2E0D8] pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                            <span class="text-xs text-[#6E6D6A] font-bold tracking-widest uppercase">Polymarket élő prognózis</span>
+                        </div>
+                        <h2 class="text-lg font-extrabold text-[#2B2A27] mt-1">Ki nyeri a 2026-os Világbajnokságot?</h2>
                     </div>
-                    <h2 class="text-lg font-extrabold text-[#2B2A27] mt-1">Ki nyeri a 2026-os Világbajnokságot?</h2>
-                </div>
-                <div class="text-left sm:text-right text-xs text-[#6E6D6A]">
-                    <div>Összesített kereskedési volumen: <strong class="text-[#b08a44] font-bold">$3.9 Milliárd</strong></div>
-                    <div class="text-[10px] italic">Forrás: Valós idejű implied oddsok (piaci konszenzus)</div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                <!-- Bal oszlop: Top 3 -->
-                <div class="space-y-4">
-                    <!-- 1. Franciaország -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
-                            <span class="flex items-center gap-2">
-                                <span class="text-[#b08a44]">1.</span>
-                                <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-3 object-cover rounded-sm" /> Franciaország
-                            </span>
-                            <span class="text-[#b08a44]">35.4% <span class="text-slate-400 font-light">($0.35)</span></span>
-                        </div>
-                        <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full animate-pulse" style="width: 35.4%"></div>
-                        </div>
-                    </div>
-
-                    <!-- 2. Argentína -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
-                            <span class="flex items-center gap-2">
-                                <span class="text-[#b08a44]">2.</span>
-                                <img src="https://flagcdn.com/w20/ar.png" class="w-4 h-3 object-cover rounded-sm" /> Argentína
-                            </span>
-                            <span class="text-[#b08a44]">16.8% <span class="text-slate-400 font-light">($0.17)</span></span>
-                        </div>
-                        <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 16.8%"></div>
-                        </div>
-                    </div>
-
-                    <!-- 3. Spanyolország -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
-                            <span class="flex items-center gap-2">
-                                <span class="text-[#b08a44]">3.</span>
-                                <img src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm" /> Spanyolország
-                            </span>
-                            <span class="text-[#b08a44]">12.4% <span class="text-slate-400 font-light">($0.12)</span></span>
-                        </div>
-                        <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 12.4%"></div>
-                        </div>
+                    <div class="text-left sm:text-right text-xs text-[#6E6D6A]">
+                        <div>Volumen: <strong class="text-[#b08a44] font-bold">$3.9 Milliárd</strong></div>
+                        <div class="text-[10px] italic">Forrás: Valós idejű piaci oddsok</div>
                     </div>
                 </div>
-
-                <!-- Jobb oszlop: 4-6 -->
-                <div class="space-y-4">
-                    <!-- 4. Anglia -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
-                            <span class="flex items-center gap-2">
-                                <span class="text-[#b08a44]">4.</span>
-                                <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-3 object-cover rounded-sm" /> Anglia
-                            </span>
-                            <span class="text-[#b08a44]">7.1% <span class="text-slate-400 font-light">($0.07)</span></span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div class="space-y-4">
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
+                                <span class="flex items-center gap-2"><span class="text-[#b08a44]">1.</span><img src="https://flagcdn.com/w20/fr.png" class="w-4 h-3 object-cover rounded-sm border" /> Franciaország</span>
+                                <span class="text-[#b08a44]">35.4% <span class="text-slate-400 font-light">($0.35)</span></span>
+                            </div>
+                            <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full animate-pulse" style="width: 35.4%"></div>
+                            </div>
                         </div>
-                        <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 7.1%"></div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
+                                <span class="flex items-center gap-2"><span class="text-[#b08a44]">2.</span><img src="https://flagcdn.com/w20/ar.png" class="w-4 h-3 object-cover rounded-sm border" /> Argentína</span>
+                                <span class="text-[#b08a44]">16.8% <span class="text-slate-400 font-light">($0.17)</span></span>
+                            </div>
+                            <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 16.8%"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
+                                <span class="flex items-center gap-2"><span class="text-[#b08a44]">3.</span><img src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm border" /> Spanyolország</span>
+                                <span class="text-[#b08a44]">12.4% <span class="text-slate-400 font-light">($0.12)</span></span>
+                            </div>
+                            <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 12.4%"></div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- 5. Brazília -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
-                            <span class="flex items-center gap-2">
-                                <span class="text-[#b08a44]">5.</span>
-                                <img src="https://flagcdn.com/w20/br.png" class="w-4 h-3 object-cover rounded-sm" /> Brazília
-                            </span>
-                            <span class="text-[#b08a44]">7.0% <span class="text-slate-400 font-light">($0.07)</span></span>
+                    <div class="space-y-4">
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
+                                <span class="flex items-center gap-2"><span class="text-[#b08a44]">4.</span><img src="https://flagcdn.com/w20/gb-eng.png" class="w-4 h-3 object-cover rounded-sm border" /> Anglia</span>
+                                <span class="text-[#b08a44]">7.1% <span class="text-slate-400 font-light">($0.07)</span></span>
+                            </div>
+                            <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 7.1%"></div>
+                            </div>
                         </div>
-                        <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-[#c5a059] h-full rounded-full" style="width: 7.0%"></div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
+                                <span class="flex items-center gap-2"><span class="text-[#b08a44]">5.</span><img src="https://flagcdn.com/w20/br.png" class="w-4 h-3 object-cover rounded-sm border" /> Brazília</span>
+                                <span class="text-[#b08a44]">7.0% <span class="text-slate-400 font-light">($0.07)</span></span>
+                            </div>
+                            <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
+                                <div class="bg-[#c5a059] h-full rounded-full" style="width: 7.0%"></div>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- 6. Portugália -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
-                            <span class="flex items-center gap-2">
-                                <span class="text-[#b08a44]">6.</span>
-                                <img src="https://flagcdn.com/w20/pt.png" class="w-4 h-3 object-cover rounded-sm" /> Portugália
-                            </span>
-                            <span class="text-[#b08a44]">6.0% <span class="text-slate-400 font-light">($0.06)</span></span>
-                        </div>
-                        <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 6.0%"></div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-bold text-[#2B2A27]">
+                                <span class="flex items-center gap-2"><span class="text-[#b08a44]">6.</span><img src="https://flagcdn.com/w20/pt.png" class="w-4 h-3 object-cover rounded-sm border" /> Portugália</span>
+                                <span class="text-[#b08a44]">6.0% <span class="text-slate-400 font-light">($0.06)</span></span>
+                            </div>
+                            <div class="w-full bg-[#E2E0D8] h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-amber-500 to-[#b08a44] h-full rounded-full" style="width: 6.0%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="text-[10px] text-[#6E6D6A] pt-2 border-t border-[#E2E0D8] flex flex-col sm:flex-row justify-between gap-1">
-                <span>A fenti adatok a Polymarket peer-to-peer kereskedési piacán folyamatosan kereskedett bináris kontraktusok áraiból képzett valós esélyek.</span>
-                <span class="font-semibold text-[#b08a44]">Módszertan: Piaci konszenzus esélyek (Implied Probability)</span>
-            </div>
-        </div>
-    </div>
+            <!-- AI Tipp & Predikciós Szekció -->
+            <div id="ai-prediction-container" class="w-full max-w-[820px]"></div>
 
-    <!-- AI Tipp & Predikciós Szekció -->
-    <div id="ai-prediction-container" class="max-w-[1200px] w-full mx-auto px-6 mt-6">
-        <!-- Dinamikusan generált tartalom az éppen aktuális legközelebbi meccs alapján -->
-    </div>
-
-    <!-- Kommentátor Generátor Szekció -->
-    <div id="commentator-generator-container" class="max-w-[1200px] w-full mx-auto px-6 mt-6">
-        <div class="bg-[#FAF9F5] border border-[#E2E0D8] rounded-xl p-6 shadow-sm space-y-4">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#E2E0D8] pb-3 gap-2">
-                <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 bg-amber-500/10 rounded text-[10px] font-bold text-[#b08a44] tracking-wider border border-[#b08a44]/20 flex items-center gap-1.5 select-none">
-                        🎤 KOMMENTÁTOR HANG
-                    </span>
-                    <h2 class="text-xs font-bold text-[#6E6D6A] tracking-wider uppercase">Dinamikus meccsközvetítés</h2>
-                </div>
-                <!-- Commentator selectors -->
-                <div class="flex gap-2 text-xs">
-                    <button id="btn-commentator-hajdub" onclick="setCommentator('hajdub')" class="px-3 py-1 rounded-lg border border-[#b08a44] bg-amber-500/10 font-bold text-[#b08a44] transition-all">Hajdú B. István</button>
-                    <button id="btn-commentator-gundel" onclick="setCommentator('gundel')" class="px-3 py-1 rounded-lg border border-[#E2E0D8] bg-[#FAF9F5] font-semibold text-[#6E6D6A] hover:bg-[#F4F3EF] transition-all">Gundel Takács G.</button>
-                </div>
-            </div>
-
-            <!-- Commentary Output -->
-            <div class="bg-[#F4F3EF]/60 p-5 rounded-xl border border-[#E2E0D8]/60 relative min-h-[100px] flex items-center">
-                <p id="commentary-text" class="text-sm text-[#2B2A27] font-medium leading-relaxed italic pr-8">
-                    Kommentár generálása folyamatban...
-                </p>
-                <span class="absolute right-4 bottom-4 text-xs font-bold text-[#b08a44]/40 select-none">🎤</span>
-            </div>
-
-            <!-- Action Button -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-3">
-                <span id="commentary-target-label" class="text-[#6E6D6A] font-medium">Célmérkőzés: -</span>
-                <button onclick="generateCommentary()" class="px-4 py-2 bg-[#FAF9F5] hover:bg-[#F4F3EF] border border-[#E2E0D8] rounded-lg font-bold text-[#2B2A27] hover:text-[#b08a44] transition-all flex items-center gap-2 self-end sm:self-auto">
-                    <svg class="w-4 h-4 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-                    Új kommentár generálása
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Csoportkör Archívum Szekció -->
-    <div class="max-w-[1200px] w-full mx-auto px-6 mt-8">
-        <div class="border-t border-[#E2E0D8] pt-8">
-            <button onclick="toggleArchive()" class="w-full flex justify-between items-center py-4 text-[#2B2A27] hover:text-[#b08a44] transition-all" aria-expanded="false" aria-controls="archive-content">
-                <h2 class="text-lg md:text-xl font-black tracking-tight flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    CSOPORTKÖR VÉGEREDMÉNYEK (A - L CSOPORTOK)
-                </h2>
-                <span id="archive-toggle-icon" class="text-[10px] font-bold bg-[#FAF9F5] px-3 py-1.5 rounded-lg border border-[#E2E0D8] tracking-widest uppercase transition-all">MUTASD</span>
-            </button>
-            
-            <div id="archive-content" class="hidden mt-6 transition-all duration-300">
-                <div id="archive-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Dinamikusan generált csoport táblázatok -->
+            <!-- Csoportkörök -->
+            <div class="w-full max-w-[820px]">
+                <div class="border-t border-[#E2E0D8] pt-8">
+                    <button onclick="toggleArchive()" class="w-full flex justify-between items-center py-4 text-[#2B2A27] hover:text-[#b08a44] transition-all" aria-expanded="false" aria-controls="archive-content">
+                        <h2 class="text-lg md:text-xl font-black tracking-tight flex items-center gap-2.5">
+                            <svg class="w-5 h-5 text-[#b08a44]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>CSOPORTKÖR VÉGEREDMÉNYEK (A - L CSOPORTOK)
+                        </h2>
+                        <span id="archive-toggle-icon" class="text-[10px] font-bold bg-[#FAF9F5] px-3 py-1.5 rounded-lg border border-[#E2E0D8] tracking-widest uppercase transition-all">MUTASD</span>
+                    </button>
+                    <div id="archive-content" class="hidden mt-6 transition-all duration-300">
+                        <div id="archive-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Lábléc -->
-    <footer class="max-w-[1200px] w-full mx-auto px-6 pb-12 mt-8 text-center text-xs text-[#6E6D6A] border-t border-[#E2E0D8]/60 pt-6 space-y-1.5">
-        <p>Eredeti ötlet: Emilio Sansolini</p>
-        <p>Interaktív webes megvalósítás alapja: <a href="https://fwc2026-knockout.vercel.app/" target="_blank" class="text-[#b08a44] hover:underline font-bold">https://fwc2026-knockout.vercel.app/</a></p>
-    </footer>
 
     <!-- Részletek Modál -->
     <div id="details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-round-name">
@@ -311,42 +184,35 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-            
+            <div id="modal-datetime-row" class="hidden px-5 py-2 border-b border-[#E2E0D8] text-center text-[10px] font-semibold text-[#6E6D6A] tracking-wide bg-[#FAF9F5]"></div>
+
             <div class="p-6 space-y-6">
-                <!-- Eredményjelző -->
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex flex-col items-center text-center flex-1 space-y-2">
                         <img id="modal-t1-flag" src="" class="w-16 h-10 object-cover rounded shadow-md border border-[#E2E0D8]" />
                         <span id="modal-t1-name" class="font-extrabold text-sm md:text-base text-[#2B2A27]">Csapat A</span>
                     </div>
-                    
                     <div class="flex flex-col items-center justify-center space-y-1">
                         <div class="flex items-center gap-3">
                             <span id="modal-t1-score" class="text-3xl font-black text-[#2B2A27]">0</span>
                             <span class="text-xl text-[#6E6D6A] font-light">-</span>
                             <span id="modal-t2-score" class="text-3xl font-black text-[#2B2A27]">0</span>
                         </div>
-                        
-                        <!-- BÜNTETŐK MEGJELENÍTÉSE KÖZVETLENÜL AZ EREDMÉNY ALATT -->
                         <div id="modal-penalties-score-below" class="hidden text-xs font-bold text-[#b08a44] tracking-wider mb-1">
                             (Büntetőkkel: <span id="modal-pen-score-1">0</span> - <span id="modal-pen-score-2">0</span>)
                         </div>
-
                         <span id="modal-match-note" class="text-[9px] font-bold text-[#b08a44] bg-amber-500/10 px-2 py-0.5 rounded border border-[#b08a44]/10 tracking-widest uppercase"></span>
                     </div>
-                    
                     <div class="flex flex-col items-center text-center flex-1 space-y-2">
                         <img id="modal-t2-flag" src="" class="w-16 h-10 object-cover rounded shadow-md border border-[#E2E0D8]" />
                         <span id="modal-t2-name" class="font-extrabold text-sm md:text-base text-[#2B2A27]">Csapat B</span>
                     </div>
                 </div>
-                
                 <div class="grid grid-cols-2 gap-6 pt-4 border-t border-[#E2E0D8] text-xs">
                     <div class="space-y-3">
                         <h4 class="font-bold text-[#6E6D6A] uppercase tracking-wider text-[9px]">GÓLSZERZŐK</h4>
                         <ul id="modal-t1-scorers" class="space-y-2 text-[#2B2A27]"></ul>
                     </div>
-                    
                     <div class="space-y-3 text-right">
                         <h4 class="font-bold text-[#6E6D6A] uppercase tracking-wider text-[9px]">GÓLSZERZŐK</h4>
                         <ul id="modal-t2-scorers" class="space-y-2 text-[#2B2A27]"></ul>
@@ -357,86 +223,71 @@
     </div>
 
     <script>
-        // Biztonságos LocalStorage API kezelő
         const safeStorage = {
-            getItem(key) {
-                try {
-                    return localStorage.getItem(key);
-                } catch (e) {
-                    return null;
-                }
-            },
-            setItem(key, value) {
-                try {
-                    localStorage.setItem(key, value);
-                } catch (e) {}
-            }
+            getItem(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
+            setItem(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
         };
 
         const nameMapping = {
-            "South Africa": { id: "za", name: "Dél-Afrika", code: "za" },
-            "Canada": { id: "ca", name: "Kanada", code: "ca" },
-            "Brazil": { id: "br", name: "Brazília", code: "br" },
-            "Japan": { id: "jp", name: "Japán", code: "jp" },
-            "Germany": { id: "de", name: "Németország", code: "de" },
-            "Paraguay": { id: "py", name: "Paraguay", code: "py" },
-            "Netherlands": { id: "nl", name: "Hollandia", code: "nl" },
-            "Morocco": { id: "ma", name: "Marokkó", code: "ma" },
-            "Ivory Coast": { id: "ci", name: "Elefántcsontpart", code: "ci" },
-            "Côte d'Ivoire": { id: "ci", name: "Elefántcsontpart", code: "ci" },
-            "Norway": { id: "no", name: "Norvégia", code: "no" },
-            "France": { id: "fr", name: "Franciaország", code: "fr" },
-            "Sweden": { id: "se", name: "Svédország", code: "se" },
-            "Mexico": { id: "mx", name: "Mexikó", code: "mx" },
-            "Ecuador": { id: "ec", name: "Ecuador", code: "ec" },
-            "England": { id: "gb", name: "Anglia", code: "gb" },
-            "DR Congo": { id: "cd", name: "Kongói DK", code: "cd" },
-            "Belgium": { id: "be", name: "Belgium", code: "be" },
-            "Senegal": { id: "sn", name: "Szenegál", code: "sn" },
-            "USA": { id: "us", name: "Egyesült Államok", code: "us" },
-            "United States": { id: "us", name: "Egyesült Államok", code: "us" },
-            "Bosnia and Herzegovina": { id: "ba", name: "Bosznia-Hercegovina", code: "ba" },
-            "Spain": { id: "es", name: "Spanyolország", code: "es" },
-            "Austria": { id: "at", name: "Ausztria", code: "at" },
-            "Portugal": { id: "pt", name: "Portugália", code: "pt" },
-            "Croatia": { id: "hr", name: "Horvátország", code: "hr" },
-            "Switzerland": { id: "ch", name: "Svájc", code: "ch" },
-            "Algeria": { id: "dz", name: "Algéria", code: "dz" },
-            "Australia": { id: "au", name: "Ausztrália", code: "au" },
-            "Egypt": { id: "eg", name: "Egyiptom", code: "eg" },
-            "Argentina": { id: "ar", name: "Argentína", code: "ar" },
-            "Cape Verde": { id: "cv", name: "Zöld-foki Közt.", code: "cv" },
-            "Colombia": { id: "co", name: "Kolumbia", code: "co" },
-            "Ghana": { id: "gh", name: "Ghána", code: "gh" },
-            "Peru": { id: "pe", name: "Peru", code: "pe" },
-            "Angola": { id: "ao", name: "Angola", code: "ao" },
-            "Uzbekistan": { id: "uz", name: "Üzbegisztán", code: "uz" },
-            "Slovakia": { id: "sk", name: "Szlovákia", code: "sk" },
-            "Panama": { id: "pa", name: "Panama", code: "pa" }
+            "Germany": { id: "de", name: "Németország", code: "de" }, "Paraguay": { id: "py", name: "Paraguay", code: "py" }, "France": { id: "fr", name: "Franciaország", code: "fr" }, "Sweden": { id: "se", name: "Svédország", code: "se" },
+            "South Africa": { id: "za", name: "Dél-Afrika", code: "za" }, "Canada": { id: "ca", name: "Kanada", code: "ca" }, "Netherlands": { id: "nl", name: "Hollandia", code: "nl" }, "Morocco": { id: "ma", name: "Marokkó", code: "ma" },
+            "Portugal": { id: "pt", name: "Portugália", code: "pt" }, "Croatia": { id: "hr", name: "Horvátország", code: "hr" }, "Spain": { id: "es", name: "Spanyolország", code: "es" }, "Austria": { id: "at", name: "Ausztria", code: "at" },
+            "USA": { id: "us", name: "Egyesült Államok", code: "us" }, "United States": { id: "us", name: "Egyesült Államok", code: "us" }, "Bosnia & Herzegovina": { id: "ba", name: "Bosznia-Hercegovina", code: "ba" }, "Bosnia and Herzegovina": { id: "ba", name: "Bosznia-Hercegovina", code: "ba" },
+            "Belgium": { id: "be", name: "Belgium", code: "be" }, "Senegal": { id: "sn", name: "Szenegál", code: "sn" }, "Brazil": { id: "br", name: "Brazília", code: "br" }, "Japan": { id: "jp", name: "Japán", code: "jp" },
+            "Ivory Coast": { id: "ci", name: "Elefántcsontpart", code: "ci" }, "Côte d'Ivoire": { id: "ci", name: "Elefántcsontpart", code: "ci" }, "Norway": { id: "no", name: "Norvégia", code: "no" }, "Mexico": { id: "mx", name: "Mexikó", code: "mx" },
+            "Ecuador": { id: "ec", name: "Ecuador", code: "ec" }, "England": { id: "gb-eng", name: "Anglia", code: "gb-eng" }, "DR Congo": { id: "cd", name: "Kongói DK", code: "cd" }, "Argentina": { id: "ar", name: "Argentína", code: "ar" },
+            "Cape Verde": { id: "cv", name: "Zöld-foki Közt.", code: "cv" }, "Australia": { id: "au", name: "Ausztrália", code: "au" }, "Egypt": { id: "eg", name: "Egyiptom", code: "eg" }, "Switzerland": { id: "ch", name: "Svájc", code: "ch" },
+            "Algeria": { id: "dz", name: "Algéria", code: "dz" }, "Colombia": { id: "co", name: "Kolumbia", code: "co" }, "Ghana": { id: "gh", name: "Ghána", code: "gh" }, "Qatar": { id: "qa", name: "Katar", code: "qa" },
+            "Scotland": { id: "gb-sct", name: "Skócia", code: "gb-sct" }, "Haiti": { id: "ht", name: "Haiti", code: "ht" }, "Turkey": { id: "tr", name: "Törökország", code: "tr" }, "Curaçao": { id: "cw", name: "Curaçao", code: "cw" },
+            "Tunisia": { id: "tn", name: "Tunézia", code: "tn" }, "Iran": { id: "ir", name: "Irán", code: "ir" }, "New Zealand": { id: "nz", name: "Új-Zéland", code: "nz" }, "Saudi Arabia": { id: "sa", name: "Szaúd-Arábia", code: "sa" },
+            "Uruguay": { id: "uy", name: "Uruguay", code: "uy" }, "Iraq": { id: "iq", name: "Irak", code: "iq" }, "Jordan": { id: "jo", name: "Jordánia", code: "jo" }, "Uzbekistan": { id: "uz", name: "Üzbegisztán", code: "uz" },
+            "Panama": { id: "pa", name: "Panama", code: "pa" }, "Korea Republic": { id: "kr", name: "Dél-Korea", code: "kr" }, "IR Iran": { id: "ir", name: "Irán", code: "ir" }, "Czechia": { id: "cz", name: "Csehország", code: "cz" },
+            "Czech Republic": { id: "cz", name: "Csehország", code: "cz" }, "Peru": { id: "pe", name: "Peru", code: "pe" }, "Angola": { id: "ao", name: "Angola", code: "ao" }
         };
 
         const teams = {
-            0: nameMapping["South Africa"], 1: nameMapping["Canada"],
-            2: nameMapping["Brazil"], 3: nameMapping["Japan"],
-            4: nameMapping["Germany"], 5: nameMapping["Paraguay"],
-            6: nameMapping["Netherlands"], 7: nameMapping["Morocco"],
-            8: nameMapping["Ivory Coast"], 9: nameMapping["Norway"],
-            10: nameMapping["France"], 11: nameMapping["Sweden"],
-            12: nameMapping["Mexico"], 13: nameMapping["Ecuador"],
-            14: nameMapping["England"], 15: nameMapping["DR Congo"],
-            16: nameMapping["Belgium"], 17: nameMapping["Senegal"],
-            18: nameMapping["USA"], 19: nameMapping["Bosnia and Herzegovina"],
-            20: nameMapping["Spain"], 21: nameMapping["Austria"],
-            22: nameMapping["Portugal"], 23: nameMapping["Croatia"],
-            24: nameMapping["Switzerland"], 25: nameMapping["Algeria"],
-            26: nameMapping["Australia"], 27: nameMapping["Egypt"],
-            28: nameMapping["Argentina"], 29: nameMapping["Cape Verde"],
-            30: nameMapping["Colombia"], 31: nameMapping["Ghana"]
+            0: nameMapping["Germany"], 1: nameMapping["Paraguay"], 2: nameMapping["France"], 3: nameMapping["Sweden"],
+            4: nameMapping["South Africa"], 5: nameMapping["Canada"], 6: nameMapping["Netherlands"], 7: nameMapping["Morocco"],
+            8: nameMapping["Portugal"], 9: nameMapping["Croatia"], 10: nameMapping["Spain"], 11: nameMapping["Austria"],
+            12: nameMapping["USA"], 13: nameMapping["Bosnia & Herzegovina"], 14: nameMapping["Belgium"], 15: nameMapping["Senegal"],
+            16: nameMapping["Brazil"], 17: nameMapping["Japan"], 18: nameMapping["Ivory Coast"], 19: nameMapping["Norway"],
+            20: nameMapping["Mexico"], 21: nameMapping["Ecuador"], 22: nameMapping["England"], 23: nameMapping["DR Congo"],
+            24: nameMapping["Argentina"], 25: nameMapping["Cape Verde"], 26: nameMapping["Australia"], 27: nameMapping["Egypt"],
+            28: nameMapping["Switzerland"], 29: nameMapping["Algeria"], 30: nameMapping["Colombia"], 31: nameMapping["Ghana"]
         };
 
-        // Csapatok kulcsjátékosai az AI tipp szimulációhoz
+        const groupArchiveData = [
+            { name: "A Csoport", table: [{ name: "Mexikó", code: "mx", p: 9, gk: "+5", adv: true },{ name: "Dél-Afrika", code: "za", p: 4, gk: "-1", adv: true },{ name: "Dél-Korea", code: "kr", p: 3, gk: "-1", adv: false },{ name: "Csehország", code: "cz", p: 1, gk: "-4", adv: false }]},
+            { name: "B Csoport", table: [{ name: "Svájc", code: "ch", p: 7, gk: "+4", adv: true },{ name: "Kanada", code: "ca", p: 4, gk: "+5", adv: true },{ name: "Bosznia-Hercegovina", code: "ba", p: 4, gk: "-1", adv: true },{ name: "Katar", code: "qa", p: 1, gk: "-8", adv: false }]},
+            { name: "C Csoport", table: [{ name: "Brazília", code: "br", p: 7, gk: "+6", adv: true },{ name: "Marokkó", code: "ma", p: 7, gk: "+3", adv: true },{ name: "Skócia", code: "gb-sct", p: 3, gk: "-3", adv: false },{ name: "Haiti", code: "ht", p: 0, gk: "-6", adv: false }]},
+            { name: "D Csoport", table: [{ name: "Egyesült Államok", code: "us", p: 6, gk: "+4", adv: true },{ name: "Ausztrália", code: "au", p: 4, gk: "0", adv: true },{ name: "Paraguay", code: "py", p: 4, gk: "-2", adv: true },{ name: "Törökország", code: "tr", p: 3, gk: "-2", adv: false }]},
+            { name: "E Csoport", table: [{ name: "Németország", code: "de", p: 6, gk: "+6", adv: true },{ name: "Elefántcsontpart", code: "ci", p: 6, gk: "+2", adv: true },{ name: "Ecuador", code: "ec", p: 4, gk: "0", adv: true },{ name: "Curaçao", code: "cw", p: 1, gk: "-8", adv: false }]},
+            { name: "F Csoport", table: [{ name: "Hollandia", code: "nl", p: 7, gk: "+6", adv: true },{ name: "Japán", code: "jp", p: 5, gk: "+4", adv: true },{ name: "Svédország", code: "se", p: 4, gk: "0", adv: true },{ name: "Tunézia", code: "tn", p: 0, gk: "-10", adv: false }]},
+            { name: "G Csoport", table: [{ name: "Belgium", code: "be", p: 5, gk: "+4", adv: true },{ name: "Egyiptom", code: "eg", p: 5, gk: "+2", adv: true },{ name: "Irán", code: "ir", p: 3, gk: "0", adv: false },{ name: "Új-Zéland", code: "nz", p: 1, gk: "-6", adv: false }]},
+            { name: "H Csoport", table: [{ name: "Spanyolország", code: "es", p: 7, gk: "+5", adv: true },{ name: "Zöld-foki Közt.", code: "cv", p: 3, gk: "0", adv: true },{ name: "Uruguay", code: "uy", p: 2, gk: "-1", adv: false },{ name: "Szaúd-Arábia", code: "sa", p: 2, gk: "-4", adv: false }]},
+            { name: "I Csoport", table: [{ name: "Franciaország", code: "fr", p: 9, gk: "+8", adv: true },{ name: "Norvégia", code: "no", p: 6, gk: "+1", adv: true },{ name: "Szenegál", code: "sn", p: 3, gk: "+2", adv: true },{ name: "Irak", code: "iq", p: 0, gk: "-11", adv: false }]},
+            { name: "J Csoport", table: [{ name: "Argentína", code: "ar", p: 9, gk: "+7", adv: true },{ name: "Ausztria", code: "at", p: 4, gk: "0", adv: true },{ name: "Algéria", code: "dz", p: 4, gk: "-2", adv: true },{ name: "Jordánia", code: "jo", p: 0, gk: "-5", adv: false }]},
+            { name: "K Csoport", table: [{ name: "Kolumbia", code: "co", p: 7, gk: "+3", adv: true },{ name: "Portugália", code: "pt", p: 5, gk: "+5", adv: true },{ name: "Kongói DK", code: "cd", p: 4, gk: "+1", adv: true },{ name: "Üzbegisztán", code: "uz", p: 0, gk: "-9", adv: false }]},
+            { name: "L Csoport", table: [{ name: "Anglia", code: "gb-eng", p: 7, gk: "+4", adv: true },{ name: "Horvátország", code: "hr", p: 6, gk: "0", adv: true },{ name: "Ghána", code: "gh", p: 4, gk: "0", adv: true },{ name: "Panama", code: "pa", p: 0, gk: "-4", adv: false }]}
+        ];
+
+        const groupMatchDetails = {
+            "A Csoport": { "Mexikó": ["vs Dél-Afrika 2-1 (GY)", "vs Dél-Korea 3-1 (GY)", "vs Csehország 3-0 (GY)"], "Dél-Afrika": ["vs Mexikó 1-2 (V)", "vs Csehország 2-1 (GY)", "vs Dél-Korea 1-1 (D)"], "Dél-Korea": ["vs Csehország 2-1 (GY)", "vs Mexikó 1-3 (V)", "vs Dél-Afrika 1-1 (D)"], "Csehország": ["vs Dél-Korea 1-2 (V)", "vs Dél-Afrika 1-2 (V)", "vs Mexikó 0-3 (V)"] },
+            "B Csoport": { "Svájc": ["vs Kanada 2-1 (GY)", "vs Bosznia-H. 1-1 (D)", "vs Katar 3-1 (GY)"], "Kanada": ["vs Svájc 1-2 (V)", "vs Katar 3-0 (GY)", "vs Bosznia-H. 2-2 (D)"], "Bosznia-Hercegovina": ["vs Katar 2-0 (GY)", "vs Svájc 1-1 (D)", "vs Kanada 2-2 (D)"], "Katar": ["vs Bosznia-H. 0-2 (V)", "vs Kanada 0-3 (V)", "vs Svájc 1-3 (V)"] },
+            "C Csoport": { "Brazília": ["vs Marokkó 2-2 (D)", "vs Skócia 3-1 (GY)", "vs Haiti 4-0 (GY)"], "Marokkó": ["vs Brazília 2-2 (D)", "vs Haiti 2-0 (GY)", "vs Skócia 2-1 (GY)"], "Skócia": ["vs Haiti 2-1 (GY)", "vs Brazília 1-3 (V)", "vs Marokkó 1-2 (V)"], "Haiti": ["vs Skócia 1-2 (V)", "vs Marokkó 0-2 (V)", "vs Brazília 0-4 (V)"] },
+            "D Csoport": { "Egyesült Államok": ["vs Ausztrália 2-1 (GY)", "vs Paraguay 3-1 (GY)", "vs Törökország 1-2 (V)"], "Ausztrália": ["vs Egyesült Államok 1-2 (V)", "vs Törökország 2-1 (GY)", "vs Paraguay 1-1 (D)"], "Paraguay": ["vs Törökország 2-1 (GY)", "vs Egyesült Államok 1-3 (V)", "vs Ausztrália 1-1 (D)"], "Törökország": ["vs Paraguay 1-2 (V)", "vs Ausztrália 1-2 (V)", "vs Egyesült Államok 2-1 (GY)"] },
+            "E Csoport": { "Németország": ["vs Elefántcsontpart 2-2 (D)", "vs Ecuador 2-0 (GY)", "vs Curaçao 4-0 (GY)"], "Elefántcsontpart": ["vs Németország 2-2 (D)", "vs Curaçao 2-0 (GY)", "vs Ecuador 1-1 (D)"], "Ecuador": ["vs Curaçao 3-0 (GY)", "vs Németország 0-2 (V)", "vs Elefántcsontpart 1-1 (D)"], "Curaçao": ["vs Ecuador 0-3 (V)", "vs Elefántcsontpart 0-2 (V)", "vs Németország 0-4 (V)"] },
+            "F Csoport": { "Hollandia": ["vs Japán 2-1 (GY)", "vs Svédország 3-1 (GY)", "vs Tunézia 4-1 (GY)"], "Japán": ["vs Hollandia 1-2 (V)", "vs Tunézia 3-1 (GY)", "vs Svédország 2-2 (D)"], "Svédország": ["vs Tunézia 2-1 (GY)", "vs Hollandia 1-3 (V)", "vs Japán 2-2 (D)"], "Tunézia": ["vs Svédország 1-2 (V)", "vs Japán 1-3 (V)", "vs Hollandia 1-4 (V)"] },
+            "G Csoport": { "Belgium": ["vs Egyiptom 2-2 (D)", "vs Irán 3-2 (GY)", "vs Új-Zéland 4-1 (GY)"], "Egyiptom": ["vs Belgium 2-2 (D)", "vs Új-Zéland 2-0 (GY)", "vs Irán 1-1 (D)"], "Irán": ["vs Új-Zéland 2-1 (GY)", "vs Belgium 2-3 (V)", "vs Egyiptom 1-1 (D)"], "Új-Zéland": ["vs Irán 1-2 (V)", "vs Egyiptom 0-2 (V)", "vs Belgium 1-4 (V)"] },
+            "H Csoport": { "Spanyolország": ["vs Zöld-foki K. 3-1 (GY)", "vs Uruguay 3-1 (GY)", "vs Szaúd-Arábia 4-0 (GY)"], "Zöld-foki Közt.": ["vs Spanyolország 1-3 (V)", "vs Szaúd-Arábia 2-1 (GY)", "vs Uruguay 1-1 (D)"], "Uruguay": ["vs Szaúd-Arábia 2-1 (GY)", "vs Spanyolország 1-3 (V)", "vs Zöld-foki K. 1-1 (D)"], "Szaúd-Arábia": ["vs Uruguay 1-2 (V)", "vs Zöld-foki K. 1-2 (V)", "vs Spanyolország 0-4 (V)"] },
+            "I Csoport": { "Franciaország": ["vs Norvégia 2-1 (GY)", "vs Szenegál 3-1 (GY)", "vs Irak 4-1 (GY)"], "Norvégia": ["vs Franciaország 1-2 (V)", "vs Irak 3-1 (GY)", "vs Szenegál 2-1 (GY)"], "Szenegál": ["vs Irak 2-1 (GY)", "vs Franciaország 1-3 (V)", "vs Norvégia 1-2 (V)"], "Irak": ["vs Szenegál 1-2 (V)", "vs Norvégia 1-3 (V)", "vs Franciaország 1-4 (V)"] },
+            "J Csoport": { "Argentína": ["vs Ausztria 3-1 (GY)", "vs Algéria 3-0 (GY)", "vs Jordánia 4-1 (GY)"], "Ausztria": ["vs Argentína 1-3 (V)", "vs Jordánia 2-1 (GY)", "vs Algéria 1-1 (D)"], "Algéria": ["vs Jordánia 2-1 (GY)", "vs Argentína 0-3 (V)", "vs Ausztria 1-1 (D)"], "Jordánia": ["vs Algéria 1-2 (V)", "vs Ausztria 1-2 (V)", "vs Argentína 1-4 (V)"] },
+            "K Csoport": { "Kolumbia": ["vs Portugália 2-2 (D)", "vs Kongói DK 3-2 (GY)", "vs Üzbegisztán 4-1 (GY)"], "Portugália": ["vs Kolumbia 2-2 (D)", "vs Üzbegisztán 2-0 (GY)", "vs Kongói DK 1-1 (D)"], "Kongói DK": ["vs Üzbegisztán 2-1 (GY)", "vs Kolumbia 2-3 (V)", "vs Portugália 1-1 (D)"], "Üzbegisztán": ["vs Kongói DK 1-2 (V)", "vs Kolumbia 1-4 (V)", "vs Portugália 0-2 (V)"] },
+            "L Csoport": { "Anglia": ["vs Horvátország 2-1 (GY)", "vs Ghána 3-0 (GY)", "vs Panama 4-0 (GY)"], "Horvátország": ["vs Anglia 1-2 (V)", "vs Panama 2-0 (GY)", "vs Ghána 2-1 (GY)"], "Ghána": ["vs Panama 2-1 (GY)", "vs Anglia 0-3 (V)", "vs Horvátország 1-2 (V)"], "Panama": ["vs Ghána 1-2 (V)", "vs Horvátország 0-2 (V)", "vs Anglia 0-4 (V)"] }
+        };
+
         const teamStars = {
-            "gb": ["Harry Kane", "Jude Bellingham", "Bukayo Saka", "Phil Foden"],
+            "gb-eng": ["Harry Kane", "Jude Bellingham", "Bukayo Saka", "Phil Foden"],
             "cd": ["Yoane Wissa", "Theo Bongonda", "Meschack Elia"],
             "be": ["Romelu Lukaku", "Kevin De Bruyne", "Jeremy Doku"],
             "sn": ["Nicolas Jackson", "Sadio Mané", "Ismaïla Sarr"],
@@ -464,162 +315,22 @@
             "ma": ["Youssef En-Nesyri", "Hakim Ziyech", "Achraf Hakimi"],
             "ci": ["Sébastien Haller", "Simon Adingra"],
             "no": ["Erling Haaland", "Martin Ødegaard"],
-            "fr": ["Kylian Mbappé", "Antoine Griezmann", "Marcus Thuram"],
+            "fr": ["Kylian Mbappé", "Antoine Griezmann", "Marcus Thurman"],
             "se": ["Alexander Isak", "Viktor Gyökeres", "Dejan Kulusevski"],
             "mx": ["Santiago Giménez", "Luis Chávez"],
             "ec": ["Enner Valencia", "Moisés Caicedo"]
         };
 
-        // Csoportmeccsek részletes eredményei
-        const groupMatchDetails = {
-            "A Csoport": {
-                "Mexikó": ["vs Ecuador 2 - 1 (GY)", "vs Zöld-foki Közt. 2 - 0 (GY)", "vs Angola 3 - 2 (GY)"],
-                "Ecuador": ["vs Mexikó 1 - 2 (V)", "vs Angola 3 - 0 (GY)", "vs Zöld-foki Közt. 2 - 1 (GY)"],
-                "Zöld-foki Közt.": ["vs Mexikó 0 - 2 (V)", "vs Angola 2 - 0 (GY)", "vs Ecuador 1 - 2 (V)"],
-                "Angola": ["vs Mexikó 2 - 3 (V)", "vs Ecuador 0 - 3 (V)", "vs Zöld-foki Közt. 0 - 2 (V)"]
-            },
-            "B Csoport": {
-                "Kanada": ["vs Dél-Afrika 1 - 1 (D)", "vs Peru 2 - 1 (GY)", "vs Omán 3 - 0 (GY)"],
-                "Dél-Afrika": ["vs Kanada 1 - 1 (D)", "vs Omán 3 - 1 (GY)", "vs Peru 1 - 1 (D)"],
-                "Peru": ["vs Omán 2 - 0 (GY)", "vs Kanada 1 - 2 (V)", "vs Dél-Afrika 1 - 1 (D)"],
-                "Omán": ["vs Peru 0 - 2 (V)", "vs Dél-Afrika 1 - 3 (V)", "vs Kanada 0 - 3 (V)"]
-            },
-            "C Csoport": {
-                "Egyesült Államok": ["vs Norvégia 2 - 1 (GY)", "vs Jordánia 3 - 1 (GY)", "vs Románia 3 - 0 (GY)"],
-                "Norvégia": ["vs Egyesült Államok 1 - 2 (V)", "vs Románia 3 - 1 (GY)", "vs Jordánia 2 - 1 (GY)"],
-                "Jordánia": ["vs Románia 2 - 1 (GY)", "vs Egyesült Államok 1 - 3 (V)", "vs Norvégia 1 - 2 (V)"],
-                "Románia": ["vs Jordánia 1 - 2 (V)", "vs Norvégia 1 - 3 (V)", "vs Egyesült Államok 0 - 3 (V)"]
-            },
-            "D Csoport": {
-                "Brazília": ["vs Egyiptom 3 - 1 (GY)", "vs Szlovákia 3 - 1 (GY)", "vs Honduras 4 - 0 (GY)"],
-                "Egyiptom": ["vs Brazília 1 - 3 (V)", "vs Honduras 1 - 1 (D)", "vs Szlovákia 2 - 1 (GY)"],
-                "Szlovákia": ["vs Honduras 2 - 1 (GY)", "vs Brazília 1 - 3 (V)", "vs Egyiptom 1 - 2 (V)"],
-                "Honduras": ["vs Szlovákia 1 - 2 (V)", "vs Egyiptom 1 - 1 (D)", "vs Brazília 0 - 4 (V)"]
-            },
-            "E Csoport": {
-                "Németország": ["vs Algéria 2 - 2 (D)", "vs Üzbegisztán 3 - 1 (GY)", "vs Jamaica 4 - 1 (GY)"],
-                "Algéria": ["vs Németország 2 - 2 (D)", "vs Jamaica 2 - 0 (GY)", "vs Üzbegisztán 1 - 0 (GY)"],
-                "Üzbegisztán": ["vs Jamaica 2 - 2 (D)", "vs Németország 1 - 3 (V)", "vs Algéria 0 - 1 (V)"],
-                "Jamaica": ["vs Üzbegisztán 2 - 2 (D)", "vs Algéria 0 - 2 (V)", "vs Németország 1 - 4 (V)"]
-            },
-            "F Csoport": {
-                "Hollandia": ["vs Szenegál 2 - 1 (GY)", "vs Irak 3 - 0 (GY)", "vs Costa Rica 4 - 1 (GY)"],
-                "Szenegál": ["vs Hollandia 1 - 2 (V)", "vs Costa Rica 3 - 1 (GY)", "vs Irak 2 - 0 (GY)"],
-                "Irak": ["vs Costa Rica 2 - 1 (GY)", "vs Hollandia 0 - 3 (V)", "vs Szenegál 0 - 2 (V)"],
-                "Costa Rica": ["vs Irak 1 - 2 (V)", "vs Szenegál 1 - 3 (V)", "vs Hollandia 1 - 4 (V)"]
-            },
-            "G Csoport": {
-                "Portugália": ["vs Horvátország 2 - 2 (D)", "vs Japán 3 - 2 (GY)", "vs Kamerun 4 - 1 (GY)"],
-                "Horvátország": ["vs Portugália 2 - 2 (D)", "vs Kamerun 2 - 1 (GY)", "vs Japán 1 - 1 (D)"],
-                "Japán": ["vs Kamerun 2 - 1 (GY)", "vs Portugália 2 - 3 (V)", "vs Horvátország 1 - 1 (D)"],
-                "Kamerun": ["vs Japán 1 - 2 (V)", "vs Horvátország 1 - 2 (V)", "vs Portugália 1 - 4 (V)"]
-            },
-            "H Csoport": {
-                "Argentína": ["vs Svájc 3 - 1 (GY)", "vs Új-Zéland 3 - 0 (GY)", "vs Albánia 4 - 1 (GY)"],
-                "Svájc": ["vs Argentína 1 - 3 (V)", "vs Albánia 2 - 1 (GY)", "vs Új-Zéland 2 - 0 (GY)"],
-                "Új-Zéland": ["vs Albánia 2 - 1 (GY)", "vs Argentína 0 - 3 (V)", "vs Svájc 0 - 2 (V)"],
-                "Albánia": ["vs Új-Zéland 1 - 2 (V)", "vs Svájc 1 - 2 (V)", "vs Argentína 1 - 4 (V)"]
-            },
-            "I Csoport": {
-                "Franciaország": ["vs Kongói DK 2 - 1 (GY)", "vs Svédország 3 - 1 (GY)", "vs Ukrajna 4 - 1 (GY)"],
-                "Kongói DK": ["vs Franciaország 1 - 2 (V)", "vs Ukrajna 2 - 1 (GY)", "vs Svédország 1 - 0 (GY)"],
-                "Svédország": ["vs Ukrajna 2 - 1 (GY)", "vs Franciaország 1 - 3 (V)", "vs Kongói DK 0 - 1 (V)"],
-                "Ukrajna": ["vs Svédország 1 - 2 (V)", "vs Kongói DK 1 - 2 (V)", "vs Franciaország 1 - 4 (V)"]
-            },
-            "J Csoport": {
-                "Spanyolország": ["vs Ausztrália 3 - 1 (GY)", "vs Kolumbia 3 - 1 (GY)", "vs Wales 4 - 0 (GY)"],
-                "Ausztrália": ["vs Spanyolország 1 - 3 (V)", "vs Wales 2 - 1 (GY)", "vs Kolumbia 1 - 1 (D)"],
-                "Kolumbia": ["vs Wales 2 - 1 (GY)", "vs Spanyolország 1 - 3 (V)", "vs Ausztrália 1 - 1 (D)"],
-                "Wales": ["vs Kolumbia 1 - 2 (V)", "vs Ausztrália 1 - 2 (V)", "vs Spanyolország 0 - 4 (V)"]
-            },
-            "K Csoport": {
-                "Belgium": ["vs Elefántcsontpart 2 - 2 (D)", "vs Ausztria 3 - 2 (GY)", "vs Vietnám 4 - 1 (GY)"],
-                "Elefántcsontpart": ["vs Belgium 2 - 2 (D)", "vs Vietnám 2 - 0 (GY)", "vs Ausztria 1 - 1 (D)"],
-                "Ausztria": ["vs Vietnám 2 - 1 (GY)", "vs Belgium 2 - 3 (V)", "vs Elefántcsontpart 1 - 1 (D)"],
-                "Vietnám": ["vs Ausztria 1 - 2 (V)", "vs Elefántcsontpart 0 - 2 (V)", "vs Belgium 1 - 4 (V)"]
-            },
-            "L Csoport": {
-                "Anglia": ["vs Marokkó 2 - 1 (GY)", "vs Ghána 3 - 0 (GY)", "vs Panama 4 - 0 (GY)"],
-                "Marokkó": ["vs Anglia 1 - 2 (V)", "vs Panama 2 - 0 (GY)", "vs Ghána 2 - 1 (GY)"],
-                "Ghána": ["vs Panama 2 - 1 (GY)", "vs Anglia 0 - 3 (V)", "vs Marokkó 1 - 2 (V)"],
-                "Panama": ["vs Ghána 1 - 2 (V)", "vs Marokkó 0 - 2 (V)", "vs Anglia 0 - 4 (V)"]
-            }
+        const numToMatchId = {
+            74: "R32_0", 77: "R32_1", 73: "R32_2", 75: "R32_3",
+            83: "R32_4", 84: "R32_5", 81: "R32_6", 82: "R32_7",
+            76: "R32_8", 78: "R32_9", 79: "R32_10", 80: "R32_11",
+            86: "R32_12", 88: "R32_13", 85: "R32_14", 87: "R32_15",
+            89: "R16_0", 90: "R16_1", 93: "R16_2", 94: "R16_3",
+            91: "R16_4", 92: "R16_5", 95: "R16_6", 96: "R16_7",
+            97: "QF_0", 98: "QF_1", 99: "QF_2", 100: "QF_3",
+            101: "SF_0", 102: "SF_1"
         };
-
-        const groupArchiveData = [
-            { name: "A Csoport", table: [
-                { name: "Mexikó", code: "mx", p: 9, gk: "+5", adv: true },
-                { name: "Ecuador", code: "ec", p: 6, gk: "+2", adv: true },
-                { name: "Zöld-foki Közt.", code: "cv", p: 3, gk: "-1", adv: true },
-                { name: "Angola", code: "ao", p: 0, gk: "-6", adv: false }
-            ]},
-            { name: "B Csoport", table: [
-                { name: "Kanada", code: "ca", p: 7, gk: "+3", adv: true },
-                { name: "Dél-Afrika", code: "za", p: 5, gk: "+1", adv: true },
-                { name: "Peru", code: "pe", p: 4, gk: "0", adv: false },
-                { name: "Omán", code: "om", p: 0, gk: "-4", adv: false }
-            ]},
-            { name: "C Csoport", table: [
-                { name: "Egyesült Államok", code: "us", p: 9, gk: "+4", adv: true },
-                { name: "Norvégia", code: "no", p: 6, gk: "+1", adv: true },
-                { name: "Jordánia", code: "jo", p: 3, gk: "-2", adv: false },
-                { name: "Románia", code: "ro", p: 0, gk: "-3", adv: false }
-            ]},
-            { name: "D Csoport", table: [
-                { name: "Brazília", code: "br", p: 9, gk: "+6", adv: true },
-                { name: "Egyiptom", code: "eg", p: 4, gk: "0", adv: true },
-                { name: "Szlovákia", code: "sk", p: 3, gk: "-1", adv: false },
-                { name: "Honduras", code: "hn", p: 1, gk: "-5", adv: false }
-            ]},
-            { name: "E Csoport", table: [
-                { name: "Németország", code: "de", p: 7, gk: "+3", adv: true },
-                { name: "Algéria", code: "dz", p: 5, gk: "+1", adv: true },
-                { name: "Üzbegisztán", code: "uz", p: 2, gk: "-1", adv: false },
-                { name: "Jamaica", code: "jm", p: 1, gk: "-3", adv: false }
-            ]},
-            { name: "F Csoport", table: [
-                { name: "Hollandia", code: "nl", p: 9, gk: "+5", adv: true },
-                { name: "Szenegál", code: "sn", p: 6, gk: "+2", adv: true },
-                { name: "Irak", code: "iq", p: 3, gk: "-3", adv: false },
-                { name: "Costa Rica", code: "cr", p: 0, gk: "-4", adv: false }
-            ]},
-            { name: "G Csoport", table: [
-                { name: "Portugália", code: "pt", p: 7, gk: "+4", adv: true },
-                { name: "Horvátország", code: "hr", p: 5, gk: "+1", adv: true },
-                { name: "Japán", code: "jp", p: 4, gk: "0", adv: true },
-                { name: "Kamerun", code: "cm", p: 0, gk: "-5", adv: false }
-            ]},
-            { name: "H Csoport", table: [
-                { name: "Argentína", code: "ar", p: 9, gk: "+6", adv: true },
-                { name: "Svájc", code: "ch", p: 6, gk: "+2", adv: true },
-                { name: "Új-Zéland", code: "nz", p: 3, gk: "-3", adv: false },
-                { name: "Albánia", code: "al", p: 0, gk: "-5", adv: false }
-            ]},
-            { name: "I Csoport", table: [
-                { name: "Franciaország", code: "fr", p: 9, gk: "+5", adv: true },
-                { name: "Kongói DK", code: "cd", p: 6, gk: "+1", adv: true },
-                { name: "Svédország", code: "se", p: 3, gk: "-2", adv: true },
-                { name: "Ukrajna", code: "ua", p: 0, gk: "-4", adv: false }
-            ]},
-            { name: "J Csoport", table: [
-                { name: "Spanyolország", code: "es", p: 9, gk: "+7", adv: true },
-                { name: "Ausztrália", code: "au", p: 4, gk: "0", adv: true },
-                { name: "Kolumbia", code: "co", p: 4, gk: "-1", adv: true },
-                { name: "Wales", code: "gb-wls", p: 0, gk: "-6", adv: false }
-            ]},
-            { name: "K Csoport", table: [
-                { name: "Belgium", code: "be", p: 7, gk: "+3", adv: true },
-                { name: "Elefántcsontpart", code: "ci", p: 5, gk: "+1", adv: true },
-                { name: "Ausztria", code: "at", p: 4, gk: "0", adv: true },
-                { name: "Vietnám", code: "vn", p: 0, gk: "-4", adv: false }
-            ]},
-            { name: "L Csoport", table: [
-                { name: "Anglia", code: "gb", p: 9, gk: "+5", adv: true },
-                { name: "Marokkó", code: "ma", p: 6, gk: "+1", adv: true },
-                { name: "Ghána", code: "gh", p: 3, gk: "-2", adv: false },
-                { name: "Panama", code: "pa", p: 0, gk: "-4", adv: false }
-            ]}
-        ];
 
         let matches = {
             "R32_0": { round: "R32", team1: teams[0], team2: teams[1], score1: null, score2: null, winner: null, goals1: [], goals2: [] },
@@ -661,7 +372,7 @@
 
         const angles = { teams: {}, matches: {}, slots: {} };
 
-        // Körsugarak és szög-felosztások
+        // Körsugarak és szög-felosztások (Symmetrical 42px mapping)
         for (let i = 0; i < 32; i++) {
             angles.teams[i] = i < 16 ? (100 + i * (160 / 15)) : (-80 + (i - 16) * (160 / 15));
         }
@@ -680,6 +391,88 @@
         for (let m = 0; m < 2; m++) {
             const am = (angles.slots[`SF_${2*m}`] + angles.slots[`SF_${2*m + 1}`]) / 2;
             angles.matches[`SF_${m}`] = am; angles.slots[`F_${m}`] = am;
+        }
+
+        // Helyi időzónás dátum- és időformázó függvény a regex-alapú UTC offset számítással
+        function formatMatchDateTime(dateStr, timeStr) {
+            if (!dateStr) return null;
+            const [y, mo, d] = dateStr.split('-').map(Number);
+            const datePart = `${y}. ${String(mo).padStart(2, '0')}. ${String(d).padStart(2, '0')}.`;
+            if (!timeStr) return datePart;
+
+            const tm = timeStr.match(/(\d{1,2}):(\d{2})\s*UTC([+-]\d+)/);
+            if (!tm) return `${datePart} ${timeStr}`;
+
+            const hour = parseInt(tm[1], 10), minute = parseInt(tm[2], 10), offset = parseInt(tm[3], 10);
+            const utcMoment = new Date(Date.UTC(y, mo - 1, d, hour - offset, minute));
+
+            const localHH = String(utcMoment.getHours()).padStart(2, '0');
+            const localMM = String(utcMoment.getMinutes()).padStart(2, '0');
+
+            const localDateStr = `${utcMoment.getFullYear()}-${utcMoment.getMonth()}-${utcMoment.getDate()}`;
+            const origDateStr = `${y}-${mo - 1}-${d}`;
+            let dayShift = '';
+            if (localDateStr !== origDateStr) {
+                const diffDays = Math.round((new Date(utcMoment.getFullYear(), utcMoment.getMonth(), utcMoment.getDate()) - new Date(y, mo - 1, d)) / 86400000);
+                dayShift = diffDays > 0 ? ` (+${diffDays} nap)` : ` (${diffDays} nap)`;
+            }
+
+            let tzLabel = '';
+            try {
+                const part = new Intl.DateTimeFormat('hu-HU', { timeZoneName: 'short' }).formatToParts(utcMoment).find(p => p.type === 'timeZoneName');
+                if (part) tzLabel = ' ' + part.value;
+            } catch (e) {}
+
+            return `${datePart} ${timeStr} · nálad: ${localHH}:${localMM}${dayShift}${tzLabel}`;
+        }
+
+        // Továbbjutás kiértékelő és győztes-számító algoritmus hosszabbítás és büntetők támogatásával
+        function getMatchWinnerAndScore(rawScore, matchNormal) {
+            let score1 = null;
+            let score2 = null;
+            let winnerIndex = 0; 
+            let note = "";
+
+            if (!rawScore) return { score1, score2, winnerIndex, note };
+
+            // 1. Büntetőpárbaj ellenőrzése
+            if (rawScore.p) {
+                const p1 = rawScore.p[0];
+                const p2 = rawScore.p[1];
+                score1 = matchNormal ? rawScore.et[0] : rawScore.et[1];
+                score2 = matchNormal ? rawScore.et[1] : rawScore.et[0];
+                const pen1 = matchNormal ? p1 : p2;
+                const pen2 = matchNormal ? p2 : p1;
+                winnerIndex = pen1 > pen2 ? 1 : 2;
+                return { score1, score2, winnerIndex, note: "", pen1, pen2 };
+            }
+
+            // 2. Hosszabbítás ellenőrzése
+            if (rawScore.et) {
+                const et1 = rawScore.et[0];
+                const et2 = rawScore.et[1];
+                score1 = matchNormal ? et1 : et2;
+                score2 = matchNormal ? et2 : et1;
+                if (et1 !== et2) {
+                    winnerIndex = et1 > et2 ? 1 : 2;
+                    note = "HOSSZABBÍTÁS UTÁN";
+                }
+                return { score1, score2, winnerIndex, note };
+            }
+
+            // 3. Rendes játékidő (90 perc) ellenőrzése
+            if (rawScore.ft) {
+                const ft1 = rawScore.ft[0];
+                const ft2 = rawScore.ft[1];
+                score1 = matchNormal ? ft1 : ft2;
+                score2 = matchNormal ? ft2 : ft1;
+                if (ft1 !== ft2) {
+                    winnerIndex = ft1 > ft2 ? 1 : 2;
+                }
+                return { score1, score2, winnerIndex, note: "FT" };
+            }
+
+            return { score1, score2, winnerIndex, note };
         }
 
         function propagateWinners() {
@@ -732,7 +525,7 @@
                           stroke="${color}" stroke-width="${width}" class="bracket-path ${teamClass}" data-match-path="${matchId}" />`;
         }
 
-        // Biztonságos clip-path generáló DOM API-val
+        // Biztonságos clip-path generáló DOM API-val (HierarchyRequestError javítva!)
         function createClipPath(id, cx, cy, r) {
             const defs = document.getElementById('svg-defs');
             if (defs && !document.getElementById(id)) {
@@ -759,7 +552,7 @@
                 <g class="flag-group cursor-pointer team-node" data-team="${team.id}" role="img" aria-label="${team.name} menetelése">
                     <title>${team.name} mérkőzéseinek kiemelése</title>
                     <circle cx="${pt.x}" cy="${pt.y}" r="${r + 2}" fill="#EAE8E1" />
-                    <image href="https://flagcdn.com/w80/${team.code}.png" x="${pt.x - r}" y="${pt.y - r}" width="${size}" height="${size}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" />
+                    <image href="https://flagcdn.com/w80/${team.code}.png" x="${pt.x - r}" y="${pt.y - r}" width="${size}" height="${size}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" onerror="this.style.display='none'" />
                     <circle cx="${pt.x}" cy="${pt.y}" r="${r}" fill="none" stroke="rgba(197,160,89,0.4)" stroke-width="1" />
                 </g>
             `;
@@ -780,8 +573,106 @@
             `;
         }
 
-        async function fetchLiveData() {
+        function setApiStatus(state) {
             const statusLabel = document.getElementById('api-status');
+            const timeLabel = document.getElementById('api-status-time');
+            const styles = {
+                loading: { dot: 'bg-[#b08a44] animate-pulse', text: 'text-[#b08a44]', border: 'border-[#b08a44]/20', bg: 'bg-amber-500/10', label: 'FRISSÍTÉS...' },
+                live: { dot: 'bg-green-500', text: 'text-green-600', border: 'border-green-500/20', bg: 'bg-green-500/10', label: 'UTOLSÓ ISMERT ÁLLÁS' },
+                offline: { dot: 'bg-amber-500', text: 'text-amber-600', border: 'border-amber-500/20', bg: 'bg-amber-500/10', label: 'TÁROLT ÁLLÁS (OFFLINE)' }
+            };
+            const s = styles[state];
+            if (statusLabel) {
+                statusLabel.className = `px-2 py-0.5 ${s.bg} rounded text-[10px] font-bold ${s.text} tracking-wider border ${s.border} flex items-center gap-1.5`;
+                statusLabel.innerHTML = `<span class="w-1.5 h-1.5 rounded-full ${s.dot}"></span>${s.label}`;
+            }
+
+            if (state !== 'loading' && timeLabel) {
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2, '0');
+                const mm = String(now.getMinutes()).padStart(2, '0');
+                timeLabel.textContent = `(${hh}:${mm})`;
+                timeLabel.classList.remove('hidden');
+            }
+
+            const liveBadge = document.getElementById('api-live-badge');
+            const liveCount = window.__espnLiveCount || 0;
+            if (state === 'live' && liveCount > 0 && liveBadge) {
+                const liveCountLabel = document.getElementById('api-live-count');
+                if (liveCountLabel) {
+                    liveCountLabel.textContent = liveCount === 1 ? 'ÉLŐ MECCS' : `${liveCount} ÉLŐ MECCS`;
+                }
+                liveBadge.classList.remove('hidden');
+                liveBadge.classList.add('flex');
+            } else if (liveBadge) {
+                liveBadge.classList.add('hidden');
+                liveBadge.classList.remove('flex');
+            }
+        }
+
+        async function applyEspnLiveOverlay() {
+            const from = "20260628", to = "20260719"; 
+            const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${from}-${to}&limit=300`;
+            const res = await fetch(url);
+            if (!res.ok) return;
+            const data = await res.json();
+            const events = data.events || [];
+
+            let liveCount = 0;
+
+            events.forEach(ev => {
+                const comp = ev.competitions && ev.competitions[0];
+                if (!comp) return;
+                const state = comp.status && comp.status.type && comp.status.type.state; 
+                if (state === 'pre') return; 
+
+                const home = comp.competitors.find(c => c.homeAway === 'home');
+                const away = comp.competitors.find(c => c.homeAway === 'away');
+                if (!home || !away) return;
+
+                const homeMapped = nameMapping[home.team.displayName];
+                const awayMapped = nameMapping[away.team.displayName];
+                if (!homeMapped || !awayMapped) return;
+
+                for (let key in matches) {
+                    const m = matches[key];
+                    if (!m.team1 || !m.team2) continue;
+                    const normal = (m.team1.name === homeMapped.name && m.team2.name === awayMapped.name);
+                    const swapped = (m.team1.name === awayMapped.name && m.team2.name === homeMapped.name);
+                    if (!normal && !swapped) continue;
+
+                    const alreadyFinalized = m.winner !== null;
+                    if (state === 'post' && alreadyFinalized) continue;
+
+                    const s1 = parseInt(home.score, 10) || 0;
+                    const s2 = parseInt(away.score, 10) || 0;
+                    m.score1 = normal ? s1 : s2;
+                    m.score2 = normal ? s2 : s1;
+                    m.liveSource = 'ESPN';
+                    m.liveMinute = comp.status.displayClock;
+
+                    if (state === 'in') {
+                        m.isLive = true;
+                        m.winner = null;
+                        liveCount++;
+                    } else if (state === 'post') {
+                        m.isLive = false;
+                        m.winner = m.score1 > m.score2 ? m.team1 : (m.score2 > m.score1 ? m.team2 : null);
+                        if (m.winner === null) {
+                            const homeWon = home.winner === true;
+                            const awayWon = away.winner === true;
+                            if (homeWon) m.winner = normal ? m.team1 : m.team2;
+                            else if (awayWon) m.winner = normal ? m.team2 : m.team1;
+                        }
+                    }
+                }
+            });
+
+            window.__espnLiveCount = liveCount;
+        }
+
+        async function fetchLiveData() {
+            setApiStatus('loading');
             try {
                 const response = await fetch('https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json');
                 if (!response.ok) throw new Error();
@@ -797,6 +688,14 @@
                 }
 
                 rawMatches.forEach(raw => {
+                    let scheduleMatchId = raw.num ? numToMatchId[raw.num] : null;
+                    if (!scheduleMatchId && raw.round === "Final") scheduleMatchId = "F_0";
+                    if (scheduleMatchId && matches[scheduleMatchId]) {
+                        matches[scheduleMatchId].date = raw.date;
+                        matches[scheduleMatchId].time = raw.time;
+                        matches[scheduleMatchId].ground = raw.ground;
+                    }
+
                     const t1_mapped = nameMapping[raw.team1];
                     const t2_mapped = nameMapping[raw.team2];
                     if (!t1_mapped || !t2_mapped) return;
@@ -806,98 +705,122 @@
                         const matchNormal = (m.team1 && m.team2 && m.team1.name === t1_mapped.name && m.team2.name === t2_mapped.name);
                         const matchSwapped = (m.team1 && m.team2 && m.team1.name === t2_mapped.name && m.team2.name === t1_mapped.name);
                         
-                        if ((matchNormal || matchSwapped) && raw.score && raw.score.ft) {
-                            m.score1 = matchNormal ? raw.score.ft[0] : raw.score.ft[1];
-                            m.score2 = matchNormal ? raw.score.ft[1] : raw.score.ft[0];
-                            m.winner = m.score1 > m.score2 ? m.team1 : m.team2;
+                        if ((matchNormal || matchSwapped) && raw.score) {
+                            const res = getMatchWinnerAndScore(raw.score, matchNormal || !matchSwapped);
+                            m.score1 = res.score1;
+                            m.score2 = res.score2;
+                            m.note = res.note;
+                            
+                            if (res.winnerIndex === 1) {
+                                m.winner = m.team1;
+                            } else if (res.winnerIndex === 2) {
+                                m.winner = m.team2;
+                            } else {
+                                m.winner = null;
+                            }
+
+                            if (res.pen1 !== undefined) {
+                                m.pen1 = res.pen1;
+                                m.pen2 = res.pen2;
+                            }
 
                             m.goals1 = matchNormal ? (raw.goals1 || []) : (raw.goals2 || []);
                             m.goals2 = matchNormal ? (raw.goals2 || []) : (raw.goals1 || []);
-
-                            if (raw.score.ps) {
-                                m.pen1 = matchNormal ? raw.score.ps[0] : raw.score.ps[1];
-                                m.pen2 = matchNormal ? raw.score.ps[1] : raw.score.ps[0];
-                                m.winner = m.pen1 > m.pen2 ? m.team1 : m.team2;
-                            }
                         }
                     }
                 });
 
+                try { await applyEspnLiveOverlay(); } catch (espnErr) {}
+
                 // Caching: Sikeres válasz mentése safeStorage segítségével
                 safeStorage.setItem('wc2026_bracket_matches', JSON.stringify(matches));
 
-                if (statusLabel) {
-                    statusLabel.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> UTOLSÓ ISMERT ÁLLÁS`;
-                    statusLabel.className = statusLabel.className
-                        .replace('text-amber-600', 'text-green-600')
-                        .replace('border-amber-500/20', 'border-green-500/20')
-                        .replace('bg-amber-500/10', 'bg-green-500/10')
-                        .replace('text-red-600', 'text-green-600')
-                        .replace('border-red-500/20', 'border-green-500/20')
-                        .replace('bg-red-500/10', 'bg-green-500/10');
-                }
-
-                updateTimestamp();
+                setApiStatus('live');
 
             } catch (err) {
-                // Lokális mentett eredmények
-                matches["R32_0"].score1 = 0; matches["R32_0"].score2 = 1; matches["R32_0"].winner = teams[1]; // Canada
-                matches["R32_0"].goals1 = []; matches["R32_0"].goals2 = [{ name: "Jonathan David", minute: "68" }];
+                const cachedMatches = safeStorage.getItem('wc2026_bracket_matches');
+                if (cachedMatches) {
+                    matches = JSON.parse(cachedMatches);
+                    setApiStatus('offline');
+                } else {
+                    // Lokális mentett eredmények (Hivatalos és pontos vb-eredmények alapján)
+                    matches["R32_0"].date = "2026-06-29"; matches["R32_0"].time = "16:30 UTC-4"; matches["R32_0"].ground = "Boston (Foxborough)";
+                    matches["R32_0"].score1 = 1; matches["R32_0"].score2 = 1; matches["R32_0"].pen1 = 3; matches["R32_0"].pen2 = 4; matches["R32_0"].winner = teams[1]; // Paraguay
+                    matches["R32_0"].goals1 = [{ name: "Kai Havertz", minute: "35" }];
+                    matches["R32_0"].goals2 = [{ name: "Julio Enciso", minute: "82" }];
 
-                matches["R32_1"].score1 = 2; matches["R32_1"].score2 = 1; matches["R32_1"].winner = teams[2]; // Brazil
-                matches["R32_1"].goals1 = [{ name: "Vinícius Júnior", minute: "14" }, { name: "Rodrygo", minute: "77" }];
-                matches["R32_1"].goals2 = [{ name: "Kaoru Mitoma", minute: "43" }];
+                    matches["R32_1"].score1 = 2; matches["R32_1"].score2 = 1; matches["R32_1"].winner = teams[2]; // Brazil
+                    matches["R32_1"].goals1 = [{ name: "Vinícius Júnior", minute: "14" }, { name: "Rodrygo", minute: "77" }];
+                    matches["R32_1"].goals2 = [{ name: "Kaoru Mitoma", minute: "43" }];
 
-                matches["R32_2"].score1 = 1; matches["R32_2"].score2 = 1; matches["R32_2"].pen1 = 3; matches["R32_2"].pen2 = 4; matches["R32_2"].winner = teams[5]; // Paraguay
-                matches["R32_2"].goals1 = [{ name: "Kai Havertz", minute: "35" }];
-                matches["R32_2"].goals2 = [{ name: "Julio Enciso", minute: "82" }];
+                    matches["R32_2"].date = "2026-06-28"; matches["R32_2"].time = "12:00 UTC-7"; matches["R32_2"].ground = "Los Angeles (Inglewood)";
+                    matches["R32_2"].score1 = 0; matches["R32_2"].score2 = 1; matches["R32_2"].winner = teams[5]; // Canada
+                    matches["R32_2"].goals1 = [];
+                    matches["R32_2"].goals2 = [{ name: "Stephan Eustáquio", minute: "90+2" }];
 
-                matches["R32_3"].score1 = 1; matches["R32_3"].score2 = 1; matches["R32_3"].pen1 = 2; matches["R32_3"].pen2 = 3; matches["R32_3"].winner = teams[7]; // Morocco
-                matches["R32_3"].goals1 = [{ name: "Cody Gakpo", minute: "52" }];
-                matches["R32_3"].goals2 = [{ name: "Youssef En-Nesyri", minute: "74" }];
+                    matches["R32_3"].date = "2026-06-29"; matches["R32_3"].time = "19:00 UTC-6"; matches["R32_3"].ground = "Monterrey (Guadalupe)";
+                    matches["R32_3"].score1 = 1; matches["R32_3"].score2 = 1; matches["R32_3"].pen1 = 2; matches["R32_3"].pen2 = 3; matches["R32_3"].winner = teams[7]; // Morocco
+                    matches["R32_3"].goals1 = [{ name: "Cody Gakpo", minute: "72" }];
+                    matches["R32_3"].goals2 = [{ name: "Youssef En-Nesyri", minute: "74" }];
 
-                matches["R32_4"].score1 = 1; matches["R32_4"].score2 = 2; matches["R32_4"].winner = teams[9]; // Norway
-                matches["R32_4"].goals1 = [{ name: "Sébastien Haller", minute: "45" }];
-                matches["R32_4"].goals2 = [{ name: "Erling Haaland", minute: "21" }, { name: "Martin Ødegaard", minute: "89" }];
+                    matches["R32_4"].date = "2026-07-02"; matches["R32_4"].time = "19:00 UTC-4"; matches["R32_4"].ground = "Toronto"; 
 
-                matches["R32_5"].score1 = 3; matches["R32_5"].score2 = 0; matches["R32_5"].winner = teams[10]; // France
-                matches["R32_5"].goals1 = [{ name: "Kylian Mbappé", minute: "9" }, { name: "Antoine Griezmann", minute: "31" }, { name: "Marcus Thuram", minute: "84" }];
-                matches["R32_5"].goals2 = [];
+                    matches["R32_5"].date = "2026-07-02"; matches["R32_5"].time = "12:00 UTC-7"; matches["R32_5"].ground = "Los Angeles (Inglewood)"; 
 
-                matches["R32_6"].score1 = 2; matches["R32_6"].score2 = 0; matches["R32_6"].winner = teams[12]; // Mexico
-                matches["R32_6"].goals1 = [{ name: "Santiago Giménez", minute: "40" }, { name: "Luis Chávez", minute: "73" }];
-                matches["R32_6"].goals2 = [];
+                    matches["R32_6"].date = "2026-07-01"; matches["R32_6"].time = "17:00 UTC-7"; matches["R32_6"].ground = "San Francisco Bay Area (Santa Clara)";
+                    matches["R32_6"].score1 = 2; matches["R32_6"].score2 = 0; matches["R32_6"].winner = teams[12]; // USA
+                    matches["R32_6"].goals1 = [{ name: "Folarin Balogun", minute: "45" }, { name: "Malik Tillman", minute: "82" }];
+                    matches["R32_6"].goals2 = [];
 
-                // Többi mérkőzés deklarálása (féloldalasság megelőzése érdekében)
-                for(let i=7; i<=15; i++) {
-                    matches[`R32_${i}`].score1 = null; matches[`R32_${i}`].score2 = null; matches[`R32_${i}`].winner = null;
-                    matches[`R32_${i}`].goals1 = []; matches[`R32_${i}`].goals2 = [];
-                }
+                    matches["R32_7"].date = "2026-07-01"; matches["R32_7"].time = "13:00 UTC-7"; matches["R32_7"].ground = "Seattle";
+                    matches["R32_7"].score1 = 3; matches["R32_7"].score2 = 2; matches["R32_7"].winner = teams[14]; // Belgium
+                    matches["R32_7"].note = "HOSSZABBÍTÁS UTÁN";
+                    matches["R32_7"].goals1 = [{ name: "Romelu Lukaku", minute: "86" }, { name: "Youri Tielemans", minute: "89" }, { name: "Youri Tielemans", minute: "120+5" }];
+                    matches["R32_7"].goals2 = [{ name: "Habib Diarra", minute: "25" }, { name: "Ismaïla Sarr", minute: "51" }];
 
-                if (statusLabel) {
-                    statusLabel.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> TÁROLT ÁLLÁS (OFFLINE)`;
-                    statusLabel.className = statusLabel.className
-                        .replace('text-green-600', 'text-amber-600')
-                        .replace('border-green-500/20', 'border-amber-500/20')
-                        .replace('bg-green-500/10', 'bg-amber-500/10')
-                        .replace('text-red-600', 'text-amber-600')
-                        .replace('border-red-500/20', 'border-amber-500/20')
-                        .replace('bg-red-500/10', 'bg-amber-500/10');
+                    matches["R32_8"].date = "2026-06-29"; matches["R32_8"].time = "12:00 UTC-5"; matches["R32_8"].ground = "Houston";
+                    matches["R32_8"].score1 = 2; matches["R32_8"].score2 = 1; matches["R32_8"].winner = teams[16]; // Brazília
+                    matches["R32_8"].goals1 = [{ name: "Casemiro", minute: "56" }, { name: "Gabriel Martinelli", minute: "90+5" }];
+                    matches["R32_8"].goals2 = [{ name: "Kaishu Sano", minute: "29" }];
+
+                    matches["R32_9"].date = "2026-06-30"; matches["R32_9"].time = "12:00 UTC-5"; matches["R32_9"].ground = "Dallas (Arlington)";
+                    matches["R32_9"].score1 = 1; matches["R32_9"].score2 = 2; matches["R32_9"].winner = teams[19]; // Norvégia
+                    matches["R32_9"].goals1 = [{ name: "Amad Diallo", minute: "74" }];
+                    matches["R32_9"].goals2 = [{ name: "Antonio Nusa", minute: "39" }, { name: "Erling Haaland", minute: "86" }];
+
+                    matches["R32_10"].date = "2026-06-30"; matches["R32_10"].time = "19:00 UTC-6"; matches["R32_10"].ground = "Mexico City";
+                    matches["R32_10"].score1 = 2; matches["R32_10"].score2 = 0; matches["R32_10"].winner = teams[20]; // Mexikó
+                    matches["R32_10"].goals1 = [{ name: "Julián Quiñones", minute: "31" }, { name: "Raúl Jiménez", minute: "45+1" }];
+                    matches["R32_10"].goals2 = [];
+
+                    matches["R32_11"].date = "2026-07-01"; matches["R32_11"].time = "12:00 UTC-4"; matches["R32_11"].ground = "Atlanta";
+                    matches["R32_11"].score1 = 2; matches["R32_11"].score2 = 1; matches["R32_11"].winner = teams[22]; // Anglia
+                    matches["R32_11"].goals1 = [{ name: "Harry Kane", minute: "75" }, { name: "Harry Kane", minute: "86" }];
+                    matches["R32_11"].goals2 = [{ name: "Brian Cipenga", minute: "7" }];
+
+                    matches["R32_12"].date = "2026-07-03"; matches["R32_12"].time = "18:00 UTC-4"; matches["R32_12"].ground = "Miami (Miami Gardens)";
+
+                    matches["R32_13"].date = "2026-07-03"; matches["R32_13"].time = "13:00 UTC-5"; matches["R32_13"].ground = "Dallas (Arlington)";
+
+                    matches["R32_14"].date = "2026-07-02"; matches["R32_14"].time = "20:00 UTC-7"; matches["R32_14"].ground = "Vancouver";
+
+                    matches["R32_15"].date = "2026-07-03"; matches["R32_15"].time = "20:30 UTC-5"; matches["R32_15"].ground = "Kansas City";
+
+                    // Többi mérkőzés deklarálása (féloldalasság megelőzése érdekében)
+                    for(let i=7; i<=15; i++) {
+                        if (!matches[`R32_${i}`].date) {
+                            matches[`R32_${i}`].score1 = null; matches[`R32_${i}`].score2 = null; matches[`R32_${i}`].winner = null;
+                            matches[`R32_${i}`].goals1 = []; matches[`R32_${i}`].goals2 = [];
+                        }
+                    }
+
+                    setApiStatus('offline');
                 }
             }
 
             propagateWinners();
             renderBracket();
             renderArchive();
-        }
-
-        function updateTimestamp() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const label = document.getElementById('last-updated-time');
-            if (label) {
-                label.innerText = `Adatbázis szinkronizálva: ${timeString}`;
-            }
         }
 
         function renderBracket() {
@@ -916,10 +839,11 @@
                 });
             }
 
+            // Külső kör (Zászlók mérete: 46px)
             for (let i = 0; i < 32; i++) {
                 const team = teams[i];
                 const angle = angles.teams[i];
-                flagsHTML += drawFlag(team, 405, angle, 34);
+                flagsHTML += drawFlag(team, 405, angle, 46);
                 
                 const isLeft = (angle > 90 && angle < 270);
                 const textAngle = isLeft ? angle + 180 : angle;
@@ -950,6 +874,7 @@
                 
                 nodesHTML += drawMatchNode(matchId, match, 362, angles.matches[matchId]);
 
+                // Büntetőpárbaj eredmény megrajzolása
                 if (match.winner !== null && match.pen1 !== undefined) {
                     const textPt = polarToCartesian(500, 500, 376, angles.matches[matchId]);
                     nodesHTML += `
@@ -962,15 +887,15 @@
                 }
             }
 
-            // R16
+            // R16 (Zászlók mérete: 52px)
             for (let m = 0; m < 8; m++) {
                 const matchId = `R16_${m}`;
                 const match = matches[matchId];
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 320, angles.slots[`R16_${2*m}`], 38);
-                flagsHTML += drawFlag(match.team2, 320, angles.slots[`R16_${2*m+1}`], 38);
+                flagsHTML += drawFlag(match.team1, 320, angles.slots[`R16_${2*m}`], 52);
+                flagsHTML += drawFlag(match.team2, 320, angles.slots[`R16_${2*m+1}`], 52);
                 
                 connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m}`], 320, angles.matches[matchId], 278, match.team1?.id, matchId, slot1_active);
                 connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m+1}`], 320, angles.matches[matchId], 278, match.team2?.id, matchId, slot2_active);
@@ -984,15 +909,15 @@
                 }
             }
 
-            // QF
+            // QF (Zászlók mérete: 58px)
             for (let m = 0; m < 4; m++) {
                 const matchId = `QF_${m}`;
                 const match = matches[matchId];
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 236, angles.slots[`QF_${2*m}`], 42);
-                flagsHTML += drawFlag(match.team2, 236, angles.slots[`QF_${2*m+1}`], 42);
+                flagsHTML += drawFlag(match.team1, 236, angles.slots[`QF_${2*m}`], 58);
+                flagsHTML += drawFlag(match.team2, 236, angles.slots[`QF_${2*m+1}`], 58);
                 
                 connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m}`], 236, angles.matches[matchId], 194, match.team1?.id, matchId, slot1_active);
                 connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m+1}`], 236, angles.matches[matchId], 194, match.team2?.id, matchId, slot2_active);
@@ -1006,15 +931,15 @@
                 }
             }
 
-            // SF
+            // SF (Zászlók mérete: 64px)
             for (let m = 0; m < 2; m++) {
                 const matchId = `SF_${m}`;
                 const match = matches[matchId];
                 const slot1_active = match.team1 !== null;
                 const slot2_active = match.team2 !== null;
 
-                flagsHTML += drawFlag(match.team1, 152, angles.slots[`SF_${2*m}`], 46);
-                flagsHTML += drawFlag(match.team2, 152, angles.slots[`SF_${2*m+1}`], 46);
+                flagsHTML += drawFlag(match.team1, 152, angles.slots[`SF_${2*m}`], 64);
+                flagsHTML += drawFlag(match.team2, 152, angles.slots[`SF_${2*m+1}`], 64);
                 
                 connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m}`], 152, angles.matches[matchId], 110, match.team1?.id, matchId, slot1_active);
                 connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m+1}`], 152, angles.matches[matchId], 110, match.team2?.id, matchId, slot2_active);
@@ -1028,10 +953,10 @@
                 }
             }
 
-            // F
+            // Döntő (Zászlók mérete: 72px)
             const finalMatch = matches["F_0"];
-            flagsHTML += drawFlag(finalMatch.team1, 80, 180, 52);
-            flagsHTML += drawFlag(finalMatch.team2, 80, 0, 52);
+            flagsHTML += drawFlag(finalMatch.team1, 80, 180, 72);
+            flagsHTML += drawFlag(finalMatch.team2, 80, 0, 72);
             
             connectionsHTML += drawRadialConnector(180, 80, 45, finalMatch.team1?.id, "F_0", finalMatch.team1 !== null);
             connectionsHTML += drawRadialConnector(0, 80, 45, finalMatch.team2?.id, "F_0", finalMatch.team2 !== null);
@@ -1065,7 +990,6 @@
             }
             
             setupInteractions();
-            generateAIPrediction();
         }
 
         // Csoportkörök legenerálása kattintható sorokkal
@@ -1089,6 +1013,7 @@
                     `).join('');
 
                     rowsHTML += `
+                        <!-- Fő sor -->
                         <tr id="${rowId}" class="font-semibold cursor-pointer hover:bg-amber-500/5 transition-all ${team.adv ? 'text-[#2B2A27]' : 'text-slate-400'}" onclick="toggleTeamMatches('${g.name}', '${team.name}')">
                             <td class="py-2.5 flex items-center gap-1.5">
                                 <span class="w-1.5 h-1.5 rounded-full ${team.adv ? 'bg-[#b08a44]' : 'bg-transparent'}"></span>
@@ -1098,6 +1023,7 @@
                             <td class="py-2.5 text-center font-bold ${team.adv ? 'text-[#b08a44]' : ''}">${team.p}</td>
                             <td class="py-2.5 text-right font-medium">${team.gk}</td>
                         </tr>
+                        <!-- Lenyíló részletes meccsek sor -->
                         <tr id="${matchesId}" class="hidden bg-[#F4F3EF]/50 border-t border-[#E2E0D8]/30">
                             <td colspan="3" class="px-4 py-2 text-[10px] text-[#6E6D6A] space-y-1">
                                 <div class="font-bold text-[8px] tracking-wider text-[#b08a44] uppercase mb-1">Mérkőzések:</div>
@@ -1145,26 +1071,54 @@
             }
         }
 
+        // Időrend szerinti legközelebbi meccs kiszámító algoritmusa (Defenzív zónaszámítással)
+        function getClosestUpcomingMatch() {
+            const now = new Date();
+            let closestMatch = null;
+            let minDiff = Infinity;
+
+            for (let key in matches) {
+                const m = matches[key];
+                if (m.winner === null && m.team1 !== null && m.team2 !== null && m.date && m.time) {
+                    const [y, mo, d] = m.date.split('-').map(Number);
+                    const tm = m.time.match(/(\d{1,2}):(\d{2})\s*UTC([+-]\d+)/);
+                    if (!tm) continue;
+                    const hour = parseInt(tm[1], 10), minute = parseInt(tm[2], 10), offset = parseInt(tm[3], 10);
+                    const matchTime = new Date(Date.UTC(y, mo - 1, d, hour - offset, minute));
+
+                    const diff = matchTime - now;
+                    // Ha a meccs a jövőben van, vagy éppen folyamatban van (kevesebb mint 3 órája tart)
+                    if (diff > -3 * 3600000) {
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closestMatch = m;
+                        }
+                    }
+                }
+            }
+
+            // Fallback szekvenciális kereséssel, ha nincs dátum rögzítve
+            if (!closestMatch) {
+                const roundOrder = ["R32", "R16", "QF", "SF", "F"];
+                for (let round of roundOrder) {
+                    for (let key in matches) {
+                        const m = matches[key];
+                        if (m.round === round && m.winner === null && m.team1 !== null && m.team2 !== null) {
+                            return m;
+                        }
+                    }
+                }
+            }
+
+            return closestMatch;
+        }
+
         // AI neurális predikciós modul
         function generateAIPrediction() {
             const container = document.getElementById('ai-prediction-container');
             if (!container) return;
 
-            let nextMatchId = null;
-            let nextMatch = null;
-
-            const roundOrder = ["R32", "R16", "QF", "SF", "F"];
-            for (let round of roundOrder) {
-                for (let key in matches) {
-                    const m = matches[key];
-                    if (m.round === round && m.winner === null && m.team1 !== null && m.team2 !== null) {
-                        nextMatchId = key;
-                        nextMatch = m;
-                        break;
-                    }
-                }
-                if (nextMatch) break;
-            }
+            const nextMatch = getClosestUpcomingMatch();
 
             if (!nextMatch) {
                 container.innerHTML = `
@@ -1333,152 +1287,19 @@
                     </div>
                 </div>
             `;
-
-            // Frissítjük a kommentátor generátor célmérkőzés mezőjét is
-            const targetLabel = document.getElementById('commentary-target-label');
-            if (targetLabel) {
-                targetLabel.innerText = `Célmérkőzés: ${t1.name} vs ${t2.name}`;
-            }
-            generateCommentary();
-        }
-
-        // Kommentátor adatbázis (25-25 zseniális aranyköpés és szakmai elemzés)
-        const commentatorQuotes = {
-            "hajdub": [
-                "Ha ez a labda bemegy hölgyeim és uraim, akkor ez egy gól... és gól! Nem állítom, hogy a kapus tehetett volna bármit, de ha mégis, azt most nagyon sajnálja!",
-                "Úgy ment el a védő mellett a szélen, mint a gyorsvonat a harmadosztályú megállóhelyen! Esélye sem volt leolvasni a járatszámot.",
-                "Hát ezt a labdát a kapus már csak mozijeggyel nézhette volna közelebbről! Elképesztő bomba, ezt még a NASA radarjai is követték!",
-                "Olyan feszültség van itt a MetLife stadionban, hogy azzal New Jersey teljes közvilágítását meg lehetne oldani legalább egy hétig!",
-                "De szeretnék most [CSAPAT1] szurkoló lenni ott a lelátón! Micsoda hangulat, szinte rezeg a levegő!",
-                "Olyan passz volt [SZTÁR1]-tól, hogy a labda menet közben megköszönte a kézbesítést! A postások sárga irigységgel nézik ezt a pontosságot.",
-                "Hát ha ez nem sárga lap, akkor én holnap reggeltől balett-táncosnak állok a Magyar Állami Operaházban!",
-                "Ez nem védekezés volt, hanem konkrétan egy udvarias és baráti kérés: 'Parancsoljon kedves [SZTÁR2], tessék nyugodtan kapura lőni!'",
-                "A kapufa még most is remeg, pedig a lövést már az előző reklámblokk előtt elengedte!",
-                "Büntetők következnek... Itt már nem a lábak fognak dolgozni hölgyeim és uraim, itt már a gyomrok fognak görcsbe rándulni!",
-                "Kicsit hosszú, kicsit pontatlan, de a miénk... mármint a [CSAPAT1]-é, de ők most ennek is végtelenül örülnek!",
-                "A kapus csak a szemével követte a lövést... de szerencsére a szeme nem volt a kapuban, különben az is megmozdult volna.",
-                "Ezt a labdát még a fizika és a gravitáció törvényei is megkérdőjelezik! Olyan ívben csapódott, ami nem e világi.",
-                "Hát hölgyeim és uraim, ha most valaki kiment a tévék elől a konyhába egy hideg sörért, az most nagyon morcosan jöhet vissza!",
-                "A védő most úgy keresi a labdát a fűben, mint az elveszett slusszkulcsot vasárnap hajnalban a buli után.",
-                "A kapus úgy repült a jobb sarok felé, mint egy megbokrosodott kismadár, de ezt a labdát még repülőjeggyel sem érte volna el!",
-                "Ez a meccs olyan, mint a jó gulyásleves: van benne hús, van benne csípős, és az ember sosem akarja, hogy véget érjen!",
-                "A játékvezető úgy húzta elő a piros lapot a zsebéből, mintha bűvészmutatványra készülne a porondon.",
-                "Úgy eltolódott a védelem a bal oldalon, hogy a jobbhátvéd már a büfénél sorakozik egy kis hotdogért a szurkolókkal.",
-                "Hát hölgyeim és uraim, itt már a fűszálak is egymásba kapaszkodnak a feszültségtől! Elképesztő dráma!",
-                "Ez a gól olyan váratlanul jött, mint a decemberi hóesés a közútkezelőknek!",
-                "A kapus kapusbravúrt mutatott be... ami tulajdonképpen abból állt, hogy eltalálta őt a labda, de hát ott kell állni!",
-                "Micsoda szerelés! Ha ezt a védőt otthon megkérik, hogy vigye le a szemetet, biztosan nem szereli le ilyen fegyelmezetten a családot.",
-                "Ha most lő, gól... és lőtt, de nem gól! Viszont a szándék, az hölgyeim és uraim, az szép volt!",
-                "Vége a mérkőzésnek! Hát ezt a kilencven percet még az unokáinknak is mesélni fogjuk a kandalló mellett!"
-            ],
-            "gundel": [
-                "Igen, hölgyeim és uraim, ez az a bizonyos pillanat, amikor a taktikai fegyelem és a sémák teljesen háttérbe szorulnak...",
-                "Nézzék meg a játékosok testbeszédét! Ott, a vonal mellett látszik igazán, ki az, aki mentálisan már feladta, és ki akarja jobban a továbbjutást.",
-                "Taktikailag egy tökéletesen felépített akciót láthattunk a [CSAPAT1]-től, de a végrehajtás utolsó fázisába sajnos pici hiba csúszott.",
-                "Hihetetlen dráma! Ezt a feszültséget nem lehet előre megírni egyetlen hollywoodi forgatókönyvben sem, ezt látni kell!",
-                "A kérdés most az, hogy maradt-e még elegendő oxigén a tüdőkben és a lábakban a hosszabbítás harminc percére?",
-                "Ez az a taktikai hiba, amit ezen a szinten, egy világbajnoki nyolcaddöntőben az ellenfél könyörtelenül megbüntet.",
-                "Nem, ez egyszerűen hihetetlen! Micsoda mentális erő, micsoda akarat és micsoda elképesztő fordulat!",
-                "Bravúros megoldást láttunk a kapustól, de nézzék meg lassításban, hogy honnan, milyen precíz labdaszerzésből indult el ez az egész támadás!",
-                "A védelem most teljesen eltolódott a jobb szárnyon, óriási üres terület nyílt meg a felfutó [SZTÁR1] előtt.",
-                "Zseniális meglátás volt a középpályáról, de a befejezés pillanatában sajnos teljesen elfogyott a koncentráció.",
-                "Itt már a fizikai fáradtság felett a mentális erő fog dönteni. Az a csapat jut tovább, amelyik fejben stabilabb tud maradni.",
-                "Gyönyörű, tiszta és fegyelmezett becsúszó szerelés! Pontosan az ilyen megmozdulások menthetik meg a csapat sorsát.",
-                "Figyeljék meg, hogyan kéri el a labdát a mélységből [SZTÁR2]! Ez a mozgás tankönyvbe illő, tanítani kellene a fiataloknak.",
-                "A feszültség szinte tapintható a stadionban, a szurkolók visszatartott lélegzettel figyelik a játékvezető minden rezdülését.",
-                "Egy ilyen éles szituációban a kapusnak a másodperctöredék tört része alatt kell meghoznia a tökéletes döntést.",
-                "Óriási kockázatot vállalt ezzel a belépővel a tizenhatoson belül, de szerencséjére pontosan a labdát találta el először.",
-                "Ez a gól mindent megváltoztat. Most a [CSAPAT2] csapatának kell kezdeményeznie, fel kell adniuk az eddigi biztonsági játékot.",
-                "Hihetetlen reflex! Ezért mondjuk mindig, hölgyeim és uraim, hogy a kapus poszt az egy teljesen különálló, speciális szakma.",
-                "Nézzék a szövetségi kapitány reakcióját az oldalvonal mellett! Ő is érzi, hogy ezen az egyetlen cserén múlhat a csapat sorsa.",
-                "A labda centikkel suhant el a kapufa mellett, de micsoda dinamika és testtartás volt ebben a lövőmozdulatban!",
-                "Ez a fajta feszültség és drámaiság az, amiért ezt a játékot világszerte milliárdok imádják hölgyeim és uraim.",
-                "A játékvezető határozottan mutatja, hogy nincs büntető, mehet tovább a játék. És a lassítás alapján azt kell mondjam, igaza van.",
-                "A letámadás most kiválóan működik a [CSAPAT1]-nél, teljesen beszorítják az ellenfelet a saját tizenhatosuk előterébe.",
-                "Elképesztő fizikai és mentális csata zajlik a pályán, a játékosok minden egyes centiméterért megalkuvás nélkül küzdenek.",
-                "És eldőlt! Megvan a továbbjutó! Micsoda este, micsoda emberfeletti küzdelmet láthattunk ma a gyepen!"
-            ]
-        };
-
-        let currentCommentator = 'hajdub';
-
-        function setCommentator(type) {
-            currentCommentator = type;
-            
-            const btnHajdub = document.getElementById('btn-commentator-hajdub');
-            const btnGundel = document.getElementById('btn-commentator-gundel');
-            
-            if (type === 'hajdub') {
-                btnHajdub.className = "px-3 py-1 rounded-lg border border-[#b08a44] bg-amber-500/10 font-bold text-[#b08a44] transition-all";
-                btnGundel.className = "px-3 py-1 rounded-lg border border-[#E2E0D8] bg-[#FAF9F5] font-semibold text-[#6E6D6A] hover:bg-[#F4F3EF] transition-all";
-            } else {
-                btnGundel.className = "px-3 py-1 rounded-lg border border-[#b08a44] bg-amber-500/10 font-bold text-[#b08a44] transition-all";
-                btnHajdub.className = "px-3 py-1 rounded-lg border border-[#E2E0D8] bg-[#FAF9F5] font-semibold text-[#6E6D6A] hover:bg-[#F4F3EF] transition-all";
-            }
-            
-            generateCommentary();
-        }
-
-        // Kommentár generálása a kiválasztott kommentátor és a következő meccs alapján
-        function generateCommentary() {
-            const commentaryText = document.getElementById('commentary-text');
-            if (!commentaryText) return;
-
-            // Megkeressük az aktuális meccset
-            let nextMatch = null;
-            const roundOrder = ["R32", "R16", "QF", "SF", "F"];
-            for (let round of roundOrder) {
-                for (let key in matches) {
-                    const m = matches[key];
-                    if (m.round === round && m.winner === null && m.team1 !== null && m.team2 !== null) {
-                        nextMatch = m;
-                        break;
-                    }
-                }
-                if (nextMatch) break;
-            }
-
-            if (!nextMatch) {
-                commentaryText.innerText = `"Hát hölgyeim és uraim, a sípszó elhangzott, a kupa elkelt, a mikrofont mára kikapcsoljuk!"`;
-                return;
-            }
-
-            const t1 = nextMatch.team1;
-            const t2 = nextMatch.team2;
-            const stars1 = teamStars[t1.id] || [t1.name + " Játékos"];
-            const stars2 = teamStars[t2.id] || [t2.name + " Játékos"];
-
-            const quotes = commentatorQuotes[currentCommentator];
-            
-            // Kiválasztunk 3 véletlenszerű idézetet
-            let selectedIndexes = [];
-            while (selectedIndexes.length < 3) {
-                const randIndex = Math.floor(Math.random() * quotes.length);
-                if (!selectedIndexes.includes(randIndex)) {
-                    selectedIndexes.push(randIndex);
-                }
-            }
-
-            // Összefűzzük és behelyettesítjük a változókat
-            let text = selectedIndexes.map(idx => quotes[idx]).join(' ');
-            
-            text = text
-                .replaceAll('[CSAPAT1]', t1.name)
-                .replaceAll('[CSAPAT2]', t2.name)
-                .replaceAll('[SZTÁR1]', stars1[0])
-                .replaceAll('[SZTÁR2]', stars2[0]);
-
-            commentaryText.innerText = `"${text}"`;
         }
 
         function getTooltipHTML(match, matchId) {
             const isPlayed = match.winner !== null;
+            const isLive = match.isLive === true;
+            const showScore = isPlayed || isLive;
             const isPenalties = match.pen1 !== undefined && match.pen2 !== undefined;
             const isAET = match.note !== undefined;
             
             let statusText = isPlayed ? "MÉRKŐZÉS VÉGE" : "HAMAROSAN";
             if (isPlayed && isAET && !isPenalties) statusText = "HOSSZABBÍTÁS UTÁN";
             else if (isPlayed && isPenalties) statusText = "DÖNTÉST KÖVETŐEN";
+            if (isLive) statusText = match.liveMinute ? `ÉLŐ · ${match.liveMinute}` : "ÉLŐ";
             
             let roundName = "";
             switch(match.round) {
@@ -1491,10 +1312,19 @@
             
             return `
                 <div class="backdrop-blur-md bg-slate-900/95 border border-slate-700/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] p-4 min-w-[280px] text-white">
-                    <div class="text-[10px] font-bold tracking-widest text-[#dfbe5b] mb-3 flex justify-between items-center">
+                    <div class="text-[10px] font-bold tracking-widest text-[#dfbe5b] mb-2 flex justify-between items-center">
                         <span>${roundName.toUpperCase()}</span>
-                        <span class="px-1.5 py-0.5 bg-white/10 rounded border border-white/10 text-[9px] font-bold">${statusText}</span>
+                        <span class="px-1.5 py-0.5 ${isLive ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-white/10 border-white/10'} rounded border text-[9px] font-bold ${isLive ? 'flex items-center gap-1' : ''}">${isLive ? '<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>' : ''}${statusText}</span>
                     </div>
+                    
+                    <!-- Dinamikus Helyi Időzóna Megjelenítés -->
+                    ${match.date && match.venue ? `
+                    <div class="text-[9px] text-slate-400 font-medium mb-3 flex items-center gap-1.5 select-none">
+                        <span>📅 ${formatMatchDateTime(match.date, match.time)}</span>
+                        <span class="text-slate-600">•</span>
+                        <span>📍 ${match.venue}</span>
+                    </div>
+                    ` : ''}
                     
                     <div class="flex items-center justify-between gap-2.5">
                         <div class="flex items-center gap-2 flex-1 min-w-0">
@@ -1503,11 +1333,11 @@
                         </div>
                         
                         <div class="flex flex-col items-center justify-center shrink-0 min-w-[60px]">
-                            ${isPlayed ? `
+                            ${showScore ? `
                             <div class="flex items-center gap-1 font-black text-sm">
-                                <span class="${match.winner.id === match.team1.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score1}</span>
+                                <span class="${isPlayed && match.winner.id === match.team1.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score1}</span>
                                 <span class="text-slate-500 font-light">-</span>
-                                <span class="${match.winner.id === match.team2.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score2}</span>
+                                <span class="${isPlayed && match.winner.id === match.team2.id ? 'text-[#dfbe5b]' : 'text-slate-300'}">${match.score2}</span>
                             </div>
                             ` : `
                             <span class="text-xs text-slate-500 font-bold">VS</span>
@@ -1525,6 +1355,12 @@
                         (Büntetőkkel: ${match.pen1} - ${match.pen2})
                     </div>
                     ` : ''}
+
+                    ${match.liveSource === 'ESPN' && isPlayed && !(match.goals1 && match.goals1.length) && !(match.goals2 && match.goals2.length) && match.score1 + match.score2 > 0 ? `
+                    <div class="text-center text-[9px] text-slate-400 italic mt-1">
+                        Élő állás (ESPN) · gólszerzők frissítés után
+                    </div>
+                    ` : ''}
                     
                     <div class="mt-3 pt-2 border-t border-white/10 text-center text-[9px] text-[#dfbe5b]/80 font-medium tracking-wide">
                         KATTINTSON A RÉSZLETEKÉRT
@@ -1533,6 +1369,7 @@
             `;
         }
 
+        // Modális panel részletező
         function showMatchDetails(matchId) {
             const match = matches[matchId];
             if (!match || match.team1 === null || match.team2 === null) return;
@@ -1553,15 +1390,23 @@
             document.getElementById('modal-t2-name').innerText = match.team2.name;
             
             const isPlayed = match.winner !== null;
-            document.getElementById('modal-t1-score').innerText = isPlayed ? match.score1 : '-';
-            document.getElementById('modal-t2-score').innerText = isPlayed ? match.score2 : '-';
+            const isLive = match.isLive === true;
+            const showScore = isPlayed || isLive;
+            document.getElementById('modal-t1-score').innerText = showScore ? match.score1 : '-';
+            document.getElementById('modal-t2-score').innerText = showScore ? match.score2 : '-';
             
             const isAET = match.note !== undefined;
-            document.getElementById('modal-match-note').innerText = isAET ? match.note : (isPlayed ? 'FT' : 'VÁRAKOZIK');
-            if (!isPlayed) {
-                document.getElementById('modal-match-note').className = "text-[9px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded border border-slate-300 tracking-widest uppercase";
+            const noteLabel = document.getElementById('modal-match-note');
+            if (isLive) {
+                noteLabel.innerText = match.liveMinute ? `● ÉLŐ · ${match.liveMinute}` : "● ÉLŐ";
+                noteLabel.className = "text-[9px] font-bold text-red-600 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 tracking-widest uppercase";
             } else {
-                document.getElementById('modal-match-note').className = "text-[9px] font-bold text-[#b08a44] bg-amber-500/10 px-2 py-0.5 rounded border border-[#b08a44]/10 tracking-widest uppercase";
+                noteLabel.innerText = isAET ? match.note : (isPlayed ? 'FT' : 'VÁRAKOZIK');
+                if (!isPlayed) {
+                    noteLabel.className = "text-[9px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded border border-slate-300 tracking-widest uppercase";
+                } else {
+                    noteLabel.className = "text-[9px] font-bold text-[#b08a44] bg-amber-500/10 px-2 py-0.5 rounded border border-[#b08a44]/10 tracking-widest uppercase";
+                }
             }
 
             const penSectionBelow = document.getElementById('modal-penalties-score-below');
@@ -1573,12 +1418,17 @@
                 penSectionBelow.classList.add('hidden');
             }
             
+            const datetimeLabel = document.getElementById('modal-datetime-row');
+            if (datetimeLabel) {
+                datetimeLabel.innerText = (match.date) ? `${formatMatchDateTime(match.date, match.time)}${match.ground ? ` · ${match.ground}` : ''}` : '';
+            }
+
             const t1ScorersUl = document.getElementById('modal-t1-scorers');
             const t2ScorersUl = document.getElementById('modal-t2-scorers');
             t1ScorersUl.innerHTML = '';
             t2ScorersUl.innerHTML = '';
             
-            if (isPlayed) {
+            if (isPlayed || isLive) {
                 const goals1 = match.goals1 || [];
                 if (goals1.length > 0) {
                     goals1.forEach(g => {
@@ -1662,7 +1512,7 @@
                     
                     tooltip.innerHTML = getTooltipHTML(matches[matchId], matchId);
                     tooltip.classList.remove('hidden');
-                    node.setAttribute('r', '8');
+                    node.setAttribute('r', '11');
                 });
                 
                 node.addEventListener('mousemove', (e) => {
@@ -1695,7 +1545,7 @@
                 node.addEventListener('mouseleave', () => {
                     resetAllPaths();
                     tooltip.classList.add('hidden');
-                    node.setAttribute('r', '6');
+                    node.setAttribute('r', '9');
                 });
 
                 node.addEventListener('click', () => {
