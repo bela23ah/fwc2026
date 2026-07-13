@@ -323,21 +323,6 @@
     </div>
 
     <script>
-        const safeStorage = {
-            getItem(key) {
-                try {
-                    return localStorage.getItem(key);
-                } catch (e) {
-                    return null;
-                }
-            },
-            setItem(key, value) {
-                try {
-                    localStorage.setItem(key, value);
-                } catch (e) {}
-            }
-        };
-
         const nameMapping = {
             "South Africa": { id: "za", name: "Dél-Afrika", code: "za" },
             "Canada": { id: "ca", name: "Kanada", code: "ca" },
@@ -484,10 +469,10 @@
                 "Albánia": ["vs Új-Zéland 1 - 2 (V)", "vs Svájc 1 - 2 (V)", "vs Argentína 1 - 4 (V)"]
             },
             "I Csoport": {
-                "Franciaország": ["vs Kongói DK 2 - 1 (GY)", "vs Svédország 3 - 1 (GY)", "vs Ukraine 4 - 1 (GY)"],
-                "Kongói DK": ["vs Franciaország 1 - 2 (V)", "vs Ukraine 2 - 1 (GY)", "vs Svédország 1 - 0 (GY)"],
-                "Svédország": ["vs Ukraine 2 - 1 (GY)", "vs Franciaország 1 - 3 (V)", "vs Kongói DK 0 - 1 (V)"],
-                "Ukraine": ["vs Svédország 1 - 2 (V)", "vs Kongói DK 1 - 2 (V)", "vs Franciaország 1 - 4 (V)"]
+                "Franciaország": ["vs Kongói DK 2 - 1 (GY)", "vs Svédország 3 - 1 (GY)", "vs Ukrajna 4 - 1 (GY)"],
+                "Kongói DK": ["vs Franciaország 1 - 2 (V)", "vs Ukrajna 2 - 1 (GY)", "vs Svédország 1 - 0 (GY)"],
+                "Svédország": ["vs Ukrajna 2 - 1 (GY)", "vs Franciaország 1 - 3 (V)", "vs Kongói DK 0 - 1 (V)"],
+                "Ukrajna": ["vs Svédország 1 - 2 (V)", "vs Kongói DK 1 - 2 (V)", "vs Franciaország 1 - 4 (V)"]
             },
             "J Csoport": {
                 "Spanyolország": ["vs Ausztrália 3 - 1 (GY)", "vs Kolumbia 3 - 1 (GY)", "vs Wales 4 - 0 (GY)"],
@@ -584,6 +569,40 @@
             ]}
         ];
 
+        const angles = { teams: {}, matches: {}, slots: {} };
+
+        // Körsugarak és szög-felosztások
+        for (let i = 0; i < 32; i++) {
+            angles.teams[i] = i < 16 ? (100 + i * (160 / 15)) : (-80 + (i - 16) * (160 / 15));
+        }
+        for (let m = 0; m < 16; m++) {
+            const am = (angles.teams[2*m] + angles.teams[2*m + 1]) / 2;
+            angles.matches[`R32_${m}`] = am; angles.slots[`R16_${m}`] = am;
+        }
+        for (let m = 0; m < 8; m++) {
+            const am = (angles.slots[`R16_${2*m}`] + angles.slots[`R16_${2*m + 1}`]) / 2;
+            angles.matches[`R16_${m}`] = am; angles.slots[`QF_${m}`] = am;
+        }
+        for (let m = 0; m < 4; m++) {
+            const am = (angles.slots[`QF_${2*m}`] + angles.slots[`QF_${2*m + 1}`]) / 2;
+            angles.matches[`QF_${m}`] = am; angles.slots[`SF_${m}`] = am;
+        }
+        for (let m = 0; m < 2; m++) {
+            const am = (angles.slots[`SF_${2*m}`] + angles.slots[`SF_${2*m + 1}`]) / 2;
+            angles.matches[`SF_${m}`] = am; angles.slots[`F_${m}`] = am;
+        }
+
+        const numToMatchId = {
+            73: "R32_0", 75: "R32_1", 74: "R32_2", 76: "R32_3",
+            78: "R32_4", 77: "R32_5", 79: "R32_6", 80: "R32_7",
+            82: "R32_8", 81: "R32_9", 84: "R32_10", 83: "R32_11",
+            85: "R32_12", 88: "R32_13", 86: "R32_14", 87: "R32_15",
+            90: "R16_0", 89: "R16_1", 91: "R16_2", 92: "R16_3",
+            94: "R16_4", 93: "R16_5", 96: "R16_6", 95: "R16_7",
+            97: "QF_0", 99: "QF_1", 98: "QF_2", 100: "QF_3",
+            101: "SF_0", 102: "SF_1", 104: "F_0"
+        };
+
         let matches = {
             "R32_0": { round: "R32", team1: teams[0], team2: teams[1], score1: null, score2: null, winner: null, goals1: [], goals2: [] },
             "R32_1": { round: "R32", team1: teams[2], team2: teams[3], score1: null, score2: null, winner: null, goals1: [], goals2: [] },
@@ -620,40 +639,6 @@
             "SF_1": { round: "SF", team1: null, team2: null, score1: null, score2: null, winner: null, goals1: [], goals2: [] },
 
             "F_0": { round: "F", team1: null, team2: null, score1: null, score2: null, winner: null, goals1: [], goals2: [] }
-        };
-
-        const angles = { teams: {}, matches: {}, slots: {} };
-
-        // Körsugarak és szög-felosztások
-        for (let i = 0; i < 32; i++) {
-            angles.teams[i] = i < 16 ? (100 + i * (160 / 15)) : (-80 + (i - 16) * (160 / 15));
-        }
-        for (let m = 0; m < 16; m++) {
-            const am = (angles.teams[2*m] + angles.teams[2*m + 1]) / 2;
-            angles.matches[`R32_${m}`] = am; angles.slots[`R16_${m}`] = am;
-        }
-        for (let m = 0; m < 8; m++) {
-            const am = (angles.slots[`R16_${2*m}`] + angles.slots[`R16_${2*m + 1}`]) / 2;
-            angles.matches[`R16_${m}`] = am; angles.slots[`QF_${m}`] = am;
-        }
-        for (let m = 0; m < 4; m++) {
-            const am = (angles.slots[`QF_${2*m}`] + angles.slots[`QF_${2*m + 1}`]) / 2;
-            angles.matches[`QF_${m}`] = am; angles.slots[`SF_${m}`] = am;
-        }
-        for (let m = 0; m < 2; m++) {
-            const am = (angles.slots[`SF_${2*m}`] + angles.slots[`SF_${2*m + 1}`]) / 2;
-            angles.matches[`SF_${m}`] = am; angles.slots[`F_${m}`] = am;
-        }
-
-        const numToMatchId = {
-            73: "R32_0", 75: "R32_1", 74: "R32_2", 76: "R32_3",
-            78: "R32_4", 77: "R32_5", 79: "R32_6", 80: "R32_7",
-            82: "R32_8", 81: "R32_9", 84: "R32_10", 83: "R32_11",
-            85: "R32_12", 88: "R32_13", 86: "R32_14", 87: "R32_15",
-            90: "R16_0", 89: "R16_1", 91: "R16_2", 92: "R16_3",
-            94: "R16_4", 93: "R16_5", 96: "R16_6", 95: "R16_7",
-            97: "QF_0", 99: "QF_1", 98: "QF_2", 100: "QF_3",
-            101: "SF_0", 102: "SF_1", 104: "F_0"
         };
 
         function formatMatchDateTime(dateStr, timeStr) {
@@ -772,7 +757,7 @@
 
         function drawMatchNode(matchId, match, radius, angle) {
             const pt = polarToCartesian(500, 500, radius, angle);
-            const isPlayed = match.winner !== null;
+            const isPlayed = !!match.winner;
             
             const strokeColor = isPlayed ? '#c5a059' : '#AEABA0';
             const fill = isPlayed ? '#F4F3EF' : '#FFFFFF';
@@ -803,7 +788,7 @@
 
                 const home = comp.competitors.find(c => c.homeAway === 'home');
                 const away = comp.competitors.find(c => c.homeAway === 'away');
-                if (!home || !away) return;
+                if (!home || !away || !home.team || !away.team) return;
 
                 const homeMapped = nameMapping[home.team.displayName];
                 const awayMapped = nameMapping[away.team.displayName];
@@ -816,7 +801,7 @@
                     const swapped = (m.team1.name === awayMapped.name && m.team2.name === homeMapped.name);
                     if (!normal && !swapped) continue;
 
-                    const alreadyFinalized = m.winner !== null;
+                    const alreadyFinalized = !!m.winner;
                     if (state === 'post' && alreadyFinalized) continue;
 
                     const s1 = parseInt(home.score, 10) || 0;
@@ -918,9 +903,7 @@
                 updateTimestamp();
 
             } catch (err) {
-                // Offline / hiba esetén használt, TELJES valós eredményadatbázis (up to 2026-07-13)
-                
-                // R32 meccsek
+                // Fallback tárolt eredményadatbázis
                 matches["R32_0"].date = "2026-06-28"; matches["R32_0"].time = "12:00 UTC-7"; matches["R32_0"].ground = "SoFi Stadium, Los Angeles";
                 matches["R32_0"].score1 = 0; matches["R32_0"].score2 = 1; matches["R32_0"].winner = teams[1]; 
                 matches["R32_0"].goals1 = []; matches["R32_0"].goals2 = [{ name: "Stephen Eustáquio", minute: "90+2" }];
@@ -1001,39 +984,219 @@
 
                 // R16 meccsek
                 matches["R16_0"].date = "2026-07-04"; matches["R16_0"].time = "17:00 UTC-5"; matches["R16_0"].ground = "Houston Stadium, Houston";
-                matches["R16_0"].score1 = 3; matches["R16_0"].score2 = 0; matches["R16_0"].winner = teams[1]; // Canada won
+                matches["R16_0"].score1 = 3; matches["R16_0"].score2 = 0; matches["R16_0"].winner = teams[1]; 
                 matches["R16_0"].goals1 = [{ name: "Jonathan David", minute: "22" }, { name: "Alphonso Davies", minute: "54" }]; matches["R16_0"].goals2 = [];
 
                 matches["R16_1"].date = "2026-07-04"; matches["R16_1"].time = "21:00 UTC-4"; matches["R16_1"].ground = "Lincoln Financial Field, Philadelphia";
-                matches["R16_1"].score1 = 0; matches["R16_1"].score2 = 1; matches["R16_1"].winner = teams[7]; // Morocco won
+                matches["R16_1"].score1 = 0; matches["R16_1"].score2 = 1; matches["R16_1"].winner = teams[7]; 
                 matches["R16_1"].goals1 = []; matches["R16_1"].goals2 = [{ name: "Youssef En-Nesyri", minute: "75" }];
 
                 matches["R16_2"].date = "2026-07-05"; matches["R16_2"].time = "16:00 UTC-5"; matches["R16_2"].ground = "MetLife Stadium, New York/New Jersey";
-                matches["R16_2"].score1 = 0; matches["R16_2"].score2 = 1; matches["R16_2"].winner = teams[10]; // France won
+                matches["R16_2"].score1 = 0; matches["R16_2"].score2 = 1; matches["R16_2"].winner = teams[10]; 
                 matches["R16_2"].goals1 = []; matches["R16_2"].goals2 = [{ name: "Kylian Mbappé", minute: "70" }];
 
                 matches["R16_3"].date = "2026-07-05"; matches["R16_3"].time = "18:00 UTC-6"; matches["R16_3"].ground = "Estadio Azteca, Mexico City";
-                matches["R16_3"].score1 = 2; matches["R16_3"].score2 = 3; matches["R16_3"].winner = teams[14]; // England won
+                matches["R16_3"].score1 = 2; matches["R16_3"].score2 = 3; matches["R16_3"].winner = teams[14]; 
                 matches["R16_3"].goals1 = [{ name: "Julián Quiñones", minute: "42" }, { name: "Raúl Jiménez", minute: "69" }]; 
                 matches["R16_3"].goals2 = [{ name: "Jude Bellingham", minute: "36" }, { name: "Harry Kane", minute: "60" }];
 
                 matches["R16_4"].date = "2026-07-06"; matches["R16_4"].time = "20:00 UTC-7"; matches["R16_4"].ground = "Lumen Field, Seattle";
-                matches["R16_4"].score1 = 4; matches["R16_4"].score2 = 1; matches["R16_4"].winner = teams[16]; // Belgium won
+                matches["R16_4"].score1 = 4; matches["R16_4"].score2 = 1; matches["R16_4"].winner = teams[16]; 
                 matches["R16_4"].goals1 = [{ name: "Charles De Ketelaere", minute: "33" }, { name: "Romelu Lukaku", minute: "90" }]; matches["R16_4"].goals2 = [{ name: "Malik Tillman", minute: "31" }];
 
                 matches["R16_5"].date = "2026-07-06"; matches["R16_5"].time = "15:00 UTC-5"; matches["R16_5"].ground = "AT&T Stadium, Dallas";
-                matches["R16_5"].score1 = 1; matches["R16_5"].score2 = 0; matches["R16_5"].winner = teams[20]; // Spain won
+                matches["R16_5"].score1 = 1; matches["R16_5"].score2 = 0; matches["R16_5"].winner = teams[20]; 
                 matches["R16_5"].goals1 = [{ name: "Mikel Merino", minute: "90+1" }]; matches["R16_5"].goals2 = [];
 
                 matches["R16_6"].date = "2026-07-07"; matches["R16_6"].time = "16:00 UTC-7"; matches["R16_6"].ground = "BC Place, Vancouver";
-                matches["R16_6"].score1 = 2; matches["R16_6"].score2 = 1; matches["R16_6"].winner = teams[24]; // Switzerland won
+                matches["R16_6"].score1 = 2; matches["R16_6"].score2 = 1; matches["R16_6"].winner = teams[24]; 
                 matches["R16_6"].goals1 = [{ name: "Breel Embolo", minute: "45" }]; matches["R16_6"].goals2 = [{ name: "Mohamed Salah", minute: "12" }];
 
                 matches["R16_7"].date = "2026-07-07"; matches["R16_7"].time = "12:00 UTC-4"; matches["R16_7"].ground = "Mercedes-Benz Stadium, Atlanta";
-                matches["R16_7"].score1 = 3; matches["R16_7"].score2 = 2; matches["R16_7"].winner = teams[28]; // Argentina won
+                matches["R16_7"].score1 = 3; matches["R16_7"].score2 = 2; matches["R16_7"].winner = teams[28]; 
                 matches["R16_7"].goals1 = [{ name: "Lionel Messi", minute: "83" }, { name: "Enzo Fernández", minute: "90" }]; matches["R16_7"].goals2 = [{ name: "Luis Díaz", minute: "33" }];
 
                 // QF meccsek
                 matches["QF_0"].date = "2026-07-09"; matches["QF_0"].time = "16:00 UTC-4"; matches["QF_0"].ground = "Gillette Stadium, Boston";
-                matches["QF_0"].score1 = 0; matches["QF_0"].score2 = 2; matches["QF_0"].winner = teams[7]; // Morocco won
-                matches["QF_0"].goals1 = []; matches
+                matches["QF_0"].score1 = 0; matches["QF_0"].score2 = 2; matches["QF_0"].winner = teams[7]; 
+                matches["QF_0"].goals1 = []; matches["QF_0"].goals2 = [{ name: "Youssef En-Nesyri", minute: "19" }];
+
+                matches["QF_1"].date = "2026-07-11"; matches["QF_1"].time = "17:00 UTC-4"; matches["QF_1"].ground = "Miami Stadium, Miami";
+                matches["QF_1"].score1 = 2; matches["QF_1"].score2 = 1; matches["QF_1"].winner = teams[10]; 
+                matches["QF_1"].goals1 = [{ name: "Kylian Mbappé", minute: "28" }, { name: "Ousmane Dembélé", minute: "73" }]; matches["QF_1"].goals2 = [{ name: "Harry Kane", minute: "54" }];
+
+                matches["QF_2"].date = "2026-07-10"; matches["QF_2"].time = "15:00 UTC-5"; matches["QF_2"].ground = "AT&T Stadium, Dallas";
+                matches["QF_2"].score1 = 1; matches["QF_2"].score2 = 2; matches["QF_2"].winner = teams[20]; 
+                matches["QF_2"].goals1 = [{ name: "Romelu Lukaku", minute: "12" }]; matches["QF_2"].goals2 = [{ name: "Mikel Merino", minute: "89" }];
+
+                matches["QF_3"].date = "2026-07-11"; matches["QF_3"].time = "18:00 UTC-5"; matches["QF_3"].ground = "Kansas City Stadium, Kansas City";
+                matches["QF_3"].score1 = 1; matches["QF_3"].score2 = 3; matches["QF_3"].winner = teams[28]; matches["QF_3"].note = "HOSSZABBÍTÁS UTÁN"; 
+                matches["QF_3"].goals1 = [{ name: "Dan Ndoye", minute: "67" }]; matches["QF_3"].goals2 = [{ name: "Julián Álvarez", minute: "112" }, { name: "Lautaro Martínez", minute: "120" }];
+
+                // SF meccsek
+                matches["SF_0"].date = "2026-07-14"; matches["SF_0"].time = "15:00 UTC-5"; matches["SF_0"].ground = "AT&T Stadium, Dallas";
+                matches["SF_1"].date = "2026-07-15"; matches["SF_1"].time = "15:00 UTC-4"; matches["SF_1"].ground = "Mercedes-Benz Stadium, Atlanta";
+
+                // Döntő
+                matches["F_0"].date = "2026-07-19"; matches["F_0"].time = "14:00 UTC-4"; matches["F_0"].ground = "MetLife Stadium, New York/New Jersey";
+
+                if (statusLabel) {
+                    statusLabel.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> TÁROLT ÁLLÁS (SZINKRONIZÁLVA)`;
+                    statusLabel.className = statusLabel.className
+                        .replace('text-green-600', 'text-amber-600')
+                        .replace('border-green-500/20', 'border-amber-500/20')
+                        .replace('bg-green-500/10', 'bg-amber-500/10');
+                }
+
+                updateTimestamp();
+            }
+
+            propagateWinners();
+            renderBracket();
+            renderArchive();
+        }
+
+        function renderBracket() {
+            let connectionsHTML = '';
+            let nodesHTML = '';
+            let flagsHTML = '';
+            let labelsHTML = '';
+
+            const ringsGrp = document.getElementById('grid-rings');
+            if (ringsGrp) {
+                ringsGrp.innerHTML = '';
+                const radii = [405, 320, 236, 152, 80];
+                radii.forEach(r => {
+                    ringsGrp.innerHTML += `<circle cx="500" cy="500" r="${r}" fill="none" stroke="#FAF9F5" stroke-width="4" />`;
+                    ringsGrp.innerHTML += `<circle cx="500" cy="500" r="${r}" fill="none" stroke="#E2E0D8" stroke-width="1" stroke-dasharray="4 4" />`;
+                });
+            }
+
+            for (let i = 0; i < 32; i++) {
+                const team = teams[i];
+                if (!team) continue;
+                const angle = angles.teams[i];
+                flagsHTML += drawFlag(team, 405, angle, 46);
+                
+                const isLeft = (angle > 90 && angle < 270);
+                const textAngle = isLeft ? angle + 180 : angle;
+                const textAnchor = isLeft ? 'end' : 'start';
+                const textPt = polarToCartesian(500, 500, 435, angle);
+                
+                labelsHTML += `
+                    <text x="${textPt.x}" y="${textPt.y + 3.5}" 
+                          transform="rotate(${textAngle}, ${textPt.x}, ${textPt.y})" 
+                          text-anchor="${textAnchor}" 
+                          class="fill-[#6E6D6A] hover:fill-[#b08a44] font-bold text-[9px] tracking-wider transition-all duration-200 cursor-pointer team-label select-none"
+                          data-team="${team.id}">
+                        ${team.name.toUpperCase()}
+                    </text>
+                `;
+            }
+
+            // R32 ágak kirajzolása (letisztult ábrázolás)
+            for (let m = 0; m < 16; m++) {
+                const matchId = `R32_${m}`;
+                const match = matches[matchId];
+                const active1 = !!match.winner && match.winner.id === match.team1?.id;
+                const active2 = !!match.winner && match.winner.id === match.team2?.id;
+                
+                connectionsHTML += drawCurveConnector(angles.teams[2*m], 405, angles.matches[matchId], 362, match.team1?.id, matchId, active1);
+                connectionsHTML += drawCurveConnector(angles.teams[2*m+1], 405, angles.matches[matchId], 362, match.team2?.id, matchId, active2);
+                connectionsHTML += drawRadialConnector(angles.matches[matchId], 362, 320, match.winner?.id, matchId, !!match.winner);
+                
+                nodesHTML += drawMatchNode(matchId, match, 362, angles.matches[matchId]);
+            }
+
+            // R16
+            for (let m = 0; m < 8; m++) {
+                const matchId = `R16_${m}`;
+                const match = matches[matchId];
+                const slot1_active = match.team1 !== null;
+                const slot2_active = match.team2 !== null;
+
+                flagsHTML += drawFlag(match.team1, 320, angles.slots[`R16_${2*m}`], 52);
+                flagsHTML += drawFlag(match.team2, 320, angles.slots[`R16_${2*m+1}`], 52);
+                
+                connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m}`], 320, angles.matches[matchId], 278, match.team1?.id, matchId, slot1_active);
+                connectionsHTML += drawCurveConnector(angles.slots[`R16_${2*m+1}`], 320, angles.matches[matchId], 278, match.team2?.id, matchId, slot2_active);
+                connectionsHTML += drawRadialConnector(angles.matches[matchId], 278, 236, match.winner?.id, matchId, !!match.winner);
+                
+                nodesHTML += drawMatchNode(matchId, match, 278, angles.matches[matchId]);
+            }
+
+            // QF
+            for (let m = 0; m < 4; m++) {
+                const matchId = `QF_${m}`;
+                const match = matches[matchId];
+                const slot1_active = match.team1 !== null;
+                const slot2_active = match.team2 !== null;
+
+                flagsHTML += drawFlag(match.team1, 236, angles.slots[`QF_${2*m}`], 58);
+                flagsHTML += drawFlag(match.team2, 236, angles.slots[`QF_${2*m+1}`], 58);
+                
+                connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m}`], 236, angles.matches[matchId], 194, match.team1?.id, matchId, slot1_active);
+                connectionsHTML += drawCurveConnector(angles.slots[`QF_${2*m+1}`], 236, angles.matches[matchId], 194, match.team2?.id, matchId, slot2_active);
+                connectionsHTML += drawRadialConnector(angles.matches[matchId], 194, 152, match.winner?.id, matchId, !!match.winner);
+                
+                nodesHTML += drawMatchNode(matchId, match, 194, angles.matches[matchId]);
+            }
+
+            // SF
+            for (let m = 0; m < 2; m++) {
+                const matchId = `SF_${m}`;
+                const match = matches[matchId];
+                const slot1_active = match.team1 !== null;
+                const slot2_active = match.team2 !== null;
+
+                flagsHTML += drawFlag(match.team1, 152, angles.slots[`SF_${2*m}`], 64);
+                flagsHTML += drawFlag(match.team2, 152, angles.slots[`SF_${2*m+1}`], 64);
+                
+                connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m}`], 152, angles.matches[matchId], 110, match.team1?.id, matchId, slot1_active);
+                connectionsHTML += drawCurveConnector(angles.slots[`SF_${2*m+1}`], 152, angles.matches[matchId], 110, match.team2?.id, matchId, slot2_active);
+                connectionsHTML += drawRadialConnector(angles.matches[matchId], 120, 80, match.winner?.id, matchId, !!match.winner);
+                
+                nodesHTML += drawMatchNode(matchId, match, 110, angles.matches[matchId]);
+            }
+
+            // F
+            const finalMatch = matches["F_0"];
+            flagsHTML += drawFlag(finalMatch.team1, 80, 180, 72);
+            flagsHTML += drawFlag(finalMatch.team2, 80, 0, 72);
+            
+            connectionsHTML += drawRadialConnector(180, 80, 45, finalMatch.team1?.id, "F_0", finalMatch.team1 !== null);
+            connectionsHTML += drawRadialConnector(0, 80, 45, finalMatch.team2?.id, "F_0", finalMatch.team2 !== null);
+
+            const conGrp = document.getElementById('connections-group');
+            if (conGrp) conGrp.innerHTML = connectionsHTML;
+
+            const ndGrp = document.getElementById('nodes-group');
+            if (ndGrp) ndGrp.innerHTML = nodesHTML;
+
+            const flGrp = document.getElementById('flags-group');
+            if (flGrp) flGrp.innerHTML = flagsHTML;
+
+            const lbGrp = document.getElementById('labels-group');
+            if (lbGrp) lbGrp.innerHTML = labelsHTML;
+            
+            const championGlow = finalMatch.winner ? 'fill="url(#gold-glow)"' : 'fill="none"';
+            const trophyBorder = finalMatch.winner ? '#c5a059' : '#AEABA0';
+            const trophyColor = finalMatch.winner ? 'fill-[#c5a059]' : 'fill-[#AEABA0]';
+            
+            const trGrp = document.getElementById('center-trophy-group');
+            if (trGrp) {
+                trGrp.innerHTML = `
+                    <circle cx="500" cy="500" r="60" ${championGlow} />
+                    <circle cx="500" cy="500" r="42" fill="#FAF9F5" stroke="${trophyBorder}" stroke-width="2.5" 
+                            class="cursor-pointer drop-shadow-[0_0_15px_rgba(197,160,89,0.15)] transition-all duration-300 hover:scale-105" id="trophy-node" />
+                    <g transform="translate(480.8, 480.8) scale(1.6)" class="pointer-events-none ${trophyColor}">
+                        <path d="M18 2H6v2H2v6c0 3.12 1.96 5.78 4.7 6.84C7.75 18.91 9.75 20 12 20s4.25-1.09 5.3-3.16C20.04 15.78 22 13.12 22 10V4h-4V2zM4 10V6h2v5.18C4.78 10.74 4 10.43 4 10zm14 1.18V6h2v4c0 .43-.78.74-2 1.18zM12 18c-2.45 0-4.5-1.85-4.5-4.5v-3h9v3c0 2.65-2.05 4.5-4.5 4.5z"/>
+                    </g>
+                `;
+            }
+            
+            setupInteractions();
+            generateAIPrediction();
+        }
+
+       
